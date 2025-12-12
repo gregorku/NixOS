@@ -15,6 +15,6 @@
     xnviewmp
     evolution
     nextcloud-client
-    git-cola
+    gitkraken
     ];
 }
