@@ -16,4 +16,11 @@
   ];
 
   networking.hostName = "ntbDell";
+
+  # 🔑 POVINNÉ – bootloader (EFI)
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # 🔑 POVINNÉ – NIKDY POZDĚJI NEMĚNIT
+  system.stateVersion = "24.05";
 }

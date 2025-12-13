@@ -1,9 +1,15 @@
 { config, pkgs, ... }:
 
 {
-  services.desktopManager.plasma6.enable = true;
-  services.displayManager.sddm.enable = true;
+  # 🔑 ZÁKLAD GRAFIKY
+  services.xserver.enable = true;
 
+  # 🔑 DISPLAY MANAGER + KDE
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
+
+  # 🔊 AUDIO (správně)
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   services.pipewire = {
@@ -12,5 +18,6 @@
     pulse.enable = true;
   };
 
+  # 🌐 SÍŤ
   networking.networkmanager.enable = true;
 }
