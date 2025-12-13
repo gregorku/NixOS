@@ -3,16 +3,18 @@
 {
   services.flatpak.enable = true;
 
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-kde ];
-  };
+  # Přidání Flathub repozitáře
+  systemd.services.flatpak-repo = {
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
 
-  services.flatpak.remotes = {
-    flathub = {
-      url = "https://flathub.org/repo/flathub.flatpakrepo";
-      gpgVerify = false;
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = ''
+        ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub \
+          https://flathub.org/repo/flathub.flatpakrepo
+      '';
     };
   };
 }
