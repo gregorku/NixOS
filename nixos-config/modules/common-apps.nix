@@ -11,7 +11,7 @@
     sshfs
     gocryptfs
     krusader
-    crystal-dock
+    pkgs."crystal-dock"
     gnome-calendar
     keepassxc
     system-config-printer
