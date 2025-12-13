@@ -10,7 +10,6 @@
   services.desktopManager.plasma6.enable = true;
 
   # 🔊 AUDIO (správně)
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
