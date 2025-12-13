@@ -11,6 +11,8 @@
     ../../modules/common-filesystems.nix
     ../../modules/common-snapshots.nix
     ../../modules/gpu-nvidia-amd.nix
+    ../../modules/common-virtualization.nix
+    ../../modules/common-swap.nix
   ];
 
   networking.hostName = "ntbLenovo";
