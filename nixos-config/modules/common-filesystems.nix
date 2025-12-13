@@ -1,50 +1,20 @@
-{ config, pkgs, ... }:
+{ config, lib, ... }:
 
-{
-  fileSystems."/" = {
-    options = [
-      "compress=zstd"
-      "ssd"
-      "noatime"
-      "space_cache=v2"
-      "discard=async"
-    ];
-  };
-
-  fileSystems."/home".options = [
+let
+  opts = [
     "compress=zstd"
     "ssd"
     "noatime"
     "space_cache=v2"
     "discard=async"
   ];
-
-  fileSystems."/var/log".options = [
-    "compress=zstd"
-    "ssd"
-    "noatime"
-    "space_cache=v2"
-  ];
-
-  fileSystems."/var/cache".options = [
-    "compress=zstd"
-    "ssd"
-    "noatime"
-    "space_cache=v2"
-  ];
-
-  fileSystems."/.snapshots".options = [
-    "compress=zstd"
-    "ssd"
-    "noatime"
-    "space_cache=v2"
-  ];
+in
+{
+  fileSystems."/".options = lib.mkDefault (opts ++ [ "subvol=@" ]);
+  fileSystems."/home".options = lib.mkDefault (opts ++ [ "subvol=@home" ]);
+  fileSystems."/var/log".options = lib.mkDefault (opts ++ [ "subvol=@log" ]);
+  fileSystems."/var/cache".options = lib.mkDefault (opts ++ [ "subvol=@cache" ]);
+  fileSystems."/.snapshots".options = lib.mkDefault (opts ++ [ "subvol=@snapshots" ]);
 
   services.fstrim.enable = true;
-  services.fstrim.interval = "weekly";
-
-  boot.kernel.sysctl = {
-    "vm.swappiness" = 10;
-    "vm.vfs_cache_pressure" = 50;
-  };
 }
