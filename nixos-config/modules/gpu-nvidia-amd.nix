@@ -11,8 +11,8 @@
   };
 
   hardware.opengl.enable = true;
-  hardware.opengl.driSupport = true;
-  hardware.opengl.driSupport32Bit = true;
 
-  environment.systemPackages = with pkgs; [ vulkan-tools ];
+  environment.systemPackages = with pkgs; [
+    vulkan-tools
+  ];
 }
