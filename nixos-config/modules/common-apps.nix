@@ -1,6 +1,11 @@
 { config, pkgs, ... }:
 
 {
+  # ----------------------------------
+  # Allow unfree packages (NVIDIA, browsers, etc.)
+  # ----------------------------------
+  nixpkgs.config.allowUnfree = true;
+
   environment.systemPackages = with pkgs; [
 
     # ======================
@@ -11,7 +16,7 @@
     sshfs
     gocryptfs
     krusader
-    pkgs."crystal-dock"
+    crystal-dock
     gnome-calendar
     keepassxc
     system-config-printer
@@ -47,4 +52,3 @@
     kdePackages.okular
   ];
 }
-
