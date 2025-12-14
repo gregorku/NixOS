@@ -2,11 +2,8 @@
 
 let
   opts = [
-    "compress=zstd"
-    "ssd"
+    "compress=zstd:3"
     "noatime"
-    "space_cache=v2"
-    "discard=async"
   ];
 in
 {

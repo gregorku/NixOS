@@ -1,6 +1,9 @@
+{ config, pkgs, ... }:
+
 {
   imports = [
     ./hardware-configuration.nix
+
     ../../modules/common-users.nix
     ../../modules/common-desktop-kde.nix
     ../../modules/common-security.nix
@@ -17,10 +20,25 @@
 
   networking.hostName = "ntbDell";
 
-  # 🔑 POVINNÉ – bootloader (EFI)
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  ##################################################
+  # BOOTLOADER – DUAL BOOT (Windows 11 + NixOS)
+  ##################################################
 
-  # 🔑 POVINNÉ – NIKDY POZDĚJI NEMĚNIT
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = true;
+    device = "nodev";          # EFI systém, ne MBR
+    useOSProber = true;        # najde Windows Boot Manager
+  };
+
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+  };
+
+  ##################################################
+  # POVINNÉ – NIKDY NEMĚNIT PO INSTALACI
+  ##################################################
+
   system.stateVersion = "24.05";
 }
+

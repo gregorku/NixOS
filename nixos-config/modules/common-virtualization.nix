@@ -2,7 +2,7 @@
 
 {
   # ----------------------
-  # Virtualizace (KVM / libvirt)
+  # Virtualization (KVM / libvirt)
   # ----------------------
 
   virtualisation.libvirtd = {
@@ -16,13 +16,13 @@
   # Virt-manager GUI
   programs.virt-manager.enable = true;
 
-  # Uživatel gregor může spravovat VM bez hesla
+  # User access (no sudo needed)
   users.users.gregor.extraGroups = [
     "libvirtd"
     "kvm"
   ];
 
-  # Polkit pravidlo – žádné heslo pro virt-manager
+  # Polkit: allow libvirt management without password
   security.polkit.extraConfig = ''
     polkit.addRule(function(action, subject) {
       if (
@@ -33,11 +33,4 @@
       }
     });
   '';
-
-  # Doporučeno pro síťování VM
-  networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedUDPPorts = [ ];
-
-  # Autostart služby
-  systemd.services.libvirtd.wantedBy = [ "multi-user.target" ];
 }

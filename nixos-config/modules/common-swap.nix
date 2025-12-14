@@ -4,11 +4,10 @@
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 50;   # použije max 50 % RAM
+    memoryPercent = 50;
   };
 
-  # Doporučené chování kernelu
   boot.kernel.sysctl = {
-    "vm.swappiness" = 180;   # vysoká swappiness = preferuje zram
+    "vm.swappiness" = 180;
   };
 }

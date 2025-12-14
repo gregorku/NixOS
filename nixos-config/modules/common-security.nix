@@ -9,12 +9,17 @@
 
   services.openssh = {
     enable = true;
-    openFirewall = true;
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    settings.PermitRootLogin = "no";
+    openFirewall = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+    };
   };
 
+  # Needed for PipeWire (realtime scheduling)
   security.rtkit.enable = true;
+
+  # Hardening
   security.protectKernelImage = true;
 }

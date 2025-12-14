@@ -1,17 +1,19 @@
 { config, pkgs, ... }:
 
 {
-  services.xserver.videoDrivers = [ "intel" ];
+  # Modern Intel iGPU setup (X11 + Wayland)
+  hardware.graphics.enable = true;
 
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-vaapi-driver
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-  };
+  # VAAPI / VDPAU
+  hardware.graphics.extraPackages = with pkgs; [
+    intel-media-driver
+    intel-vaapi-driver
+    vaapiVdpau
+    libvdpau-va-gl
+  ];
 
-  environment.systemPackages = with pkgs; [ vulkan-tools ];
+  # Diagnostic / testing tools
+  environment.systemPackages = with pkgs; [
+    vulkan-tools
+  ];
 }
