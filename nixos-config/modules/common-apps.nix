@@ -31,7 +31,6 @@
     putty
     remmina
     nextcloud-client
-    megasync
     kdePackages.ktorrent
 
     # ======================
