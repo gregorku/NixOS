@@ -14,6 +14,10 @@
     ../../modules/common-filesystems.nix
     ../../modules/common-snapshots.nix
     ../../modules/gpu-intel.nix
+
+    # Notebook-specific power optimizations
+    ../../modules/notebook-power.nix
+
     ../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
   ];
@@ -41,4 +45,3 @@
 
   system.stateVersion = "24.05";
 }
-
