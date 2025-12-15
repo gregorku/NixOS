@@ -7,11 +7,12 @@ let
   ];
 in
 {
+  # Root filesystem (BTRFS subvolume @)
   fileSystems."/".options = lib.mkDefault (opts ++ [ "subvol=@" ]);
-  fileSystems."/home".options = lib.mkDefault (opts ++ [ "subvol=@home" ]);
-  fileSystems."/var/log".options = lib.mkDefault (opts ++ [ "subvol=@log" ]);
-  fileSystems."/var/cache".options = lib.mkDefault (opts ++ [ "subvol=@cache" ]);
-  fileSystems."/.snapshots".options = lib.mkDefault (opts ++ [ "subvol=@snapshots" ]);
 
+  # Home filesystem (BTRFS subvolume @home)
+  fileSystems."/home".options = lib.mkDefault (opts ++ [ "subvol=@home" ]);
+
+  # Periodic TRIM for SSD / NVMe
   services.fstrim.enable = true;
 }
