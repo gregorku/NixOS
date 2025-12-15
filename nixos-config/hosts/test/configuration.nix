@@ -14,33 +14,31 @@
     ../../modules/common-filesystems.nix
     ../../modules/common-snapshots.nix
 
-    # GPU – test stroj (kombinovaný profil)
-    ../../modules/gpu-nvidia-amd.nix
-
+    # Modul ve VM
     ../../modules/common-virtualization.nix
+    ../../modules/hosts/test-vm-graphics.nix
     ../../modules/common-swap.nix
+
+    # Modul Wireguard
+    #../../modules/common-wireguard.nix
+    #../../modules/hosts/test-wireguard.nix
+    ../../modules/common-networkmanager.nix
+
   ];
 
-  # ----------------------
-  # Host identity
-  # ----------------------
   networking.hostName = "test";
 
   # ----------------------
   # Lokalizace / Jazyk
   # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
-
   i18n.supportedLocales = [
     "cs_CZ.UTF-8/UTF-8"
     "en_US.UTF-8/UTF-8"
   ];
-
   time.timeZone = "Europe/Prague";
 
-  console = {
-    keyMap = "cz";
-  };
+  console.keyMap = "cz";
 
   services.xserver = {
     layout = "cz";

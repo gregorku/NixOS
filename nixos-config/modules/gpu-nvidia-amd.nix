@@ -1,18 +1,36 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  services.xserver.videoDrivers = [ "nvidia" "amdgpu" ];
+  # Primární GPU = AMD iGPU
+  services.xserver.videoDrivers = [ "amdgpu" "nvidia" ];
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = true;
-    nvidiaPersistenced = true;
+
+    # NVIDIA zapnutá jen na vyžádání
+    prime = {
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+    };
+
+    # Power management – klíčové pro notebook
+    powerManagement = {
+      enable = true;
+      finegrained = true;
+    };
+
+    # Používej proprietární ovladač (správně pro RTX 3070)
     open = false;
   };
 
-  hardware.opengl.enable = true;
-
   environment.systemPackages = with pkgs; [
     vulkan-tools
+    libva-utils
   ];
 }

@@ -20,9 +20,32 @@
 
     ../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
+
+    # Modul Wireguard
+    #../../modules/common-wireguard.nix
+    #../../modules/hosts/ntbDell-wireguard.nix
+    ../../modules/common-networkmanager.nix
+
   ];
 
   networking.hostName = "ntbDell";
+
+  # ----------------------
+  # Lokalizace / Jazyk
+  # ----------------------
+  i18n.defaultLocale = "cs_CZ.UTF-8";
+  i18n.supportedLocales = [
+    "cs_CZ.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+  ];
+  time.timeZone = "Europe/Prague";
+
+  console.keyMap = "cz";
+
+  services.xserver = {
+    layout = "cz";
+    xkbVariant = "";
+  };
 
   ##################################################
   # BOOTLOADER – DUAL BOOT (Windows 11 + NixOS)

@@ -20,13 +20,41 @@
 
     ../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
+
+    # Modul Wireguard
+    #../../modules/common-wireguard.nix
+    #../../modules/hosts/ntbLenovo-wireguard.nix
+    ../../modules/common-networkmanager.nix
+
   ];
 
   networking.hostName = "ntbLenovo";
 
-  ##################################################
-  # POVINNÉ – NIKDY NEMĚNIT PO INSTALACI
-  ##################################################
+  # ----------------------
+  # Lokalizace / Jazyk
+  # ----------------------
+  i18n.defaultLocale = "cs_CZ.UTF-8";
+  i18n.supportedLocales = [
+    "cs_CZ.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+  ];
+  time.timeZone = "Europe/Prague";
 
-  system.stateVersion = "24.05";
+  console.keyMap = "cz";
+
+  services.xserver = {
+    layout = "cz";
+    xkbVariant = "";
+  };
+
+  # ----------------------
+  # Bootloader (UEFI)
+  # ----------------------
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # ----------------------
+  # Povinné – NIKDY neměnit po instalaci
+  # ----------------------
+  system.stateVersion = "25.05";
 }
