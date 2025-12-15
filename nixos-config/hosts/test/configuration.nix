@@ -16,7 +16,7 @@
 
     # Modul ve VM
     ../../modules/common-virtualization.nix
-    ../../modules/hosts/test-vm-graphics.nix
+    ../../hosts/test/test-vm-graphics.nix
     ../../modules/common-swap.nix
 
     # Modul Wireguard
