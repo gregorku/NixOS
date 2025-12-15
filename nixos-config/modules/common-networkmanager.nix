@@ -6,8 +6,13 @@
   environment.systemPackages = with pkgs; [
     networkmanager
     networkmanagerapplet
+
+    # VPN pluginy
     networkmanager-openvpn
-    networkmanager-wireguard
+    networkmanager-openconnect
+
+    # WireGuard nástroje (CLI + NM backend)
+    wireguard-tools
   ];
 
   programs.nm-applet.enable = true;
