@@ -17,4 +17,22 @@
       '';
     };
   };
+
+  # Instalace Flatpak aplikací (system-wide)
+  systemd.services.flatpak-install = {
+    wantedBy = [ "multi-user.target" ];
+    after = [
+      "flatpak-repo.service"
+      "network-online.target"
+    ];
+    wants = [ "network-online.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = ''
+        ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub \
+          nz.mega.MEGAsync
+      '';
+    };
+  };
 }

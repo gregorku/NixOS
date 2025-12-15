@@ -1,26 +1,40 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  services.xserver.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
 
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # 🔑 XDG PORTAL – POVINNÉ PRO WAYLAND + PLASMA 6
+  services.pipewire = {
+    enable = true;
+    audio.enable = true;
+    pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    jack.enable = true;
+  };
+
+  security.rtkit.enable = true;
+
   xdg.portal = {
     enable = true;
-    extraPortals = [
-      pkgs.kdePackages.xdg-desktop-portal-kde
+    extraPortals = with pkgs; [
+      kdePackages.xdg-desktop-portal-kde
     ];
   };
 
-  hardware.pulseaudio.enable = false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    pulse.enable = true;
-  };
+  hardware.graphics.enable = true;
 
-  networking.networkmanager.enable = true;
+  services.power-profiles-daemon.enable = true;
+
+  programs.dconf.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    kdePackages.kdeconnect-kde
+    kdePackages.kio-extras
+    kdePackages.kio-fuse
+  ];
 }

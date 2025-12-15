@@ -27,6 +27,27 @@
   networking.hostName = "test";
 
   # ----------------------
+  # Lokalizace / Jazyk
+  # ----------------------
+  i18n.defaultLocale = "cs_CZ.UTF-8";
+
+  i18n.supportedLocales = [
+    "cs_CZ.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+  ];
+
+  time.timeZone = "Europe/Prague";
+
+  console = {
+    keyMap = "cz";
+  };
+
+  services.xserver = {
+    layout = "cz";
+    xkbVariant = "";
+  };
+
+  # ----------------------
   # Bootloader (UEFI)
   # ----------------------
   boot.loader.systemd-boot.enable = true;
@@ -37,4 +58,3 @@
   # ----------------------
   system.stateVersion = "25.05";
 }
-
