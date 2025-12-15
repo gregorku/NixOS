@@ -49,5 +49,11 @@
     pdfarranger
     kdePackages.kate
     kdePackages.okular
+
+    # --- Jazyky / dictionaries ---
+    hunspell
+    hunspellDicts.cs_CZ
+    aspell
+    aspellDicts.cs
   ];
 }
