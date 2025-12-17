@@ -1,17 +1,11 @@
 { config, pkgs, ... }:
 
 {
-  # ----------------------------------
-  # Allow unfree packages (NVIDIA, browsers, etc.)
-  # ----------------------------------
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
 
     # ======================
-    # 📦 SYSTÉM / ZÁKLAD
+    # 📦 SYSTÉM / ZÁKLAD (DESKTOP)
     # ======================
-    git
     gitkraken
     sshfs
     gocryptfs
