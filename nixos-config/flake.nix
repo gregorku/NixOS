@@ -35,7 +35,14 @@
           ./hosts/test/configuration.nix
         ];
       };
+
+      # ⬇⬇⬇ NOVÝ SERVER (VM test)
+      testServer = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/testServer/configuration.nix
+        ];
+      };
     };
   };
 }
-
