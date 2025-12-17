@@ -1,0 +1,3 @@
+{
+  systemd.nspawn.enable = true;
+}

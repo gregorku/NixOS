@@ -4,12 +4,27 @@
   imports = [
     ./hardware-configuration.nix
 
-    # --- základní serverové moduly (už existují)
+    ##################################################
+    # Common – sdílené moduly
+    ##################################################
+    ../../modules/common-base.nix
     ../../modules/common-security.nix
     ../../modules/common-snapshots.nix
     ../../modules/common-swap.nix
 
-    # --- virtual / VM only
+    ##################################################
+    # Server-only moduly
+    ##################################################
+    ../../modules/server/server-apps.nix
+    ../../modules/server/bridge-network.nix
+    ../../modules/server/libvirt.nix
+    ../../modules/server/cockpit.nix
+    ../../modules/server/nspawn.nix
+    ../../modules/server/zfs.nix
+
+    ##################################################
+    # VM-specific
+    ##################################################
     ../../modules/common-vm-guest.nix
   ];
 
@@ -23,6 +38,20 @@
   ##################################################
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  ##################################################
+  # Boot generations cleanup
+  ##################################################
+  boot.loader.systemd-boot.configurationLimit = 5;
+
+  ##################################################
+  # Nix garbage collection (server-friendly)
+  ##################################################
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 
   # POVINNÉ – po instalaci už NEMĚNIT
   system.stateVersion = "25.05";
