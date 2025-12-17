@@ -18,7 +18,6 @@
   time.timeZone = "Europe/Prague";
   i18n.defaultLocale = "cs_CZ.UTF-8";
 
-  boot.kernelPackages = pkgs.linuxPackages_lts;
 
   # POVINNÉ – po instalaci už NEMĚNIT
   system.stateVersion = "25.05";
