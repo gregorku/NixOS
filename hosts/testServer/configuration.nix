@@ -18,6 +18,11 @@
   time.timeZone = "Europe/Prague";
   i18n.defaultLocale = "cs_CZ.UTF-8";
 
+  ##################################################
+  # Bootloader – UEFI (VM)
+  ##################################################
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   # POVINNÉ – po instalaci už NEMĚNIT
   system.stateVersion = "25.05";
