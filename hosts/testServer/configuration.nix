@@ -30,6 +30,11 @@
 
   networking.hostName = "testServer";
 
+  ##################################################
+  # ZFS host ID (required)
+  ##################################################
+  networking.hostId = "deadbeef";
+
   time.timeZone = "Europe/Prague";
   i18n.defaultLocale = "cs_CZ.UTF-8";
 
