@@ -1,3 +1,7 @@
+{ config, pkgs, ... }:
+
 {
-  systemd.nspawn.enable = true;
+  environment.systemPackages = with pkgs; [
+    systemd
+  ];
 }
