@@ -34,17 +34,22 @@
   # Users
   ##################################################
   users.users.gregor = {
-  isNormalUser = true;
-  description = "Server administrator";
-  extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
-  initialPassword = "CHANGE_ME";
+    isNormalUser = true;
+    description = "Server administrator";
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
+    initialPassword = "CHANGE_ME";
+  };
 
   ##################################################
   # ZFS host ID (required)
   ##################################################
   networking.hostId = "deadbeef";
 
+  # ----------------------
+  # Lokalizace / Jazyk
+  # ----------------------
   time.timeZone = "Europe/Prague";
+  console.keyMap = "cz";
   i18n.defaultLocale = "cs_CZ.UTF-8";
 
   ##################################################
