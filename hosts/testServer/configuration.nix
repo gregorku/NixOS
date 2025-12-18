@@ -28,6 +28,9 @@
     ../../modules/common-vm-guest.nix
   ];
 
+  ##################################################
+  # Hostname
+  ##################################################
   networking.hostName = "testServer";
 
   ##################################################
@@ -41,13 +44,26 @@
   };
 
   ##################################################
+  # SSH – povolit přihlášení uživatele (heslem)
+  ##################################################
+  services.openssh = {
+    enable = true;
+
+    settings = {
+      PasswordAuthentication = true;
+      KbdInteractiveAuthentication = true;
+      PermitRootLogin = "no";
+    };
+  };
+
+  ##################################################
   # ZFS host ID (required)
   ##################################################
   networking.hostId = "deadbeef";
 
-  # ----------------------
+  ##################################################
   # Lokalizace / Jazyk
-  # ----------------------
+  ##################################################
   time.timeZone = "Europe/Prague";
   console.keyMap = "cz";
   i18n.defaultLocale = "cs_CZ.UTF-8";
@@ -72,6 +88,8 @@
     options = "--delete-older-than 7d";
   };
 
+  ##################################################
   # POVINNÉ – po instalaci už NEMĚNIT
+  ##################################################
   system.stateVersion = "25.05";
 }
