@@ -40,7 +40,7 @@
     isNormalUser = true;
     description = "Server administrator";
     extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
-    initialPassword = "CHANGE_ME";
+    initialPassword = "zmenit";
   };
 
   ##################################################
