@@ -31,6 +31,15 @@
   networking.hostName = "testServer";
 
   ##################################################
+  # Users
+  ##################################################
+  users.users.gregor = {
+  isNormalUser = true;
+  description = "Server administrator";
+  extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
+  initialPassword = "CHANGE_ME";
+
+  ##################################################
   # ZFS host ID (required)
   ##################################################
   networking.hostId = "deadbeef";
