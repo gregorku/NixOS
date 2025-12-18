@@ -44,19 +44,6 @@
   };
 
   ##################################################
-  # SSH – povolit přihlášení uživatele (heslem)
-  ##################################################
-  services.openssh = {
-    enable = true;
-
-    settings = {
-      PasswordAuthentication = true;
-      KbdInteractiveAuthentication = true;
-      PermitRootLogin = "no";
-    };
-  };
-
-  ##################################################
   # ZFS host ID (required)
   ##################################################
   networking.hostId = "deadbeef";

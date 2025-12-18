@@ -11,8 +11,8 @@
     enable = true;
     openFirewall = false;
     settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
+      PasswordAuthentication = true;
+      KbdInteractiveAuthentication = true;
       PermitRootLogin = "no";
     };
   };
