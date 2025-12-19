@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 
 {
-  networking.firewall.enable = lib.mkDefault false;
+  # Změnit na mkDefault true pro server
+  networking.firewall.enable = lib.mkDefault true;
 
   services.openssh = {
     enable = lib.mkDefault true;

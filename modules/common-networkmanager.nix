@@ -3,6 +3,11 @@
 {
   networking.networkmanager.enable = true;
 
+  # Explicitně zakázat systemd-networkd
+  networking.useNetworkd = false;
+  systemd.services.systemd-networkd.enable = false;
+  systemd.sockets.systemd-networkd.enable = false;
+
   # Vynutit DHCP jako výchozí
   networking.useDHCP = lib.mkForce true;
 
