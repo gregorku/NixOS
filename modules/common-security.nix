@@ -2,7 +2,7 @@
 
 {
   networking.firewall = {
-    enable = true;
+    enable = false;
     allowedTCPPorts = [ 22 ];
     allowedUDPPorts = [];
   };
@@ -11,8 +11,8 @@
     enable = true;
     openFirewall = false;
     settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
+      PasswordAuthentication = true;
+      KbdInteractiveAuthentication = true;
       PermitRootLogin = "no";
     };
   };
