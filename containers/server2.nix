@@ -4,13 +4,10 @@
   containers.server2 = {
     autoStart = true;
     privateNetwork = false;
-    hostBridge = "br0";
-
-    localAddress = "192.168.122.11/24";
-    hostAddress = "192.168.122.1";
 
     config = { config, pkgs, lib, ... }: {
       networking.hostName = "server2";
+      system.stateVersion = "25.05";
 
       virtualisation.docker = {
         enable = true;
