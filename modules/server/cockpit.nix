@@ -4,7 +4,6 @@
   services.cockpit = {
     enable = true;
     port = 9090;
-    openFirewall = false;  # Firewall je vypnutý, ale pro úplnost
 
     # Odstranit všechny omezení pro přístup
     settings = {
