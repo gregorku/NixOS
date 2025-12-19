@@ -4,26 +4,34 @@
   services.cockpit = {
     enable = true;
     port = 9090;
+    openFirewall = false;  # Firewall je vypnutý, ale pro úplnost
 
-    # Odstranit allowed-origins pro přímé připojení (pokud nepoužíváte reverse proxy)
-    # allowed-origins = [ "https://cockpit.<domain>.com" ];  # ZAKOMENTOVÁNO
-
+    # Odstranit všechny omezení pro přístup
     settings = {
       WebService = {
-        AllowUnencrypted = true;  # Povolit HTTP pro testování
-
-        # Naslouchat na všech adresách (IPv4 i IPv6)
-        # Pokud chcete povolit pouze HTTP (bez HTTPS), přidejte:
-        # ProtocolHeader = "";  # Prázdné pro přímé připojení
+        AllowUnencrypted = true;
+        # Odstranit ProtocolHeader pro přímé připojení
+        Origins = "*";
       };
     };
   };
 
-  # Vynutit naslouchání na všech síťových rozhraních (IPv4 i IPv6)
-  systemd.sockets.cockpit.socketConfig = {
-    ListenStream = [
-      "0.0.0.0:9090"   # IPv4 na všech adresách
-      "[::]:9090"      # IPv6 na všech adresách
-    ];
+  # KLÍČOVÉ: Explicitně definovat socket v NixOS stylu
+  systemd.sockets.cockpit = {
+    enable = true;
+    wantedBy = [ "sockets.target" ];
+    socketConfig = {
+      # TOTO JE NEJDŮLEŽITĚJŠÍ - přinutí IPv4 naslouchání
+      ListenStream = [ "0.0.0.0:9090" ];
+      # Pro IPv6 přidejte: "[::]:9090"
+      SocketMode = "0666";
+      PassCredentials = true;
+    };
+  };
+
+  # Zajistit, že socket bude spuštěn před službou
+  systemd.services.cockpit = {
+    requires = [ "cockpit.socket" ];
+    after = [ "cockpit.socket" ];
   };
 }
