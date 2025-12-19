@@ -33,8 +33,8 @@
     ##################################################
     # Containers - ZJEDNODUŠENÉ verze
     ##################################################
-    ../../containers/server1-dhcp.nix
-    ../../containers/server2-dhcp.nix
+    #../../containers/server1-dhcp.nix
+    #../../containers/server2-dhcp.nix
   ];
 
   networking.hostName = "testServer";
