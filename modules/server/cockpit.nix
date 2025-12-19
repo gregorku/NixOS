@@ -2,22 +2,16 @@
 
 {
   services.cockpit = {
-    enable = true;
-    openFirewall = true; [cite: 1]
-    settings = {
-      WebService = {
-        AllowUnencrypted = true;
-        # Toto pomůže, pokud prohlížeč blokuje mix HTTP/HTTPS
-        ProtocolHeader = "X-Forwarded-Proto";
-      };
-      # Přidání této sekce může pomoci s přihlašovací smyčkou
-      Session = {
-        IdleTimeout = 15;
-        Banner = "/etc/issue";
-      };
+      enable = true;
+      port = 9090;
+      allowed-origins = [
+        "https://cockpit.<domain>.com"  # The public-facing URL clients will connect from in the browser
+      ];
+      settings = {
+        WebService = {
+          AllowUnencrypted = true;
+          ProtocolHeader = "X-Forwarded-Proto";  # Specifies the request goes through a reverse proxy
+        };
     };
   };
-
-  # Ujistěte se, že Cockpit má přístup k PAM
-  security.pam.services.cockpit = {};
 }
