@@ -5,55 +5,37 @@
     autoStart = true;
     privateNetwork = false;
 
-    # POVINNÉ pro Docker v kontejneru
+    # Pro Docker v kontejneru potřebujeme bind mount cgroups a některé další
     extraFlags = [
       "--capability=all"
-      "--system-call-filter=@system-service"
       "--bind=/sys/fs/cgroup"
     ];
 
     config = { config, pkgs, lib, ... }: {
       boot.isContainer = true;
 
-      networking.hostName = "server1";
+      # Použijte mkForce pro přepsání vnitřních definic
+      networking.hostName = lib.mkForce "server1";
       system.stateVersion = "25.05";
 
-      # Síť - vypnout vše, použije host network
+      # Síť: kontejner používá host networking, takže nic nenastavujeme
       networking.useDHCP = lib.mkForce false;
       networking.dhcpcd.enable = lib.mkForce false;
       networking.networkmanager.enable = lib.mkForce false;
-
-      systemd.services.systemd-networkd.enable = false;
-      systemd.services.NetworkManager.enable = false;
-      systemd.services.dhcpcd.enable = false;
-
       networking.interfaces = lib.mkForce {};
-      networking.defaultGateway = lib.mkForce null;
-      networking.nameservers = lib.mkForce [];
 
-      # Docker konfigurace pro kontejnery
+      # Docker: vypněte iptables, protože v kontejneru nemáme potřebná oprávnění
       virtualisation.docker = lib.mkForce {
         enable = true;
         enableOnBoot = true;
         package = pkgs.docker_27;
         daemon.settings = {
-          ip = "0.0.0.0";
-          # Důležité pro kontejnery
-          exec-opts = ["native.cgroupdriver=cgroupfs"];
-          storage-driver = "vfs";
+          iptables = false;
+          ip-forward = false;
+          ip-masq = false;
         };
-        extraOptions = "--exec-opt native.cgroupdriver=cgroupfs --storage-driver=vfs";
+        extraOptions = "--iptables=false --ip-forward=false --ip-masq=false";
       };
-
-      # Potřebné pro Docker v kontejneru
-      boot.kernelModules = [ "overlay" ];
-      boot.kernel.sysctl = {
-        "net.ipv4.ip_forward" = 1;
-        "net.ipv6.conf.all.forwarding" = 1;
-      };
-
-      # Povolit cgroups
-      systemd.enableUnifiedCgroupHierarchy = false;
 
       # Portainer Business Edition
       systemd.services.portainer = {
@@ -69,16 +51,14 @@
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v portainer_data:/data \
             portainer/portainer-ee:2.33.6";
-          Restart = "always";
+          Restart = "on-failure";
           RestartSec = "10s";
+          TimeoutStartSec = "300";
         };
         wantedBy = [ "multi-user.target" ];
       };
 
-      # Firewall
-      networking.firewall.enable = false;
-
-      # SSH
+      # SSH pro přístup do kontejneru
       services.openssh = {
         enable = true;
         settings = {
@@ -89,6 +69,7 @@
 
       users.users.root.initialPassword = "test123";
 
+      # Vypněte zbytečné služby
       services.resolved.enable = false;
       services.timesyncd.enable = false;
 
