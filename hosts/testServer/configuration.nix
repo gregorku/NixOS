@@ -16,7 +16,7 @@
     ##################################################
     ../../modules/server/server-apps.nix
     ../../modules/server/libvirt.nix
-    ../../modules/server/cockpit.nix
+    ../../modules/server/cockpit.nix   # Tento modul už jen zapne cockpit a otevře firewall
     ../../modules/server/nspawn.nix
     ../../modules/server/zfs.nix
 
@@ -72,7 +72,7 @@
   ##################################################
   # Boot generations cleanup
   ##################################################
-  boot.loader.systemd-boot.configurationLimit = 5;
+  boot.loader.systemd-boot.configurationLimit = 20;
 
   ##################################################
   # Nix garbage collection
@@ -98,6 +98,14 @@
   ##################################################
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 9090 8443 9443 ];
+
+  ##################################################
+  # Cockpit settings - přepsat výchozí
+  ##################################################
+  services.cockpit.settings.WebService = {
+    AllowUnencrypted = true;
+    Origins = lib.mkForce "*";
+  };
 
   system.stateVersion = "25.05";
 }

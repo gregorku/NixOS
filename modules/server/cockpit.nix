@@ -4,13 +4,6 @@
   services.cockpit = {
     enable = true;
     port = 9090;
-    openFirewall = true;
-
-    settings = {
-      WebService = {
-        AllowUnencrypted = true;
-        Origins = "*";
-      };
-    };
+    openFirewall = true;  # Povolit firewall
   };
 }
