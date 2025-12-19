@@ -1,15 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  services.cockpit = {
-    enable = true;
-    openFirewall = true;
+  services.cockpit.enable = true;
 
-    settings = {
-      WebService = {
-        # Poslouchej i na IPv4
-        ListenStream = "0.0.0.0:9090";
-      };
-    };
+  # Firewall teď neřešíme
+  services.cockpit.openFirewall = true;
+
+  # KONFIGURACE SOCKETU (KLÍČOVÉ)
+  systemd.sockets."cockpit" = {
+    listenStreams = [
+      "0.0.0.0:9090"
+      "[::]:9090"
+    ];
+    wantedBy = [ "sockets.target" ];
   };
 }
