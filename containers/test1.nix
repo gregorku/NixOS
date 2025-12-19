@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   containers.test1 = {
@@ -6,9 +6,11 @@
     privateNetwork = false;  # Použít bridge místo privátní sítě
     hostBridge = "br0";      # Použít váš bridge z bridge-network.nix
 
-    config = { config, pkgs, ... }: {
+    config = { config, pkgs, lib, ... }: {
       networking.hostName = "test1";
-      networking.useDHCP = true;  # Kontejner dostane IP z DHCP přes bridge
+
+      # ŘEŠENÍ: Explicitné přepsání DHCP pomocí mkForce
+      networking.useDHCP = lib.mkForce true;  # ← TOHLE JE KLÍČOVÉ
 
       # SSH pro přístup
       services.openssh.enable = true;
