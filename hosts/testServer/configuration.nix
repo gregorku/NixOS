@@ -30,7 +30,8 @@
     ##################################################
     # Containers
     ##################################################
-    ../../containers/test1.nix
+    ../../containers/server1.nix
+    ../../containers/server2.nix
   ];
 
   ##################################################
@@ -86,6 +87,22 @@
   # Container support
   ##################################################
   boot.enableContainers = true;
+
+  ##################################################
+  # Firewall a NAT
+  ##################################################
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 8443 9443 ];
+
+  networking.nat = {
+    enable = true;
+    internalInterfaces = [ "br0" ];
+    externalInterface = "enp1s0";
+    forwardPorts = [
+      { sourcePort = 8443; destination = "10.0.0.10:8443"; }
+      { sourcePort = 9443; destination = "10.0.0.11:9443"; }
+    ];
+  };
 
   ##################################################
   # POVINNÉ – po instalaci už NEMĚNIT
