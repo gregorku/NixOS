@@ -3,21 +3,25 @@
 {
   containers.server1 = {
     autoStart = true;
-    privateNetwork = false;  # Použít host network (DHCP)
+    privateNetwork = false;  # Host networking
 
     extraFlags = [
       "--bind=/tmp"
       "--bind=/run"
-      "--bind=/sys/fs/cgroup"
     ];
 
     config = { config, pkgs, lib, ... }: {
       networking.hostName = "server1";
       system.stateVersion = "25.05";
 
-      # DHCP a síť
-      networking.useDHCP = true;
-      networking.networkmanager.enable = false;
+      # ŘEŠENÍ KONFLIKTU: explicitně nastavit DHCP s vysokou prioritou
+      networking.useDHCP = lib.mkForce true;
+      # Vypnout NetworkManager v kontejneru, protože používáme host network
+      networking.networkmanager.enable = lib.mkForce false;
+
+      # Explicitně zakázat další služby, které by mohly konfliktovat
+      networking.dhcpcd.enable = lib.mkForce false;
+      networking.interfaces = lib.mkForce {};
 
       # Docker
       virtualisation.docker = {
@@ -46,7 +50,7 @@
         wantedBy = [ "multi-user.target" ];
       };
 
-      # Firewall v kontejneru
+      # Firewall
       networking.firewall.enable = true;
       networking.firewall.allowedTCPPorts = [ 22 8443 ];
 
@@ -54,16 +58,15 @@
       services.openssh = {
         enable = true;
         settings = {
-          PasswordAuthentication = true;  # Pro jednoduchost
+          PasswordAuthentication = true;
           PermitRootLogin = "yes";
         };
       };
 
       users.users.root.initialPassword = "test123";
 
-      # Základní balíčky
       environment.systemPackages = with pkgs; [
-        nano vim htop curl wget git tmux docker-compose
+        vim htop curl wget git tmux docker-compose
       ];
     };
   };
