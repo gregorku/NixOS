@@ -39,46 +39,55 @@
   users.users.gregor = {
     isNormalUser = true;
     description = "Server administrator";
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
+    # [cite_start]Přidány skupiny 'podman' a 'docker' pro správu v Cockpitu [cite: 5]
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "podman" "docker" ];
     shell = pkgs.bashInteractive;
     linger = true;
-    initialPassword = "zmenit";
+    [cite_start]initialPassword = "zmenit"; [cite: 5]
   };
+
+  ##################################################
+  # Cockpit Pluginy (pro zobrazení kontejnerů a VM)
+  ##################################################
+  environment.systemPackages = with pkgs; [
+    cockpit-machines  # Správa nspawn kontejnerů a Libvirt VM
+    cockpit-podman    # Správa Podman/Docker kontejnerů
+  ];
 
   ##################################################
   # ZFS host ID (required)
   ##################################################
-  networking.hostId = "deadbeef";
+  [cite_start]networking.hostId = "deadbeef"; [cite: 6]
 
   ##################################################
   # Lokalizace / Jazyk
   ##################################################
-  time.timeZone = "Europe/Prague";
-  console.keyMap = "cz";
-  i18n.defaultLocale = "cs_CZ.UTF-8";
+  [cite_start]time.timeZone = "Europe/Prague"; [cite: 7]
+  [cite_start]console.keyMap = "cz"; [cite: 7]
+  [cite_start]i18n.defaultLocale = "cs_CZ.UTF-8"; [cite: 7]
 
   ##################################################
   # Bootloader – UEFI (VM)
   ##################################################
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  [cite_start]boot.loader.systemd-boot.enable = true; [cite: 8]
+  [cite_start]boot.loader.efi.canTouchEfiVariables = true; [cite: 8]
 
   ##################################################
   # Boot generations cleanup
   ##################################################
-  boot.loader.systemd-boot.configurationLimit = 5;
+  [cite_start]boot.loader.systemd-boot.configurationLimit = 5; [cite: 9]
 
   ##################################################
-  # Nix garbage collection (server-friendly)
+  # Nix garbage collection
   ##################################################
   nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+    [cite_start]automatic = true; [cite: 10]
+    [cite_start]dates = "weekly"; [cite: 11]
+    [cite_start]options = "--delete-older-than 7d"; [cite: 11]
   };
 
   ##################################################
   # POVINNÉ – po instalaci už NEMĚNIT
   ##################################################
-  system.stateVersion = "25.05";
+  [cite_start]system.stateVersion = "25.05"; [cite: 12]
 }
