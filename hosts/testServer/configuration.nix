@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -16,7 +15,6 @@
     # Server-only moduly
     ##################################################
     ../../modules/server/server-apps.nix
-    ../../modules/server/bridge-network.nix
     ../../modules/server/libvirt.nix
     ../../modules/server/cockpit.nix
     ../../modules/server/nspawn.nix
@@ -26,6 +24,12 @@
     # VM-specific
     ##################################################
     ../../modules/common-vm-guest.nix
+
+    ##################################################
+    # Network
+    ##################################################
+    ../../modules/common-networkmanager.nix
+    ../../modules/server/server-network.nix
 
     ##################################################
     # Containers

@@ -7,8 +7,8 @@
     hostBridge = "br0";
 
     # Fixní IP adresa
-    localAddress = "10.0.0.10/24";
-    hostAddress = "10.0.0.1";
+    localAddress = "192.168.122.10/24";
+    hostAddress = "192.168.122.1";
 
     config = { config, pkgs, lib, ... }: {
       networking.hostName = "server1";

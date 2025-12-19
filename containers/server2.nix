@@ -6,8 +6,8 @@
     privateNetwork = false;
     hostBridge = "br0";
 
-    localAddress = "10.0.0.11/24";
-    hostAddress = "10.0.0.1";
+    localAddress = "192.168.122.11/24";
+    hostAddress = "192.168.122.1";
 
     config = { config, pkgs, lib, ... }: {
       networking.hostName = "server2";
