@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  containers.server1 = {
+  containers.server2 = {
     autoStart = true;
     privateNetwork = false;
 
