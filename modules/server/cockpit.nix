@@ -1,16 +1,17 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   services.cockpit = {
     enable = true;
     port = 9090;
+    openFirewall = false;  # Firewall je vypnutý, ale pro úplnost
 
     # Odstranit všechny omezení pro přístup
     settings = {
       WebService = {
         AllowUnencrypted = true;
-        # Odstranit ProtocolHeader pro přímé připojení
-        Origins = "*";
+        # Použijte mkForce k přepsání výchozí hodnoty
+        Origins = lib.mkForce "*";
       };
     };
   };
