@@ -40,6 +40,8 @@
     isNormalUser = true;
     description = "Server administrator";
     extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
+    shell = pkgs.bashInteractive;
+    linger = true;
     initialPassword = "zmenit";
   };
 
