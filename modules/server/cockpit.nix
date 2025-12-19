@@ -14,4 +14,10 @@
     ];
     wantedBy = [ "sockets.target" ];
   };
+
+  # Zajistit, že socket bude spuštěn před službou
+  systemd.services.cockpit = {
+    requires = [ "cockpit.socket" ];
+    after = [ "cockpit.socket" ];
+  };
 }
