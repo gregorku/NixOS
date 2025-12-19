@@ -5,9 +5,11 @@
     autoStart = true;
     privateNetwork = false;
 
+    # POVINNÉ pro Docker v kontejneru
     extraFlags = [
-      "--bind=/tmp"
-      "--bind=/run"
+      "--capability=all"
+      "--system-call-filter=@system-service"
+      "--bind=/sys/fs/cgroup"
     ];
 
     config = { config, pkgs, lib, ... }: {
@@ -16,7 +18,7 @@
       networking.hostName = "server1";
       system.stateVersion = "25.05";
 
-      # Síťová konfigurace - vypnout vše
+      # Síť - vypnout vše, použije host network
       networking.useDHCP = lib.mkForce false;
       networking.dhcpcd.enable = lib.mkForce false;
       networking.networkmanager.enable = lib.mkForce false;
@@ -29,15 +31,29 @@
       networking.defaultGateway = lib.mkForce null;
       networking.nameservers = lib.mkForce [];
 
-      # Docker - POUŽÍT mkForce PRO CELÝ ATRIBUT
+      # Docker konfigurace pro kontejnery
       virtualisation.docker = lib.mkForce {
         enable = true;
         enableOnBoot = true;
         package = pkgs.docker_27;
         daemon.settings = {
           ip = "0.0.0.0";
+          # Důležité pro kontejnery
+          exec-opts = ["native.cgroupdriver=cgroupfs"];
+          storage-driver = "vfs";
         };
+        extraOptions = "--exec-opt native.cgroupdriver=cgroupfs --storage-driver=vfs";
       };
+
+      # Potřebné pro Docker v kontejneru
+      boot.kernelModules = [ "overlay" ];
+      boot.kernel.sysctl = {
+        "net.ipv4.ip_forward" = 1;
+        "net.ipv6.conf.all.forwarding" = 1;
+      };
+
+      # Povolit cgroups
+      systemd.enableUnifiedCgroupHierarchy = false;
 
       # Portainer Business Edition
       systemd.services.portainer = {
@@ -73,7 +89,6 @@
 
       users.users.root.initialPassword = "test123";
 
-      # Vypnout zbytečné služby
       services.resolved.enable = false;
       services.timesyncd.enable = false;
 
