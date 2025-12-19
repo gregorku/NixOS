@@ -15,32 +15,17 @@
       networking.hostName = "server2";
       system.stateVersion = "25.05";
 
-      ##################################################
-      # ŘEŠENÍ KONFLIKTU
-      ##################################################
-      networking.networkmanager.enable = lib.mkForce false;
-      networking.useDHCP = lib.mkForce true;
+      networking.useDHCP = true;
+      networking.networkmanager.enable = false;
 
-      networking.dhcpcd.enable = false;
-      networking.interfaces = {};
-      networking.defaultGateway = lib.mkForce null;
-      networking.nameservers = lib.mkForce [];
-
-      ##################################################
       # Docker
-      ##################################################
       virtualisation.docker = {
         enable = true;
         enableOnBoot = true;
         package = pkgs.docker_27;
-        daemon.settings = {
-          ip = "0.0.0.0";
-        };
       };
 
-      ##################################################
       # Portainer Business Edition
-      ##################################################
       systemd.services.portainer = {
         description = "Portainer Business Edition 2.33.6";
         after = [ "docker.service" ];
@@ -60,25 +45,24 @@
         wantedBy = [ "multi-user.target" ];
       };
 
-      ##################################################
       # Firewall
-      ##################################################
       networking.firewall.enable = true;
       networking.firewall.allowedTCPPorts = [ 22 9443 ];
 
-      ##################################################
       # SSH
-      ##################################################
-      services.openssh.enable = true;
+      services.openssh = {
+        enable = true;
+        settings = {
+          PasswordAuthentication = true;
+          PermitRootLogin = "yes";
+        };
+      };
 
-      services.resolved.enable = false;
-      services.timesyncd.enable = false;
+      users.users.root.initialPassword = "test123";
 
-      ##################################################
       # Základní balíčky
-      ##################################################
       environment.systemPackages = with pkgs; [
-        vim htop curl wget git tmux docker-compose
+        nano vim htop curl wget git tmux docker-compose
       ];
     };
   };

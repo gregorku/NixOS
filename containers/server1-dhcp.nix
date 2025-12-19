@@ -3,9 +3,8 @@
 {
   containers.server1 = {
     autoStart = true;
-    privateNetwork = false;  # Použít host network
+    privateNetwork = false;  # Použít host network (DHCP)
 
-    # Přidat tyto flagy pro stabilitu
     extraFlags = [
       "--bind=/tmp"
       "--bind=/run"
@@ -16,33 +15,18 @@
       networking.hostName = "server1";
       system.stateVersion = "25.05";
 
-      ##################################################
-      # ŘEŠENÍ KONFLIKTU: Vynutit DHCP a vypnout NetworkManager
-      ##################################################
-      networking.networkmanager.enable = lib.mkForce false;  # VYPNOUT
-      networking.useDHCP = lib.mkForce true;  # VYNUTIT DHCP
+      # DHCP a síť
+      networking.useDHCP = true;
+      networking.networkmanager.enable = false;
 
-      # Explicitně zakázat všechny ruční síťové konfigurace
-      networking.dhcpcd.enable = false;
-      networking.interfaces = {};
-      networking.defaultGateway = lib.mkForce null;
-      networking.nameservers = lib.mkForce [];
-
-      ##################################################
       # Docker
-      ##################################################
       virtualisation.docker = {
         enable = true;
         enableOnBoot = true;
         package = pkgs.docker_27;
-        daemon.settings = {
-          ip = "0.0.0.0";
-        };
       };
 
-      ##################################################
       # Portainer Business Edition
-      ##################################################
       systemd.services.portainer = {
         description = "Portainer Business Edition 2.33.6";
         after = [ "docker.service" ];
@@ -62,32 +46,24 @@
         wantedBy = [ "multi-user.target" ];
       };
 
-      ##################################################
       # Firewall v kontejneru
-      ##################################################
       networking.firewall.enable = true;
       networking.firewall.allowedTCPPorts = [ 22 8443 ];
 
-      ##################################################
-      # SSH - minimalizovat konflikty
-      ##################################################
+      # SSH
       services.openssh = {
         enable = true;
         settings = {
-          PasswordAuthentication = false;
-          PermitRootLogin = "prohibit-password";
+          PasswordAuthentication = true;  # Pro jednoduchost
+          PermitRootLogin = "yes";
         };
       };
 
-      # Zakázat zbytečné služby, které mohou konfliktovat
-      services.resolved.enable = false;
-      services.timesyncd.enable = false;
+      users.users.root.initialPassword = "test123";
 
-      ##################################################
       # Základní balíčky
-      ##################################################
       environment.systemPackages = with pkgs; [
-        vim htop curl wget git tmux docker-compose
+        nano vim htop curl wget git tmux docker-compose
       ];
     };
   };
