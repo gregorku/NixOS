@@ -1,14 +1,14 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  networking.firewall.enable = false;
+  networking.firewall.enable = lib.mkDefault false;
 
   services.openssh = {
-    enable = true;
+    enable = lib.mkDefault true;
     settings = {
-      PasswordAuthentication = true;
-      KbdInteractiveAuthentication = true;
-      PermitRootLogin = "no";
+      PasswordAuthentication = lib.mkDefault true;
+      KbdInteractiveAuthentication = lib.mkDefault true;
+      PermitRootLogin = lib.mkDefault "no";
     };
   };
 
