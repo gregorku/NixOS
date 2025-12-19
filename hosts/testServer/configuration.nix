@@ -39,55 +39,46 @@
   users.users.gregor = {
     isNormalUser = true;
     description = "Server administrator";
-    # [cite_start]Přidány skupiny 'podman' a 'docker' pro správu v Cockpitu [cite: 5]
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" "podman" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
     shell = pkgs.bashInteractive;
     linger = true;
-    [cite_start]initialPassword = "zmenit"; [cite: 5]
+    initialPassword = "zmenit";
   };
-
-  ##################################################
-  # Cockpit Pluginy (pro zobrazení kontejnerů a VM)
-  ##################################################
-  environment.systemPackages = with pkgs; [
-    cockpit-machines  # Správa nspawn kontejnerů a Libvirt VM
-    cockpit-podman    # Správa Podman/Docker kontejnerů
-  ];
 
   ##################################################
   # ZFS host ID (required)
   ##################################################
-  [cite_start]networking.hostId = "deadbeef"; [cite: 6]
+  networking.hostId = "deadbeef";
 
   ##################################################
   # Lokalizace / Jazyk
   ##################################################
-  [cite_start]time.timeZone = "Europe/Prague"; [cite: 7]
-  [cite_start]console.keyMap = "cz"; [cite: 7]
-  [cite_start]i18n.defaultLocale = "cs_CZ.UTF-8"; [cite: 7]
+  time.timeZone = "Europe/Prague";
+  console.keyMap = "cz";
+  i18n.defaultLocale = "cs_CZ.UTF-8";
 
   ##################################################
   # Bootloader – UEFI (VM)
   ##################################################
-  [cite_start]boot.loader.systemd-boot.enable = true; [cite: 8]
-  [cite_start]boot.loader.efi.canTouchEfiVariables = true; [cite: 8]
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   ##################################################
   # Boot generations cleanup
   ##################################################
-  [cite_start]boot.loader.systemd-boot.configurationLimit = 5; [cite: 9]
+  boot.loader.systemd-boot.configurationLimit = 5;
 
   ##################################################
-  # Nix garbage collection
+  # Nix garbage collection (server-friendly)
   ##################################################
   nix.gc = {
-    [cite_start]automatic = true; [cite: 10]
-    [cite_start]dates = "weekly"; [cite: 11]
-    [cite_start]options = "--delete-older-than 7d"; [cite: 11]
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
   };
 
   ##################################################
   # POVINNÉ – po instalaci už NEMĚNIT
   ##################################################
-  [cite_start]system.stateVersion = "25.05"; [cite: 12]
+  system.stateVersion = "25.05";
 }
