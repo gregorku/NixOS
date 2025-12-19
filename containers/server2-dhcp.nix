@@ -1,13 +1,16 @@
 { config, pkgs, lib, ... }:
 
 {
-  containers.server1 = {
+  containers.server2 = {
     autoStart = true;
-    privateNetwork = false;
+    privateNetwork = false;  # Sdílet hostitelskou síť
 
     config = { config, pkgs, lib, ... }: {
-      networking.hostName = "server1";
+      networking.hostName = "server2";
       system.stateVersion = "25.05";
+
+      # Povolit DHCP v kontejneru
+      networking.useDHCP = true;
 
       virtualisation.docker = {
         enable = true;
@@ -23,7 +26,7 @@
             ${pkgs.docker}/bin/docker run \
               --name portainer \
               --restart unless-stopped \
-              -p 8443:9000 \
+              -p 9443:9000 \
               -v /var/run/docker.sock:/var/run/docker.sock \
               -v portainer_data:/data \
               portainer/portainer-ee:2.33.6
@@ -36,12 +39,11 @@
       };
 
       networking.firewall.enable = true;
-      networking.firewall.allowedTCPPorts = [ 8443 ];
-
-      users.users.root.initialPassword = "changeme";
+      networking.firewall.allowedTCPPorts = [ 9443 ];
 
       services.openssh.enable = true;
       services.openssh.settings.PermitRootLogin = "yes";
+      users.users.root.initialPassword = "changeme";
     };
   };
 }

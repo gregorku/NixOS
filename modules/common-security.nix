@@ -12,14 +12,9 @@
     };
   };
 
-  # Nutné pro Cockpit
   services.dbus.enable = true;
   security.polkit.enable = true;
   services.accounts-daemon.enable = true;
-
-  # Realtime (nevadí)
   security.rtkit.enable = true;
-
-  # Hardening
   security.protectKernelImage = true;
 }

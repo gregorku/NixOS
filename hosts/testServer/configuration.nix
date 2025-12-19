@@ -26,20 +26,17 @@
     ../../modules/common-vm-guest.nix
 
     ##################################################
-    # Network
+    # Network - POUZE NetworkManager s DHCP
     ##################################################
     ../../modules/common-networkmanager.nix
 
     ##################################################
-    # Containers
+    # Containers - ZJEDNODUŠENÉ verze
     ##################################################
-    ../../containers/server1.nix
-    ../../containers/server2.nix
+    ../../containers/server1-dhcp.nix
+    ../../containers/server2-dhcp.nix
   ];
 
-  ##################################################
-  # Hostname
-  ##################################################
   networking.hostName = "testServer";
 
   ##################################################
@@ -52,11 +49,11 @@
     shell = pkgs.bashInteractive;
     linger = true;
     initialPassword = "zmenit";
+    openssh.authorizedKeys.keys = [
+      "ssh-rsa AAAAB3NzaC1yc2E... váš-ssh-klíč"
+    ];
   };
 
-  ##################################################
-  # ZFS host ID (required)
-  ##################################################
   networking.hostId = "deadbeef";
 
   ##################################################
@@ -78,7 +75,7 @@
   boot.loader.systemd-boot.configurationLimit = 5;
 
   ##################################################
-  # Nix garbage collection (server-friendly)
+  # Nix garbage collection
   ##################################################
   nix.gc = {
     automatic = true;
@@ -92,13 +89,15 @@
   boot.enableContainers = true;
 
   ##################################################
-  # Firewall
+  # DHCP - výchozí nastavení
+  ##################################################
+  networking.useDHCP = true;
+
+  ##################################################
+  # Firewall - jen potřebné porty
   ##################################################
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 22 9090 8443 9443 ];
 
-  ##################################################
-  # POVINNÉ – po instalaci už NEMĚNIT
-  ##################################################
   system.stateVersion = "25.05";
 }

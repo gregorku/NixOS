@@ -1,17 +1,18 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   networking.networkmanager.enable = true;
 
+  # Vynutit DHCP jako výchozí
+  networking.useDHCP = lib.mkForce true;
+
+  # Zakázat ruční konfiguraci
+  networking.dhcpcd.enable = false;
+  networking.interfaces = {};
+
   environment.systemPackages = with pkgs; [
     networkmanager
     networkmanagerapplet
-
-    # VPN pluginy
-    networkmanager-openvpn
-    networkmanager-openconnect
-
-    # WireGuard nástroje (CLI + NM backend)
     wireguard-tools
   ];
 

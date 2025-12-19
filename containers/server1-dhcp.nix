@@ -1,19 +1,24 @@
 { config, pkgs, lib, ... }:
 
 {
-  containers.server2 = {
+  containers.server1 = {
     autoStart = true;
-    privateNetwork = false;
+    privateNetwork = false;  # Sdílet hostitelskou síť
 
     config = { config, pkgs, lib, ... }: {
-      networking.hostName = "server2";
+      networking.hostName = "server1";
       system.stateVersion = "25.05";
 
+      # Povolit DHCP v kontejneru
+      networking.useDHCP = true;
+
+      # Docker
       virtualisation.docker = {
         enable = true;
         enableOnBoot = true;
       };
 
+      # Portainer Business Edition
       systemd.services.portainer = {
         description = "Portainer Business Edition";
         after = [ "docker.service" ];
@@ -23,7 +28,7 @@
             ${pkgs.docker}/bin/docker run \
               --name portainer \
               --restart unless-stopped \
-              -p 9443:9000 \
+              -p 8443:9000 \
               -v /var/run/docker.sock:/var/run/docker.sock \
               -v portainer_data:/data \
               portainer/portainer-ee:2.33.6
@@ -35,13 +40,16 @@
         wantedBy = [ "multi-user.target" ];
       };
 
+      # Firewall v kontejneru
       networking.firewall.enable = true;
-      networking.firewall.allowedTCPPorts = [ 9443 ];
+      networking.firewall.allowedTCPPorts = [ 8443 ];
 
-      users.users.root.initialPassword = "changeme";
-
+      # SSH (volitelné)
       services.openssh.enable = true;
       services.openssh.settings.PermitRootLogin = "yes";
+
+      # Nastavit heslo pro root (pro SSH)
+      users.users.root.initialPassword = "changeme";
     };
   };
 }
