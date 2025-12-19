@@ -3,7 +3,7 @@
 {
   containers.server1 = {
     autoStart = true;
-    privateNetwork = false;  # Host networking
+    privateNetwork = false;
 
     extraFlags = [
       "--bind=/tmp"
@@ -11,23 +11,32 @@
     ];
 
     config = { config, pkgs, lib, ... }: {
+      boot.isContainer = true;
+
       networking.hostName = "server1";
       system.stateVersion = "25.05";
 
-      # ŘEŠENÍ KONFLIKTU: explicitně nastavit DHCP s vysokou prioritou
-      networking.useDHCP = lib.mkForce true;
-      # Vypnout NetworkManager v kontejneru, protože používáme host network
+      # Síťová konfigurace - vypnout vše
+      networking.useDHCP = lib.mkForce false;
+      networking.dhcpcd.enable = lib.mkForce false;
       networking.networkmanager.enable = lib.mkForce false;
 
-      # Explicitně zakázat další služby, které by mohly konfliktovat
-      networking.dhcpcd.enable = lib.mkForce false;
-      networking.interfaces = lib.mkForce {};
+      systemd.services.systemd-networkd.enable = false;
+      systemd.services.NetworkManager.enable = false;
+      systemd.services.dhcpcd.enable = false;
 
-      # Docker
-      virtualisation.docker = {
+      networking.interfaces = lib.mkForce {};
+      networking.defaultGateway = lib.mkForce null;
+      networking.nameservers = lib.mkForce [];
+
+      # Docker - POUŽÍT mkForce PRO CELÝ ATRIBUT
+      virtualisation.docker = lib.mkForce {
         enable = true;
         enableOnBoot = true;
         package = pkgs.docker_27;
+        daemon.settings = {
+          ip = "0.0.0.0";
+        };
       };
 
       # Portainer Business Edition
@@ -51,8 +60,7 @@
       };
 
       # Firewall
-      networking.firewall.enable = true;
-      networking.firewall.allowedTCPPorts = [ 22 8443 ];
+      networking.firewall.enable = false;
 
       # SSH
       services.openssh = {
@@ -64,6 +72,10 @@
       };
 
       users.users.root.initialPassword = "test123";
+
+      # Vypnout zbytečné služby
+      services.resolved.enable = false;
+      services.timesyncd.enable = false;
 
       environment.systemPackages = with pkgs; [
         vim htop curl wget git tmux docker-compose

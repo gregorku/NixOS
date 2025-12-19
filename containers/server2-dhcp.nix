@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
 
 {
-  containers.server1 = {
+  containers.server2 = {
     autoStart = true;
-    privateNetwork = false;  # Host networking
+    privateNetwork = false;
 
     extraFlags = [
       "--bind=/tmp"
@@ -11,23 +11,31 @@
     ];
 
     config = { config, pkgs, lib, ... }: {
-      networking.hostName = "server1";
+      boot.isContainer = true;
+
+      networking.hostName = "server2";
       system.stateVersion = "25.05";
 
-      # ŘEŠENÍ KONFLIKTU: explicitně nastavit DHCP s vysokou prioritou
-      networking.useDHCP = lib.mkForce true;
-      # Vypnout NetworkManager v kontejneru, protože používáme host network
+      networking.useDHCP = lib.mkForce false;
+      networking.dhcpcd.enable = lib.mkForce false;
       networking.networkmanager.enable = lib.mkForce false;
 
-      # Explicitně zakázat další služby, které by mohly konfliktovat
-      networking.dhcpcd.enable = lib.mkForce false;
-      networking.interfaces = lib.mkForce {};
+      systemd.services.systemd-networkd.enable = false;
+      systemd.services.NetworkManager.enable = false;
+      systemd.services.dhcpcd.enable = false;
 
-      # Docker
-      virtualisation.docker = {
+      networking.interfaces = lib.mkForce {};
+      networking.defaultGateway = lib.mkForce null;
+      networking.nameservers = lib.mkForce [];
+
+      # Docker - POUŽÍT mkForce
+      virtualisation.docker = lib.mkForce {
         enable = true;
         enableOnBoot = true;
         package = pkgs.docker_27;
+        daemon.settings = {
+          ip = "0.0.0.0";
+        };
       };
 
       # Portainer Business Edition
@@ -40,7 +48,7 @@
           ExecStart = "${pkgs.docker}/bin/docker run \
             --name portainer \
             --restart=always \
-            -p 8443:9000 \
+            -p 9443:9000 \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v portainer_data:/data \
             portainer/portainer-ee:2.33.6";
@@ -50,11 +58,8 @@
         wantedBy = [ "multi-user.target" ];
       };
 
-      # Firewall
-      networking.firewall.enable = true;
-      networking.firewall.allowedTCPPorts = [ 22 8443 ];
+      networking.firewall.enable = false;
 
-      # SSH
       services.openssh = {
         enable = true;
         settings = {
@@ -64,6 +69,9 @@
       };
 
       users.users.root.initialPassword = "test123";
+
+      services.resolved.enable = false;
+      services.timesyncd.enable = false;
 
       environment.systemPackages = with pkgs; [
         vim htop curl wget git tmux docker-compose
