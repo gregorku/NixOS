@@ -1,28 +1,18 @@
 { config, pkgs, lib, ... }:
 
 {
+  # Použít NetworkManager
   networking.networkmanager.enable = true;
 
-  # Explicitně zakázat systemd-networkd
+  # Nepoužívat systemd-networkd
   networking.useNetworkd = false;
-  systemd.services.systemd-networkd.enable = false;
-  systemd.sockets.systemd-networkd.enable = false;
 
-  # Vynutit DHCP jako výchozí
-  networking.useDHCP = lib.mkForce true;
-
-  # Zakázat ruční konfiguraci
-  networking.dhcpcd.enable = false;
-  networking.interfaces = {};
-
+  # Nástroje pro síť (server-friendly)
   environment.systemPackages = with pkgs; [
     networkmanager
-    networkmanagerapplet
     wireguard-tools
   ];
 
-  programs.nm-applet.enable = true;
-
-  # uživatel smí spravovat síť
+  # Uživatel může spravovat síť
   users.users.gregor.extraGroups = [ "networkmanager" ];
 }

@@ -6,38 +6,27 @@
     ##################################################
     # Common – sdílené moduly
     ##################################################
-    ../../modules/common-base.nix
     ../../modules/common-security.nix
     ../../modules/common-snapshots.nix
-    ../../modules/common-swap.nix
+    ../../modules/common-server-swap.nix
 
     ##################################################
     # Server-only moduly
     ##################################################
     ../../modules/server/server-apps.nix
     ../../modules/server/libvirt.nix
-    ../../modules/server/cockpit.nix   # Tento modul už jen zapne cockpit a otevře firewall
-    ../../modules/server/nspawn.nix
+    ../../modules/server/cockpit.nix
     ../../modules/server/zfs.nix
-
-    ##################################################
-    # VM-specific
-    ##################################################
-    ../../modules/common-vm-guest.nix
 
     ##################################################
     # Network - POUZE NetworkManager s DHCP
     ##################################################
     ../../modules/common-networkmanager.nix
 
-    ##################################################
-    # Containers - ZJEDNODUŠENÉ verze
-    ##################################################
-    ../../containers/server1-dhcp.nix
-#    ../../containers/server2-dhcp.nix
+
   ];
 
-  networking.hostName = "testServer";
+  networking.hostName = "domaPcServer";
 
   ##################################################
   # Users
@@ -49,8 +38,6 @@
     shell = pkgs.bashInteractive;
     linger = true;
     initialPassword = "zmenit";
-    openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3NzaC1yc2E... váš-ssh-klíč"
     ];
   };
 
@@ -107,5 +94,5 @@
     Origins = lib.mkForce "*";
   };
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "24.05";
 }

@@ -1,9 +1,20 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   services.cockpit = {
     enable = true;
-    port = 9090;
-    openFirewall = true;  # Povolit firewall
+    openFirewall = true;
+
+    settings = {
+      WebService = {
+        Protocol = "https";
+        Port = 9090;
+      };
+    };
   };
+
+  environment.systemPackages = with pkgs; [
+    cockpit
+    cockpit-machines
+  ];
 }
