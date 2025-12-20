@@ -4,16 +4,22 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../../modules/zfs.nix
+    ##################################################
+    # Common – sdílené moduly
+    ##################################################
+    ../../modules/common-security.nix
     ../../modules/common-server-swap.nix
     ../../modules/common-snapshots.nix
-
     ../../modules/common-networkmanager.nix
-    ../../modules/common-security.nix
 
-    ../../modules/cockpit.nix
-    ../../modules/libvirt.nix
-    ../../modules/server-apps.nix
+    ##################################################
+    # Server-only moduly
+    ##################################################
+    ../../modules/server/server-apps.nix
+    ../../modules/server/libvirt.nix
+    ../../modules/server/cockpit.nix
+    ../../modules/server/zfs.nix
+
   ];
 
   ## =========================
