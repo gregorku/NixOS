@@ -12,9 +12,4 @@
       };
     };
   };
-
-  environment.systemPackages = with pkgs; [
-    cockpit
-    cockpitPackages.cockpit-machines
-  ];
 }
