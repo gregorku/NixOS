@@ -11,10 +11,10 @@
         Port = 9090;
       };
     };
-
-    # Cockpit plugins
-    packages = with pkgs; [
-      cockpit-machines
-    ];
   };
+
+  environment.systemPackages = with pkgs; [
+    cockpit
+    cockpitPackages.cockpit-machines
+  ];
 }
