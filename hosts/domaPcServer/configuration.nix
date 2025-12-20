@@ -10,7 +10,6 @@
     ../../modules/common-security.nix
     ../../modules/common-server-swap.nix
     ../../modules/common-snapshots.nix
-    ../../modules/common-networkmanager.nix
 
     ##################################################
     # Server-only moduly
@@ -19,6 +18,11 @@
     ../../modules/server/libvirt.nix
     ../../modules/server/cockpit.nix
     ../../modules/server/zfs.nix
+
+    ##################################################
+    # Server-networking
+    ##################################################
+    ../../modules/server/br0-domaPcServer.nix
 
   ];
 
