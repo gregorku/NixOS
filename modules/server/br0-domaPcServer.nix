@@ -10,8 +10,9 @@
   ## =========================
   ## Bridge br0 (host + VM + containers)
   ## =========================
-  networking.networkmanager.ensureProfiles = {
-    br0 = {
+  networking.networkmanager.ensureProfiles = [
+    {
+      name = "br0";
       text = ''
         [connection]
         id=br0
@@ -28,9 +29,10 @@
         [ipv6]
         method=ignore
       '';
-    };
+    }
 
-    br0-enp2s0 = {
+    {
+      name = "br0-enp2s0";
       text = ''
         [connection]
         id=br0-enp2s0
@@ -46,8 +48,8 @@
         [ipv6]
         method=ignore
       '';
-    };
-  };
+    }
+  ];
 
   ## =========================
   ## Firewall
