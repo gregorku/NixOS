@@ -2,46 +2,55 @@
 
 {
   ## =========================
-  ## NETWORK MANAGER
+  ## NetworkManager
   ## =========================
   networking.networkmanager.enable = true;
   networking.useNetworkd = false;
 
   ## =========================
-  ## BRIDGE br0 (host + VM + containers)
+  ## Bridge br0 (host + VM + containers)
   ## =========================
-  networking.networkmanager.connectionProfiles = {
+  networking.networkmanager.ensureProfiles = {
     br0 = {
-      connection = {
-        id = "br0";
-        type = "bridge";
-        interface-name = "br0";
-        autoconnect = true;
-      };
+      text = ''
+        [connection]
+        id=br0
+        type=bridge
+        interface-name=br0
+        autoconnect=true
 
-      ipv4 = {
-        method = "auto"; # DHCP z LAN
-      };
+        [bridge]
+        stp=false
 
-      ipv6 = {
-        method = "ignore";
-      };
+        [ipv4]
+        method=auto
+
+        [ipv6]
+        method=ignore
+      '';
     };
 
     br0-enp2s0 = {
-      connection = {
-        id = "br0-enp2s0";
-        type = "ethernet";
-        interface-name = "enp2s0";
-        master = "br0";
-        slave-type = "bridge";
-        autoconnect = true;
-      };
+      text = ''
+        [connection]
+        id=br0-enp2s0
+        type=ethernet
+        interface-name=enp2s0
+        master=br0
+        slave-type=bridge
+        autoconnect=true
+
+        [ipv4]
+        method=disabled
+
+        [ipv6]
+        method=ignore
+      '';
     };
   };
 
   ## =========================
-  ## FIREWALL
+  ## Firewall
   ## =========================
   networking.firewall.trustedInterfaces = [ "br0" ];
 }
