@@ -1,94 +1,65 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
+
 {
   imports = [
     ./hardware-configuration.nix
 
-    ##################################################
-    # Common – sdílené moduly
-    ##################################################
-    ../../modules/common-security.nix
-    ../../modules/common-snapshots.nix
+    ../../modules/zfs.nix
     ../../modules/common-server-swap.nix
+    ../../modules/common-snapshots.nix
 
-    ##################################################
-    # Server-only moduly
-    ##################################################
-    ../../modules/server/server-apps.nix
-    ../../modules/server/libvirt.nix
-    ../../modules/server/cockpit.nix
-    ../../modules/server/zfs.nix
-
-    ##################################################
-    # Network - POUZE NetworkManager s DHCP
-    ##################################################
     ../../modules/common-networkmanager.nix
+    ../../modules/common-security.nix
 
-
+    ../../modules/cockpit.nix
+    ../../modules/libvirt.nix
+    ../../modules/server-apps.nix
   ];
 
-  networking.hostName = "domaPcServer";
+  ## =========================
+  ## ZÁKLADNÍ NASTAVENÍ
+  ## =========================
 
-  ##################################################
-  # Users
-  ##################################################
+  networking.hostName = "domaPcServer";
+  time.timeZone = "Europe/Prague";
+
+  i18n.defaultLocale = "cs_CZ.UTF-8";
+  console.keyMap = "cz";
+
+  ## =========================
+  ## BOOTLOADER
+  ## =========================
+
+  boot.loader.systemd-boot.enable = true;
+
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot/efi";
+  };
+
+  ## =========================
+  ## UŽIVATEL
+  ## =========================
+
   users.users.gregor = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
     initialPassword = "zmenit";
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "libvirtd"
+    ];
   };
 
-  networking.hostId = "deadbeef";
+  ## =========================
+  ## BEZPEČNÉ DEFAULTY
+  ## =========================
 
-  ##################################################
-  # Lokalizace / Jazyk
-  ##################################################
-  time.timeZone = "Europe/Prague";
-  console.keyMap = "cz";
-  i18n.defaultLocale = "cs_CZ.UTF-8";
-
-  ##################################################
-  # Bootloader – UEFI (VM)
-  ##################################################
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  ##################################################
-  # Boot generations cleanup
-  ##################################################
-  boot.loader.systemd-boot.configurationLimit = 20;
-
-  ##################################################
-  # Nix garbage collection
-  ##################################################
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
-
-  ##################################################
-  # Container support
-  ##################################################
-  boot.enableContainers = true;
-
-  ##################################################
-  # DHCP - výchozí nastavení
-  ##################################################
-#  networking.useDHCP = true;
-
-  ##################################################
-  # Firewall - jen potřebné porty
-  ##################################################
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 9090 8443 9443 ];
 
-  ##################################################
-  # Cockpit settings - přepsat výchozí
-  ##################################################
-  services.cockpit.settings.WebService = {
-    AllowUnencrypted = true;
-    Origins = lib.mkForce "*";
-  };
+  ## =========================
+  ## NIXOS KOMPATIBILITA
+  ## =========================
 
   system.stateVersion = "24.05";
 }
