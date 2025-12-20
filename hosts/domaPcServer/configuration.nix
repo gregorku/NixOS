@@ -74,7 +74,7 @@
   ##################################################
   # DHCP - výchozí nastavení
   ##################################################
-  networking.useDHCP = true;
+#  networking.useDHCP = true;
 
   ##################################################
   # Firewall - jen potřebné porty
