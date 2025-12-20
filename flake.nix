@@ -29,6 +29,14 @@
         ];
       };
 
+      # ⬇⬇⬇ server domaPc
+      domaPcServer = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/domaPcServer/configuration.nix
+        ];
+      };
+
       test = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
