@@ -2,52 +2,20 @@
 
 {
   ## =========================
-  ## NetworkManager
+  ## systemd-networkd
   ## =========================
-  networking.networkmanager.enable = true;
-  networking.useNetworkd = false;
+  networking.useNetworkd = true;
+  systemd.network.enable = true;
 
   ## =========================
-  ## Bridge br0 (host + VM + containers)
+  ## Bridge br0
   ## =========================
-  networking.networkmanager.ensureProfiles = {
-    br0 = {
-      text = ''
-        [connection]
-        id=br0
-        type=bridge
-        interface-name=br0
-        autoconnect=true
+  networking.bridges.br0.interfaces = [ "enp2s0" ];
 
-        [bridge]
-        stp=false
-
-        [ipv4]
-        method=auto
-
-        [ipv6]
-        method=ignore
-      '';
-    };
-
-    br0-enp2s0 = {
-      text = ''
-        [connection]
-        id=br0-enp2s0
-        type=ethernet
-        interface-name=enp2s0
-        master=br0
-        slave-type=bridge
-        autoconnect=true
-
-        [ipv4]
-        method=disabled
-
-        [ipv6]
-        method=ignore
-      '';
-    };
-  };
+  ## =========================
+  ## DHCP na bridge
+  ## =========================
+  networking.interfaces.br0.useDHCP = true;
 
   ## =========================
   ## Firewall
