@@ -10,7 +10,7 @@
   ## =========================
   ## BRIDGE br0 (host + VM + containers)
   ## =========================
-  networking.networkmanager.connections = {
+  networking.networkmanager.connectionProfiles = {
     br0 = {
       connection = {
         id = "br0";
