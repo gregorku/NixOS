@@ -1,24 +1,36 @@
-config = { config, pkgs, ... }: {
-  system.stateVersion = "25.05";
+{ config, pkgs, ... }:
 
-  networking.hostName = "ha-doma";
+{
+  containers.ha-doma = {
+    autoStart = true;
 
-  networking.useDHCP = true;
+    privateNetwork = false;
+    hostBridge = "br0";
 
-  time.timeZone = "Europe/Prague";
+    config = { config, pkgs, ... }: {
+      system.stateVersion = "25.05";
 
-  services.openssh.enable = true;
+      networking.hostName = "ha-doma";
 
-  users.users.root.openssh.authorizedKeys.keys = [
-    # tvůj SSH public key
-  ];
+      # DHCP uvnitř kontejneru (KLÍČOVÉ)
+      networking.useDHCP = true;
 
-  environment.systemPackages = with pkgs; [
-    bash
-    curl
-    git
-    vim
-    nano
-    mc
-  ];
-};
+      time.timeZone = "Europe/Prague";
+
+      services.openssh.enable = true;
+
+      users.users.root.openssh.authorizedKeys.keys = [
+        # tvůj SSH public key
+      ];
+
+      environment.systemPackages = with pkgs; [
+        bash
+        curl
+        git
+        vim
+        nano
+        mc
+      ];
+    };
+  };
+}
