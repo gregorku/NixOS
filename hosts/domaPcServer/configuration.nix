@@ -88,6 +88,20 @@
   };
 
   ## =========================
+  ## SMART monitoring disků (KRITICKÉ)
+  ## =========================
+  services.smartd = {
+    enable = true;
+    autodetect = true;
+
+    notifications = {
+      mail = {
+        enable = false;
+      };
+    };
+  };
+
+  ## =========================
   ## BEZPEČNÉ DEFAULTY
   ## =========================
 
