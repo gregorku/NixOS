@@ -1,31 +1,19 @@
 { config, pkgs, ... }:
 
 {
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.05";
 
-  ## =========================
-  ## ZÁKLAD
-  ## =========================
-  time.timeZone = "Europe/Prague";
+  networking.hostName = "ha-doma";
 
-  ## =========================
-  ## SSH
-  ## =========================
+  networking.useNetworkd = true;
+  systemd.network.enable = true;
+
+  systemd.network.networks."eth0" = {
+    matchConfig.Name = "host0";
+    networkConfig = {
+      DHCP = "yes";
+    };
+  };
+
   services.openssh.enable = true;
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    # vlož sem svůj SSH public key
-  ];
-
-  ## =========================
-  ## BALÍKY
-  ## =========================
-  environment.systemPackages = with pkgs; [
-    bash
-    curl
-    git
-    vim
-    nano
-    mc
-  ];
 }
