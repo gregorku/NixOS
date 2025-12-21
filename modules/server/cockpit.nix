@@ -4,17 +4,17 @@
   ## =========================
   ## Cockpit – Web UI pro server
   ## =========================
+
   services.cockpit = {
     enable = true;
 
-    ## Defaultní port Cockpitu
-    port = 9090;
+    ## DŮLEŽITÉ: explicitně určit balíček Cockpitu
+    ## (jinak se nespustí cockpit-ws backend)
+    package = pkgs.cockpit;
 
-    ## Povolit přístup přes firewall (LAN)
-    ## Skutečný dosah řeší síť / router
+    port = 9090;
     openFirewall = true;
 
-    ## Automatické odhlášení (bezpečnost)
     settings = {
       Session = {
         IdleTimeout = 15;
@@ -23,25 +23,13 @@
   };
 
   ## =========================
-  ## Nutné systémové služby
+  ## Nutné služby (už máš, ale zde pro úplnost)
   ## =========================
-
-  ## Polkit – autorizace akcí (nutné pro Cockpit)
   security.polkit.enable = true;
-
-  ## Accounts service – NUTNÉ pro přihlášení do Cockpitu
   services.accounts-daemon.enable = true;
-
-  ## D-Bus – komunikace se systémem (většinou už běží)
   services.dbus.enable = true;
 
   ## =========================
-  ## Volitelné, ale doporučené
+  ## NEpřidávat cockpit do systemPackages
   ## =========================
-
-  ## Ujistit se, že cockpit backend binárky jsou dostupné
-  ## (na serverových profilech to občas chybí v PATH)
-  environment.systemPackages = with pkgs; [
-    cockpit
-  ];
 }
