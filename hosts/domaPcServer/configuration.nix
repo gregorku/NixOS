@@ -121,14 +121,10 @@
   };
 
   ## =========================
-  ## SYSTEMD-NSPAWN (LXC-like containers)
+  ## SYSTEMD-NSPAWN containers
   ## =========================
 
   virtualisation.systemd-nspawn.enable = true;
-
-  services.systemd-machined = {
-    enable = true;
-  };
 
   ## =========================
   ## BEZPEČNÉ DEFAULTY
