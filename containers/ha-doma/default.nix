@@ -6,7 +6,6 @@
   ## =========================
   ## ZÁKLAD
   ## =========================
-  networking.hostName = "ha-doma";
   time.timeZone = "Europe/Prague";
 
   ## =========================
