@@ -7,7 +7,6 @@
     openFirewall = false;
   };
 
-  ## KLÍČOVÉ: Explicitně definovat socket (IPv4)
   systemd.sockets.cockpit = {
     enable = true;
     wantedBy = [ "sockets.target" ];
