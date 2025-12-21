@@ -2,16 +2,16 @@
 
 {
   containers.ha-doma = {
-    autoStart = true; [cite: 5]
+    autoStart = true;
 
-    # Import vnitřní konfigurace
-    config = import ./default.nix; [cite: 6]
+    # Importuje vnitřní nastavení ze souboru default.nix
+    config = import ./default.nix;
 
-    # SÍŤ – Propojení s existujícím br0 na hostiteli
+    # Propojení s bridge rozhraním br0 na hostiteli
     privateNetwork = true;
     macvlans = [ "br0" ];
 
-    # Povolení TUN/TAP zařízení
-    enableTun = true; [cite: 8]
+    # Povolení TUN zařízení (nutné pro některé síťové funkce)
+    enableTun = true;
   };
 }
