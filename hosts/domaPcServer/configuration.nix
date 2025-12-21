@@ -41,6 +41,7 @@
   ## =========================
 
   boot.loader.systemd-boot.enable = true;
+  boot.zfs.forceImportAll = true;
 
   boot.loader.efi = {
     canTouchEfiVariables = true;
@@ -59,15 +60,6 @@
       "networkmanager"
       "libvirtd"
     ];
-  };
-
-  ## =========================
-  ## ZFS – EXTRA POOLY
-  ## =========================
-  services.zfs = {
-    autoImport.enable = true;
-    autoScrub.enable = true;
-    trim.enable = true;
   };
 
   ## =========================
