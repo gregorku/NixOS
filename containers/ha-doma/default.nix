@@ -3,10 +3,9 @@
 {
   system.stateVersion = "24.05";
 
-  # IDENTITA KONTEJNERU
   networking.hostName = "ha-doma";
 
-  # SÍŤOVÉ NASTAVENÍ (ponecháno beze změn)
+  # Síťování (ponecháno beze změn)
   networking.useNetworkd = true;
   systemd.network.enable = true;
   networking.useHostResolvConf = false;
@@ -17,25 +16,35 @@
     networkConfig.DHCP = "yes";
   };
 
-  # 1. VYTVOŘENÍ UŽIVATELE GREGOR
+  # 1. AKTIVACE PODMANU UVNITŘ KONTEJNERU
+  virtualisation.podman = {
+    enable = true;
+    # Vytvoří alias 'docker' pro příkaz 'podman'
+    dockerCompat = true;
+    # Potřebné pro DNS mezi vnořenými kontejnery
+    defaultNetwork.settings.dns_enabled = true;
+  };
+
+  # 2. INSTALACE PODMAN-COMPOSE A DALŠÍCH NÁSTROJŮ
+  environment.systemPackages = with pkgs; [
+    podman-compose
+    git
+    vim # pro editaci compose souborů přímo v kontejneru
+    nano
+    mc
+  ];
+
+  # Uživatelská sekce (ponecháno pro uživatele gregor)
   users.users.gregor = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Povolení sudo pro správu
-    # Ponechání možnosti přihlášení klíčem
+    extraGroups = [ "wheel" "podman" ]; # Přidána skupina podman
     openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3Nza... váš_klíč ... uživatel@notebook"
+      "vaše-ssh-klíče"
     ];
   };
 
-  # 2. NASTAVENÍ SSH PRO PŘIPOJENÍ PŘES HESLO
   services.openssh = {
     enable = true;
-    settings = {
-      # Povolení přihlášení heslem
-      PasswordAuthentication = true;
-      KbdInteractiveAuthentication = true;
-      # Rootovi přístup zakážeme, budeme používat uživatele gregor
-      PermitRootLogin = "no";
-    };
+    settings.PasswordAuthentication = true;
   };
 }
