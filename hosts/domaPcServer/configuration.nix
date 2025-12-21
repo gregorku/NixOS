@@ -102,6 +102,20 @@
   };
 
   ## =========================
+  ## SSD / NVMe TRIM
+  ## =========================
+  services.fstrim.enable = true;
+
+  ## =========================
+  ## Ochrana paměti (earlyoom)
+  ## =========================
+  services.earlyoom = {
+    enable = true;
+    freeMemThreshold = 5;
+    freeSwapThreshold = 10;
+  };
+
+  ## =========================
   ## BEZPEČNÉ DEFAULTY
   ## =========================
 

@@ -24,5 +24,7 @@
     strace
     file
     tree
+    smartmontools
+    lm_sensors
   ];
 }
