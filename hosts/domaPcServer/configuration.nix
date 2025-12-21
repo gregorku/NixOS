@@ -62,6 +62,27 @@
   };
 
   ## =========================
+  ## ZFS – EXTRA POOLY
+  ## =========================
+  services.zfs = {
+    autoImport.enable = true;
+    autoScrub.enable = true;
+    trim.enable = true;
+  };
+
+  ## =========================
+  ## VIDEO DISK (sdb → /video)
+  ## =========================
+  fileSystems."/video" = {
+    device = "/dev/disk/by-uuid/4cf97703-5ef4-43e0-a73a-b1b2fcdc133d";
+    fsType = "xfs";
+    options = [
+      "noatime"
+      "nofail"
+    ];
+  };
+
+  ## =========================
   ## BEZPEČNÉ DEFAULTY
   ## =========================
 
