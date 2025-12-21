@@ -1,19 +1,20 @@
 { config, pkgs, ... }:
 
 {
-  system.stateVersion = "24.05"; [cite_start]# [cite: 1]
+  system.stateVersion = "24.05"; #
 
-  networking.hostName = "ha-doma"; [cite_start]# [cite: 1]
+  # IDENTITA KONTEJNERU
+  networking.hostName = "ha-doma"; #
 
-  # [cite_start]Síťové nastavení uvnitř kontejneru [cite: 2]
-  networking.useNetworkd = true;
-  systemd.network.enable = true;
+  # SÍŤ – DHCP z LAN přes macvlan (přemostěno na br0)
+  networking.useNetworkd = true; # [cite: 2]
+  systemd.network.enable = true; # [cite: 2]
 
-  # Nastavíme DHCP na rozhraní, které vytvořil macvlan
-  systemd.network.networks."10-macvlan" = {
-    matchConfig.Name = "mv-*";
-    networkConfig.DHCP = "yes";
+  systemd.network.networks."mv-br0" = {
+    matchConfig.Name = "mv-br0";
+    networkConfig.DHCP = "yes"; # [cite: 3]
   };
 
-  services.openssh.enable = true; [cite_start]# [cite: 4]
+  # ZÁKLAD
+  services.openssh.enable = true; # [cite: 4]
 }
