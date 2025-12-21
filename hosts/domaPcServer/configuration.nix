@@ -41,7 +41,6 @@
   ## =========================
 
   boot.loader.systemd-boot.enable = true;
-  boot.zfs.forceImportAll = true;
 
   boot.loader.efi = {
     canTouchEfiVariables = true;
@@ -60,6 +59,20 @@
       "networkmanager"
       "libvirtd"
     ];
+  };
+
+  ## =========================
+  ## ZFS – import datapool po bootu
+  ## =========================
+  systemd.services.zfs-import-datapool = {
+    description = "Import ZFS datapool";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "zfs-import.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.zfs}/bin/zpool import datapool";
+      RemainAfterExit = true;
+    };
   };
 
   ## =========================
