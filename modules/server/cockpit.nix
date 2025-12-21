@@ -24,7 +24,6 @@
       # TOTO JE NEJDŮLEŽITĚJŠÍ - přinutí IPv4 naslouchání
       ListenStream = [ "0.0.0.0:9090" ];
       # Pro IPv6 přidejte: "[::]:9090"
-      PassCredentials = true;
     };
   };
 
