@@ -25,10 +25,4 @@
       # Pro IPv6 přidejte: "[::]:9090"
     };
   };
-
-  # Zajistit, že socket bude spuštěn před službou
-  systemd.services.cockpit = {
-    requires = [ "cockpit.socket" ];
-    after = [ "cockpit.socket" ];
-  };
 }
