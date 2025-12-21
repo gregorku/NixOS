@@ -9,7 +9,6 @@
     # Odstranit všechny omezení pro přístup
     settings = {
       WebService = {
-        AllowUnencrypted = true;
         # Použijte mkForce k přepsání výchozí hodnoty
         Origins = lib.mkForce "*";
       };
