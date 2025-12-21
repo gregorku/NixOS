@@ -1,26 +1,19 @@
 { config, pkgs, ... }:
 
 {
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.05"; [cite: 1]
 
-  ##################################################
-  # IDENTITA KONTEJNERU
-  ##################################################
-  networking.hostName = "ha-doma";
+  networking.hostName = "ha-doma"; [cite: 1]
 
-  ##################################################
-  # SÍŤ – DHCP z LAN (br0 → host0)
-  ##################################################
-  networking.useNetworkd = true;
-  systemd.network.enable = true;
+  # Kontejner nepotřebuje vlastní networkd, pokud ho řídí nspawn,
+  # ale pro DHCP v rámci bridge je to takto správně:
+  networking.useNetworkd = true; [cite: 2]
+  systemd.network.enable = true; [cite: 2]
 
-  systemd.network.networks."host0" = {
-    matchConfig.Name = "host0";
+  systemd.network.networks."10-eth0" = {
+    matchConfig.Name = "eth0";
     networkConfig.DHCP = "yes";
   };
 
-  ##################################################
-  # ZÁKLAD
-  ##################################################
-  services.openssh.enable = true;
+  services.openssh.enable = true; [cite: 4]
 }
