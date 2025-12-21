@@ -12,8 +12,7 @@
 
       networking.hostName = "ha-doma";
 
-      # DHCP uvnitř kontejneru (KLÍČOVÉ)
-      networking.useDHCP = true;
+      networking.useDHCP =  true;
 
       time.timeZone = "Europe/Prague";
 
