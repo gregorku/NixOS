@@ -24,6 +24,11 @@
     ##################################################
     ../../modules/server/br0-domaPcServer.nix
 
+    ##################################################
+    # NSPAWN containers
+    ##################################################
+    ../../containers/homeassistant
+
   ];
 
   ## =========================
@@ -113,6 +118,16 @@
     enable = true;
     freeMemThreshold = 5;
     freeSwapThreshold = 10;
+  };
+
+  ## =========================
+  ## SYSTEMD-NSPAWN (LXC-like containers)
+  ## =========================
+
+  virtualisation.systemd-nspawn.enable = true;
+
+  services.systemd-machined = {
+    enable = true;
   };
 
   ## =========================
