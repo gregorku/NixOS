@@ -121,12 +121,6 @@
   };
 
   ## =========================
-  ## SYSTEMD-NSPAWN containers
-  ## =========================
-
-  services.systemd-nspawn.enable = true;
-
-  ## =========================
   ## BEZPEČNÉ DEFAULTY
   ## =========================
 
