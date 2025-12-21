@@ -3,19 +3,24 @@
 {
   system.stateVersion = "24.05";
 
-  # Název stroje uvnitř kontejneru
+  # IDENTITA KONTEJNERU
   networking.hostName = "ha-doma";
 
-  # Aktivace síťování pomocí systemd-networkd
+  # SÍŤOVÉ NASTAVENÍ
   networking.useNetworkd = true;
   systemd.network.enable = true;
 
-  # Nastavení DHCP pro virtuální rozhraní vytvořené přes macvlan
+  # OPRAVA DNS: Vypne přebírání resolv.conf z hostitele,
+  # což vyřeší chybu "Failed assertions"
+  networking.useHostResolvConf = false;
+  services.resolved.enable = true;
+
+  # Nastavení DHCP na virtuálním rozhraní (název začíná na mv-)
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";
   };
 
-  # Povolení SSH pro vzdálený přístup do kontejneru
+  # ZÁKLADNÍ SLUŽBY
   services.openssh.enable = true;
 }
