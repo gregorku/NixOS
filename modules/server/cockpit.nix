@@ -1,35 +1,37 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  ## =========================
-  ## Cockpit – Web UI pro server
-  ## =========================
-
   services.cockpit = {
     enable = true;
-
-    ## DŮLEŽITÉ: explicitně určit balíček Cockpitu
-    ## (jinak se nespustí cockpit-ws backend)
-    package = pkgs.cockpit;
-
     port = 9090;
-    openFirewall = true;
+    openFirewall = false;  # Firewall je vypnutý, ale pro úplnost
 
+    # Odstranit všechny omezení pro přístup
     settings = {
-      Session = {
-        IdleTimeout = 15;
+      WebService = {
+        AllowUnencrypted = true;
+        # Použijte mkForce k přepsání výchozí hodnoty
+        Origins = lib.mkForce "*";
       };
     };
   };
 
-  ## =========================
-  ## Nutné služby (už máš, ale zde pro úplnost)
-  ## =========================
-  security.polkit.enable = true;
-  services.accounts-daemon.enable = true;
-  services.dbus.enable = true;
+  # KLÍČOVÉ: Explicitně definovat socket v NixOS stylu
+  systemd.sockets.cockpit = {
+    enable = true;
+    wantedBy = [ "sockets.target" ];
+    socketConfig = {
+      # TOTO JE NEJDŮLEŽITĚJŠÍ - přinutí IPv4 naslouchání
+      ListenStream = [ "0.0.0.0:9090" ];
+      # Pro IPv6 přidejte: "[::]:9090"
+      SocketMode = "0666";
+      PassCredentials = true;
+    };
+  };
 
-  ## =========================
-  ## NEpřidávat cockpit do systemPackages
-  ## =========================
+  # Zajistit, že socket bude spuštěn před službou
+  systemd.services.cockpit = {
+    requires = [ "cockpit.socket" ];
+    after = [ "cockpit.socket" ];
+  };
 }
