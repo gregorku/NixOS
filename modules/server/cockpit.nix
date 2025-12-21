@@ -6,14 +6,6 @@
     port = 9090;
     openFirewall = false;  # Firewall je vypnutý, ale pro úplnost
 
-    # Odstranit všechny omezení pro přístup
-    settings = {
-      WebService = {
-        # Použijte mkForce k přepsání výchozí hodnoty
-        Origins = lib.mkForce "*";
-      };
-    };
-  };
 
   # KLÍČOVÉ: Explicitně definovat socket v NixOS stylu
   systemd.sockets.cockpit = {
