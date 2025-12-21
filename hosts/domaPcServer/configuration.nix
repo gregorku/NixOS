@@ -124,7 +124,7 @@
   ## SYSTEMD-NSPAWN containers
   ## =========================
 
-  virtualisation.systemd-nspawn.enable = true;
+  services.systemd-nspawn.enable = true;
 
   ## =========================
   ## BEZPEČNÉ DEFAULTY
