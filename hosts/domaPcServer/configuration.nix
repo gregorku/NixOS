@@ -65,7 +65,7 @@
   ## ZFS – EXTRA POOLY
   ## =========================
   services.zfs = {
-    autoImportPools.enable = true;
+    autoImport.enable = true;
     autoScrub.enable = true;
     trim.enable = true;
   };
