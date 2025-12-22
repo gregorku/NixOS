@@ -38,19 +38,17 @@
     mc
   ];
 
-  # 4. UŽIVATELÉ (Upraveno pro spouštění bez sudo)
+  # 4. UŽIVATELÉ
   users.users.gregor = {
     isNormalUser = true;
     extraGroups = [ "wheel" "podman" ];
-    # Tyto dva řádky umožňují rootless Podman
-    subUidRanges = [{ startIdx = 100000; count = 65536; }];
-    subGidRanges = [{ startIdx = 100000; count = 65536; }];
     openssh.authorizedKeys.keys = [
       "vaše-ssh-klíče"
     ];
   };
 
   # 5. OPRÁVNĚNÍ PRO DATA
+  # Zajistí, že složka /data bude patřit uživateli gregor
   systemd.tmpfiles.rules = [
     "d /data 0755 gregor users -"
   ];
