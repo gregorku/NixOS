@@ -66,7 +66,7 @@
       "wheel"
       "networkmanager"
       "libvirtd"
-      "podman"  # Přidáno pro správu kontejnerů v Cockpitu
+      "podman"
     ];
   };
 
@@ -74,7 +74,7 @@
   ## SYSTÉMOVÉ BALÍČKY
   ## =========================
   environment.systemPackages = with pkgs; [
-    cockpit-podman # Modul pro správu kontejnerů v Cockpitu
+    pkgs.cockpit-podman # Explicitní zápis často vyřeší problém s undefined variable
   ];
 
   ## =========================
