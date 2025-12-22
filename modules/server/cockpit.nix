@@ -41,7 +41,7 @@
       ListenStream = "/run/podman/podman.sock";
       SocketMode = "0660";
       SocketUser = "root";
-      SocketGroup = "podman"; # nebo "docker" pokud používáte dockerCompat
+      SocketGroup = "podman";
     };
   };
 
@@ -55,8 +55,9 @@
   security.polkit.enable = true;
 
   ## =========================
-  ## UŽIVATELÉ A SKUPINY
+  ## UŽIVATELÉ A SKUPINY (volitelné)
   ## =========================
-  # Pokud chcete, aby jiní uživatelé mohli spravovat kontejnery
-  users.users.<vaše-username>.extraGroups = [ "podman" ];
+  # Pokud chcete, aby jiní uživatelé mohli spravovat kontejnery,
+  # odkomentujte a nahraďte "username" skutečným uživatelským jménem:
+  # users.users.username.extraGroups = [ "podman" ];
 }
