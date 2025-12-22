@@ -73,8 +73,8 @@
   ## =========================
   ## SYSTÉMOVÉ BALÍČKY
   ## =========================
-  environment.systemPackages = with pkgs; [
-    pkgs.cockpit-podman # Explicitní zápis často vyřeší problém s undefined variable
+  environment.systemPackages = [
+    pkgs.cockpit-podman
   ];
 
   ## =========================
