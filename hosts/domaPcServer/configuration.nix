@@ -33,7 +33,6 @@
   ## =========================
   ## ZÁKLADNÍ NASTAVENÍ
   ## =========================
-
   networking.hostName = "domaPcServer";
   time.timeZone = "Europe/Prague";
 
@@ -41,11 +40,17 @@
   console.keyMap = "cz";
 
   ## =========================
+  ## VIRTUALIZACE A KONTEJNERY (Nové)
+  ## =========================
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
+
+  ## =========================
   ## BOOTLOADER
   ## =========================
-
   boot.loader.systemd-boot.enable = true;
-
   boot.loader.efi = {
     canTouchEfiVariables = true;
     efiSysMountPoint = "/boot/efi";
@@ -54,7 +59,6 @@
   ## =========================
   ## UŽIVATEL
   ## =========================
-
   users.users.gregor = {
     isNormalUser = true;
     initialPassword = "zmenit";
@@ -62,8 +66,18 @@
       "wheel"
       "networkmanager"
       "libvirtd"
+      "podman"  # Přidáno pro správu kontejnerů v Cockpitu
     ];
   };
+
+  ## =========================
+  ## SYSTÉMOVÉ BALÍČKY
+  ## =========================
+  environment.systemPackages = with pkgs; [
+    vim
+    git
+    cockpit-podman # Modul pro správu kontejnerů v Cockpitu
+  ];
 
   ## =========================
   ## ZFS – import datapool po bootu
@@ -97,12 +111,7 @@
   services.smartd = {
     enable = true;
     autodetect = true;
-
-    notifications = {
-      mail = {
-        enable = false;
-      };
-    };
+    notifications.mail.enable = false;
   };
 
   ## =========================
@@ -122,12 +131,10 @@
   ## =========================
   ## BEZPEČNÉ DEFAULTY
   ## =========================
-
   networking.firewall.enable = true;
 
   ## =========================
   ## NIXOS KOMPATIBILITA
   ## =========================
-
   system.stateVersion = "24.05";
 }
