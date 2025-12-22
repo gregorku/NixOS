@@ -9,6 +9,13 @@
     port = 9090;
     openFirewall = true;
 
+    # V NixOS 24.05 se podman plugin přidává zde, ne jako samostatný balíček
+    package = pkgs.cockpit.override {
+      extraPlugins = with pkgs.cockpitPlugins; [
+        podman
+      ];
+    };
+
     settings = {
       WebService = {
         AllowUnencrypted = true;
@@ -16,12 +23,6 @@
       };
     };
   };
-
-  ## Cockpit plugin pro Podman
-  environment.systemPackages = with pkgs; [
-    cockpit
-    cockpit-podman
-  ];
 
   ## =========================
   ## PODMAN
