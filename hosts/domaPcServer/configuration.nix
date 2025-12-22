@@ -74,7 +74,7 @@
   ## SYSTÉMOVÉ BALÍČKY
   ## =========================
   environment.systemPackages = [
-    pkgs.cockpit-podman
+    pkgs.cockpit-machines # Tento je v NixOS stabilnější a často se plete
   ];
 
   ## =========================
