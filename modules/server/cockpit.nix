@@ -19,7 +19,7 @@
 
   ## Cockpit plugin pro Podman
   environment.systemPackages = with pkgs; [
-    cockpit-podman
+    cockpit
   ];
 
   ## =========================
