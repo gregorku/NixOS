@@ -1,10 +1,12 @@
 { config, pkgs, lib, ... }:
 
 {
+  ## =========================
+  ## COCKPIT
+  ## =========================
   services.cockpit = {
     enable = true;
     port = 9090;
-    # Na hostiteli je dobré firewall povolit, pokud ho používáte
     openFirewall = true;
 
     settings = {
@@ -15,7 +17,31 @@
     };
   };
 
-  # Na hostitelském NixOS obvykle standardní socket funguje bez extra konfigurace,
-  # ale pokud chcete mít jistotu IPv4 přístupu:
-  systemd.sockets.cockpit.socketConfig.ListenStream = lib.mkForce [ "0.0.0.0:9090" ];
+  ## Cockpit plugin pro Podman
+  environment.systemPackages = with pkgs; [
+    cockpit-podman
+  ];
+
+  ## =========================
+  ## PODMAN
+  ## =========================
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
+
+  ## Podman socket (nutné pro Cockpit)
+  systemd.services.podman.enable = true;
+  systemd.sockets.podman.enable = true;
+
+  ## =========================
+  ## NETWORK / SOCKET
+  ## =========================
+  systemd.sockets.cockpit.socketConfig.ListenStream =
+    lib.mkForce [ "0.0.0.0:9090" ];
+
+  ## =========================
+  ## OPRÁVNĚNÍ
+  ## =========================
+  security.polkit.enable = true;
 }

@@ -71,13 +71,6 @@
   };
 
   ## =========================
-  ## SYSTÉMOVÉ BALÍČKY
-  ## =========================
-  environment.systemPackages = [
-    pkgs.cockpit-machines # Tento je v NixOS stabilnější a často se plete
-  ];
-
-  ## =========================
   ## ZFS – import datapool po bootu
   ## =========================
   systemd.services.zfs-import-datapool = {
