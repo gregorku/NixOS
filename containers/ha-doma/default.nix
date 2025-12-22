@@ -2,10 +2,9 @@
 
 {
   system.stateVersion = "24.05";
-
   networking.hostName = "ha-doma";
 
-  # Síťování (ponecháno beze změn)
+  # SÍŤOVÁNÍ
   networking.useNetworkd = true;
   systemd.network.enable = true;
   networking.useHostResolvConf = false;
@@ -16,39 +15,43 @@
     networkConfig.DHCP = "yes";
   };
 
-  # 1. AKTIVACE PODMANU UVNITŘ KONTEJNERU
+  # 1. KONFIGURACE PODMANU
   virtualisation.podman = {
     enable = true;
-    # Vytvoří alias 'docker' pro příkaz 'podman'
     dockerCompat = true;
-    # Potřebné pro DNS mezi vnořenými kontejnery
     defaultNetwork.settings.dns_enabled = true;
-
   };
 
-  # 2. GLOBÁLNÍ PROMĚNNÉ PROSTŘEDÍ (oprava chyby)
-  # Musí být mimo blok virtualisation.podman
-    environment.variables = {
-      PODMAN_RUN_IGNORE_KEYRING = "1";
+  # 2. FIX PRO KEYRING
+  virtualisation.containers.containersConf.settings = {
+    containers = {
+      keyring = false;
+    };
   };
 
-  # 3. INSTALACE PODMAN-COMPOSE A DALŠÍCH NÁSTROJŮ
+  # 3. BALÍČKY
   environment.systemPackages = with pkgs; [
     podman-compose
     git
-    vim # pro editaci compose souborů přímo v kontejneru
+    vim
     nano
     mc
   ];
 
-  # Uživatelská sekce (ponecháno pro uživatele gregor)
+  # 4. UŽIVATELÉ
   users.users.gregor = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "podman" ]; # Přidána skupina podman
+    extraGroups = [ "wheel" "podman" ];
     openssh.authorizedKeys.keys = [
       "vaše-ssh-klíče"
     ];
   };
+
+  # 5. OPRÁVNĚNÍ PRO DATA (NOVÉ)
+  # Toto zajistí, že složka /data bude patřit uživateli gregor
+  systemd.tmpfiles.rules = [
+    "d /data 0755 gregor users -"
+  ];
 
   services.openssh = {
     enable = true;
