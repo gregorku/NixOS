@@ -11,5 +11,16 @@
     enableTun = true;
     # Doplníme bindMounts, pokud byste později potřebovali
     # sdílet data z hostitele přímo do vnořených kontejnerů
+
+    # DŮLEŽITÉ: Přidání oprávnění pro vnořené kontejnery
+    additionalCapabilities = [ "CAP_SYS_ADMIN" "CAP_MKNOD" ];
+
+    # MAPOVÁNÍ DATAPOOLU (Hostitel -> Kontejner)
+    bindMounts = {
+      "/data" = {
+        hostPath = "/data";
+        isReadOnly = false;
+      };
+    };
   };
 }
