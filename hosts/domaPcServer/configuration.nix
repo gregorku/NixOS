@@ -74,8 +74,6 @@
   ## SYSTÉMOVÉ BALÍČKY
   ## =========================
   environment.systemPackages = with pkgs; [
-    vim
-    git
     cockpit-podman # Modul pro správu kontejnerů v Cockpitu
   ];
 
