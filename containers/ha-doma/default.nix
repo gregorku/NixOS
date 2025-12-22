@@ -23,13 +23,16 @@
     dockerCompat = true;
     # Potřebné pro DNS mezi vnořenými kontejnery
     defaultNetwork.settings.dns_enabled = true;
-    # Vypnutí keyring-u pro podman v kontejneru
-    extraPackages = [ pkgs.conmon ];
-    # Vynutíme, aby Podman nepoužíval keyring pomocí proměnné prostředí
-    environment.variables.PODMAN_RUN_IGNORE_KEYRING = "1";
+
   };
 
-  # 2. INSTALACE PODMAN-COMPOSE A DALŠÍCH NÁSTROJŮ
+  # 2. GLOBÁLNÍ PROMĚNNÉ PROSTŘEDÍ (oprava chyby)
+  # Musí být mimo blok virtualisation.podman
+    environment.variables = {
+      PODMAN_RUN_IGNORE_KEYRING = "1";
+  };
+
+  # 3. INSTALACE PODMAN-COMPOSE A DALŠÍCH NÁSTROJŮ
   environment.systemPackages = with pkgs; [
     podman-compose
     git
