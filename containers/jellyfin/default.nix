@@ -4,7 +4,9 @@
   system.stateVersion = "24.05";
   networking.hostName = "jellyfin";
 
-  # SÍŤOVÁNÍ
+  ## =========================
+  ## SÍŤ – macvlan (mv-*)
+  ## =========================
   networking.useNetworkd = true;
   systemd.network.enable = true;
   networking.useHostResolvConf = false;
@@ -15,36 +17,66 @@
     networkConfig.DHCP = "yes";
   };
 
-  # 2. FIX PRO KEYRING
+  ## =========================
+  ## FIX PRO KEYRING – ponecháno
+  ## =========================
   virtualisation.containers.containersConf.settings = {
     containers = {
       keyring = false;
     };
   };
 
-  # 3. BALÍČKY
+  ## =========================
+  ## BALÍČKY
+  ## =========================
   environment.systemPackages = with pkgs; [
-    git
-    vim
-    nano
-    mc
+    git vim nano mc
   ];
 
-  # 4. UŽIVATELÉ
+  ## =========================
+  ## UŽIVATEL
+  ## =========================
   users.users.gregor = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "podman" ];
+    extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
       "vaše-ssh-klíče"
     ];
   };
 
-  # 5. OPRÁVNĚNÍ PRO DATA
-  # Zajistí, že složka /data bude patřit uživateli gregor
+  ## =========================
+  ## JELLYFIN SERVER
+  ## =========================
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+  };
+
+  users.users.jellyfin = {
+    isSystemUser = true;
+    group = "jellyfin";
+    home = "/var/lib/jellyfin";
+    createHome = true;
+  };
+  users.groups.jellyfin = {};
+
+  ## =========================
+  ## OPRÁVNĚNÍ PRO DATA
+  ## =========================
   systemd.tmpfiles.rules = [
-    "d /data 0755 gregor users -"
+    "d /data 0755 jellyfin jellyfin -"
+    "d /data/media 0755 jellyfin jellyfin -"
   ];
 
+  ## =========================
+  ## FIREWALL
+  ## =========================
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 8096 ];
+
+  ## =========================
+  ## SSH
+  ## =========================
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = true;
