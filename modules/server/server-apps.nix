@@ -12,6 +12,7 @@
     curl
     wget
     rsync
+    mc
 
     # síť / debug
     iproute2
