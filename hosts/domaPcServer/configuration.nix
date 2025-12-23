@@ -40,14 +40,6 @@
   console.keyMap = "cz";
 
   ## =========================
-  ## VIRTUALIZACE A KONTEJNERY (Nové)
-  ## =========================
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-  };
-
-  ## =========================
   ## BOOTLOADER
   ## =========================
   boot.loader.systemd-boot.enable = true;
@@ -66,7 +58,6 @@
       "wheel"
       "networkmanager"
       "libvirtd"
-      "podman"
     ];
   };
 
