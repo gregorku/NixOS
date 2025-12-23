@@ -9,12 +9,7 @@
     macvlans = [ "br0" ];
     enableTun = true;
 
-    uidMap = [
-      { hostID = 0; containerID = 0; size = 65536; }
-    ];
-    gidMap = [
-      { hostID = 0; containerID = 0; size = 65536; }
-    ];
+    privateUsers = false;
 
     bindMounts = {
       "/data/media" = {
