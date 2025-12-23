@@ -28,6 +28,7 @@
     # NSPAWN containers
     ##################################################
     ../../containers/ha-doma/container.nix
+    ../../containers/jellyfin/container.nix
   ];
 
   ## =========================
