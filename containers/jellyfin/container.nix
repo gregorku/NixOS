@@ -9,7 +9,8 @@
     macvlans = [ "br0" ];
     enableTun = true;
 
-    privateUsers = false;
+    # Použije stejné UID/GID jako hostitel
+    privateUsers = "identity";
 
     bindMounts = {
       "/data/media" = {
