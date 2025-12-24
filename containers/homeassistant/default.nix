@@ -3,6 +3,7 @@
 {
   system.stateVersion = "24.05";
   networking.hostName = "homeassistant";
+  networking.firewall.enable = false;
 
   networking.useNetworkd = true;
   systemd.network.enable = true;
