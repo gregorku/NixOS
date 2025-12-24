@@ -13,8 +13,8 @@
     resources = [];
   };
 
-  recorder = {
-    db_url = "postgresql://homeassistant@localhost/homeassistant";
+recorder = {
+  db_url = "postgresql://homeassistant@postgres-ha/homeassistant";
   };
 
   zha = {
