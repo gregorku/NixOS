@@ -49,16 +49,14 @@
   };
 
   services.home-assistant = {
-    enable = true;
-    configDir = "/data/homeassistant/config";
-    openFirewall = true;
+  enable = true;
+  configDir = "/data/homeassistant/config";
+  openFirewall = true;
 
-    config = {
-      default_config = {};
-    };
+  config = import ./configuration.nix;
 
-    extraPackages = python3Packages: with python3Packages; [
-      psycopg2
-    ];
-  };
-}
+  extraPackages = python3Packages: with python3Packages; [
+    psycopg2
+  ];
+};
+
