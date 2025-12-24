@@ -5,7 +5,8 @@
   networking.hostName = "homeassistant";
   networking.useNetworkd = true;
   systemd.network.enable = true;
-  services.resolved.enable = true;
+  networking.resolvconf.enable = false;
+
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
