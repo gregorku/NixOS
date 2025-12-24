@@ -28,7 +28,7 @@
     ##################################################
     # NSPAWN containers
     ##################################################
-    ../../containers/hameassistant/container.nix
+    ../../containers/homeassistant/container.nix
     ../../containers/jellyfin/container.nix
   ];
 
