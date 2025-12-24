@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./auto-upgrade.nix
 
     ##################################################
     # Common – sdílené moduly
@@ -27,7 +28,7 @@
     ##################################################
     # NSPAWN containers
     ##################################################
-    ../../containers/ha-doma/container.nix
+    ../../containers/hameassistant/container.nix
     ../../containers/jellyfin/container.nix
   ];
 
