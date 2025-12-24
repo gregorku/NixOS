@@ -26,6 +26,7 @@
     home = "/var/lib/homeassistant";
     createHome = true;
   };
+
   users.groups.homeassistant = {};
 
   networking.firewall.allowedTCPPorts = [ 8123 ];
@@ -44,6 +45,11 @@
     enable = true;
     configDir = "/data/homeassistant/config";
     openFirewall = true;
+
+    config = {
+      default_config = {};
+    };
+
     extraPackages = python3Packages: with python3Packages; [
       psycopg2
     ];
