@@ -40,16 +40,6 @@
 
   networking.firewall.allowedTCPPorts = [ 8123 ];
 
-  services.postgresql = {
-    enable = true;
-    dataDir = "/data/homeassistant/postgres";
-    ensureDatabases = [ "homeassistant" ];
-    ensureUsers = [{
-      name = "homeassistant";
-      ensureDBOwnership = true;
-    }];
-  };
-
   services.home-assistant = {
     enable = true;
     configDir = "/data/homeassistant/config";
