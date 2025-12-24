@@ -6,26 +6,23 @@
 
   networking.useNetworkd = true;
   systemd.network.enable = true;
-  networking.useHostResolvConf = false;
-  services.resolved.enable = false;
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";
   };
 
+  # KEYRING FIX
   virtualisation.containers.containersConf.settings = {
     containers.keyring = false;
   };
 
-  ## =========================
-  ## BALÍČKY
-  ## =========================
-  environment.systemPackages = with pkgs; [
-    git vim nano mc
-  ];
-
   services.openssh.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    nano
+    mc
+  ];
 
   users.users.homeassistant = {
     isSystemUser = true;
@@ -34,6 +31,7 @@
     home = "/var/lib/homeassistant";
     createHome = true;
   };
+
   users.groups.homeassistant = {};
 
   networking.firewall.allowedTCPPorts = [ 8123 ];
@@ -49,14 +47,14 @@
   };
 
   services.home-assistant = {
-  enable = true;
-  configDir = "/data/homeassistant/config";
-  openFirewall = true;
+    enable = true;
+    configDir = "/data/homeassistant/config";
+    openFirewall = true;
 
-  config = import ./configuration.nix;
+    config = import ./configuration.nix;
 
-  extraPackages = python3Packages: with python3Packages; [
-    psycopg2
-  ];
- };
-};
+    extraPackages = python3Packages: with python3Packages; [
+      psycopg2
+    ];
+  };
+}
