@@ -58,5 +58,5 @@
   extraPackages = python3Packages: with python3Packages; [
     psycopg2
   ];
+ };
 };
-
