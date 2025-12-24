@@ -13,7 +13,7 @@
     networkConfig.DHCP = "yes";
   };
 
-  # FIX keyring
+  # KEYRING FIX
   virtualisation.containers.containersConf.settings = {
     containers.keyring = false;
   };
@@ -36,6 +36,9 @@
     enable = true;
     configDir = "/data/homeassistant/config";
     openFirewall = true;
+
+    # POVINNÉ – modul bez toho padá
+    config = {};
 
     extraPackages = python3Packages: with python3Packages; [
       psycopg2
