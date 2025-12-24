@@ -3,17 +3,15 @@
 {
   system.stateVersion = "24.05";
   networking.hostName = "homeassistant";
+
   networking.useNetworkd = true;
   systemd.network.enable = true;
-  networking.resolvconf.enable = false;
-
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";
   };
 
-  # KEYRING FIX
   virtualisation.containers.containersConf.settings = {
     containers.keyring = false;
   };
@@ -27,7 +25,6 @@
     home = "/var/lib/homeassistant";
     createHome = true;
   };
-
   users.groups.homeassistant = {};
 
   networking.firewall.allowedTCPPorts = [ 8123 ];
