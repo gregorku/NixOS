@@ -6,6 +6,8 @@
 
   networking.useNetworkd = true;
   systemd.network.enable = true;
+  networking.useHostResolvConf = false;
+  services.resolved.enable = false;
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
