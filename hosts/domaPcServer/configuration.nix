@@ -3,7 +3,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./auto-upgrade.nix
 
     ##################################################
     # Common – sdílené moduly
@@ -19,6 +18,7 @@
     ../../modules/server/libvirt.nix
     ../../modules/server/cockpit.nix
     ../../modules/server/zfs.nix
+    ../../auto-upgrade.nix
 
     ##################################################
     # Server-networking
