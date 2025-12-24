@@ -2,13 +2,13 @@
 
 {
   systemd.services.nixos-auto-upgrade = {
-    description = "NixOS automatic rebuild from git";
+    description = "NixOS automatic rebuild from git (flake)";
     serviceConfig = {
       Type = "oneshot";
       WorkingDirectory = "/etc/nixos";
       ExecStart = ''
         ${pkgs.git}/bin/git pull
-        ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch
+        ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake /etc/nixos#domaPcServer
       '';
     };
   };
