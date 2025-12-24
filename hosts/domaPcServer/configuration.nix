@@ -116,6 +116,8 @@
   ## BEZPEČNÉ DEFAULTY
   ## =========================
   networking.firewall.enable = true;
+  services.resolved.enable = true;
+  networking.useHostResolvConf = false;
 
   ## =========================
   ## NIXOS KOMPATIBILITA
