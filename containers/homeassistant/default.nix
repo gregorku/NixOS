@@ -40,7 +40,7 @@
 
   networking.firewall.allowedTCPPorts = [ 8123 ];
 
-services.home-assistant = {
+  services.home-assistant = {
   enable = true;
   configDir = "/data/homeassistant/config";
   openFirewall = true;
