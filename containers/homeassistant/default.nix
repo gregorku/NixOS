@@ -6,6 +6,7 @@
   networking.hostName = "homeassistant";
   networking.useNetworkd = true;
   systemd.network.enable = true;
+  networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
   systemd.network.networks."10-macvlan" = {
