@@ -2,31 +2,23 @@
 
 {
   system.stateVersion = "24.05";
-  networking.hostName = "homeassistant";
-  networking.firewall.enable = false;
 
+  networking.hostName = "homeassistant";
   networking.useNetworkd = true;
   systemd.network.enable = true;
-  services.resolved.enable = false;
-  networking.useHostResolvConf = true;
-
+  services.resolved.enable = true;
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";
   };
 
-  # KEYRING FIX
+  # FIX keyring
   virtualisation.containers.containersConf.settings = {
     containers.keyring = false;
   };
 
   services.openssh.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    nano
-    mc
-  ];
 
   users.users.homeassistant = {
     isSystemUser = true;
@@ -41,12 +33,12 @@
   networking.firewall.allowedTCPPorts = [ 8123 ];
 
   services.home-assistant = {
-  enable = true;
-  configDir = "/data/homeassistant/config";
-  openFirewall = true;
+    enable = true;
+    configDir = "/data/homeassistant/config";
+    openFirewall = true;
 
-  extraPackages = python3Packages: with python3Packages; [
-    psycopg2
-  ];
-};
-
+    extraPackages = python3Packages: with python3Packages; [
+      psycopg2
+    ];
+  };
+}
