@@ -18,6 +18,13 @@
     containers.keyring = false;
   };
 
+  ## =========================
+  ## BALÍČKY
+  ## =========================
+  environment.systemPackages = with pkgs; [
+    git vim nano mc
+  ];
+
   services.openssh.enable = true;
 
   users.users.homeassistant = {
