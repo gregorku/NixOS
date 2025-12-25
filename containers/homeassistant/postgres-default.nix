@@ -14,16 +14,17 @@
     networkConfig.DHCP = "yes";
   };
 
-  # Fixní UID pro postgres (standard v NixOS je 71)
   users.users.postgres.uid = 71;
   users.groups.postgres.gid = 71;
 
   services.postgresql = {
     enable = true;
-    dataDir = "/var/lib/postgresql/data"; [cite_start]# [cite: 7]
+    dataDir = "/var/lib/postgresql/data";
 
-    # Povolení připojení z HA kontejneru
-    settings = { listen_addresses = "*"; };
+    settings = {
+      listen_addresses = "*";
+    };
+
     authentication = pkgs.lib.mkOverride 10 ''
       local   all             all                                     trust
       host    homeassistant   homeassistant   0.0.0.0/0               trust
