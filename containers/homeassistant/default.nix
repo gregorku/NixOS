@@ -21,15 +21,17 @@
 
   services.openssh.enable = true;
 
+  # Nastavíme fixní GID a UID, abychom mohli nastavit práva na hostiteli
+  users.groups.homeassistant.gid = 911;
+
   users.users.homeassistant = {
+    uid = 911;
     isSystemUser = true;
     group = "homeassistant";
     extraGroups = [ "dialout" ];
     home = "/var/lib/homeassistant";
     createHome = true;
   };
-
-  users.groups.homeassistant = {};
 
   networking.firewall.allowedTCPPorts = [ 8123 ];
 
@@ -38,10 +40,11 @@
     configDir = "/data/homeassistant/config";
     openFirewall = true;
 
-    # POVINNÉ – modul bez toho padá
-    config = {};
+    # ZDE BÝVALA CHYBA: Nyní načítáme configuration.nix
+    config = import ./configuration.nix;
 
-    extraPackages = python3Packages: with python3Packages; [
+    extraPackages = python3Packages: with python3Packages;
+    [
       psycopg2
     ];
   };

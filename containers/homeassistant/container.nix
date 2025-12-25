@@ -5,6 +5,7 @@
     autoStart = true;
     config = import ./default.nix;
 
+    # Důležité: identity mapuje uživatele 1:1 (root=root, 911=911)
     privateNetwork = true;
     macvlans = [ "br0" ];
     enableTun = true;

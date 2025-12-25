@@ -6,6 +6,8 @@
   http = {
     server_host = "0.0.0.0";
     server_port = 8123;
+    use_x_forwarded_for = true;
+    trusted_proxies = [ "127.0.0.1" "::1" ];
   };
 
   lovelace = {
@@ -13,8 +15,9 @@
     resources = [];
   };
 
-recorder = {
-  db_url = "postgresql://homeassistant@postgres-ha/homeassistant";
+  recorder = {
+    # Ujistěte se, že hostname 'postgres-ha' je z kontejneru dostupné (viz poznámka dole)
+    db_url = "postgresql://homeassistant@postgres-ha/homeassistant";
   };
 
   zha = {
