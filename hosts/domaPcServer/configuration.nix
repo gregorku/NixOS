@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    "${secretsPath}/ssh"
+    ../secrets/ssh
 
     ##################################################
     # Common – sdílené moduly
