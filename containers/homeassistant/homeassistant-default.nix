@@ -26,16 +26,12 @@
   };
   users.groups.homeassistant.gid = 911;
 
-  services.home-assistant = {
+services.home-assistant = {
     enable = true;
-    configDir = "/data/homeassistant/config";";
-    openFirewall = true;
-
-    config = import ./configuration.nix;
-
+    configDir = "/config";
     extraPackages = python3Packages: with python3Packages; [
-      psycopg2      # Pro PostgreSQL
-      gtts          # Pro Google Text-to-Speech
+      psycopg2
+      gtts
     ];
   };
 }
