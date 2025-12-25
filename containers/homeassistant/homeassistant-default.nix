@@ -34,7 +34,7 @@
     enable = true;
     configDir = "/config";
 
-    config = {};
+    config = import ./configuration.nix;
 
     extraPackages = python3Packages: with python3Packages; [
       psycopg2
