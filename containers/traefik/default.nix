@@ -1,8 +1,9 @@
-{ config, pkgs, secretsPath, ... }:
+{ config, pkgs, ... }:
 
 {
-  imports = [
-    "${secretsPath}/traefik/default.nix"
+  services.traefik = {
+    enable = true;
+    environmentFiles = [ "/run/secrets/traefik/env" ];
   ];
 
   services.traefik = {
