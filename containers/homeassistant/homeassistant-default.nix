@@ -48,11 +48,11 @@
       "met"
      ];
 
-    extraPackages = python3Packages: with python3Packages; [
-      psycopg2
-      gtts
-      py-metno
-      home-assistant-chip-clusters
+  extraPackages = python3Packages: [
+      python3Packages.psycopg2
+      python3Packages.gtts
+      python3Packages.metno  # Zde použijeme přímou cestu místo 'with'
+      python3Packages.home-assistant-chip-clusters
     ];
   };
 }
