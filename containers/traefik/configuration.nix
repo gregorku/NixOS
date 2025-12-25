@@ -1,4 +1,4 @@
-{ config, pkgs, secretsPath, ... }:
+{ config, pkgs, ... }:
 
 {
   system.stateVersion = "24.05";
