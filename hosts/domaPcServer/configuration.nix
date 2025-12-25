@@ -29,6 +29,7 @@
     ##################################################
     # NSPAWN containers
     ##################################################
+    ../../containers/traefik/container.nix
     ../../containers/homeassistant/container.nix
 #    ../../containers/postgres-ha/container.nix
     ../../containers/jellyfin/container.nix
@@ -42,6 +43,13 @@
 
   i18n.defaultLocale = "cs_CZ.UTF-8";
   console.keyMap = "cz";
+
+  networking.extraHosts = ''
+    192.168.100.231  traefik.lan
+    192.168.100.231  crowdsec.lan
+    192.168.100.230  homeassistant.lan
+    192.168.100.230  ha.lan
+  '';
 
   ## =========================
   ## BOOTLOADER

@@ -26,6 +26,9 @@
   ## =========================
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 8123 ];
+  networking.firewall.allowedTCPPorts = [ 443 ];
+  networking.firewall.interfaces.eth0.allowedTCPPorts = [ 8888 ];
+  networking.firewall.interfaces.wg0.allowedTCPPorts = [ 8888 ];
 
   users.users.homeassistant = {
     uid = 911;
