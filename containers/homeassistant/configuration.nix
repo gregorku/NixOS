@@ -10,7 +10,7 @@
   };
 
   recorder = {
-    db_url = "postgresql://homeassistant@192.168.100.21/homeassistant";
+    db_url = "postgresql://homeassistant@192.168.100.231/homeassistant";
   };
 
 #  zha = {
