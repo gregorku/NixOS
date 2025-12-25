@@ -51,7 +51,8 @@
     extraPackages = python3Packages: with python3Packages; [
       psycopg2
       gtts
-      metno
+      py-metno
+      home-assistant-chip-clusters
     ];
   };
 }
