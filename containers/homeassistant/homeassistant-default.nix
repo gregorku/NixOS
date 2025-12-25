@@ -51,8 +51,9 @@
   extraPackages = python3Packages: [
       python3Packages.psycopg2
       python3Packages.gtts
-      python3Packages.pymetno  # Opravený název (původně metno)
+      python3Packages.pymetno
       python3Packages.home-assistant-chip-clusters
+      python3Packages.universal-silabs-flasher
     ];
   };
 }
