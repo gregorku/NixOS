@@ -1,18 +1,17 @@
 { lib, ... }:
 
 {
+  # Kontejner pro Home Assistant
   containers.homeassistant = {
     autoStart = true;
-    config = import ./default.nix;
-
-    # Důležité: identity mapuje uživatele 1:1 (root=root, 911=911)
     privateNetwork = true;
     macvlans = [ "br0" ];
     enableTun = true;
-    privateUsers = "identity";
+    privateUsers = "identity"; # [cite_start]Mapování UID 1:1 s hostitelem [cite: 2]
 
     bindMounts = {
-      "/data/homeassistant" = {
+      # [cite_start]Celý obsah /data/homeassistant bude v kontejneru vidět jako /config [cite: 2]
+      "/config" = {
         hostPath = "/data/homeassistant";
         isReadOnly = false;
       };
@@ -22,5 +21,22 @@
         isReadOnly = false;
       };
     };
+    config = import ./homeassistant-default.nix;
+  };
+
+  # Kontejner pro PostgreSQL
+  containers.postgres-ha = {
+    autoStart = true;
+    privateNetwork = true;
+    macvlans = [ "br0" ];
+    privateUsers = "identity"; # [cite_start]Nutné pro zápis DB na disk [cite: 2]
+
+    bindMounts = {
+      "/var/lib/postgresql" = {
+        hostPath = "/data/homeassistant/postgres";
+        isReadOnly = false;
+      };
+    };
+    config = import ./postgres-default.nix;
   };
 }

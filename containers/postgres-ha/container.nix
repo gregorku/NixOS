@@ -5,7 +5,7 @@
     autoStart = true;
     privateNetwork = true;
     macvlans = [ "br0" ];
-    config = import ./default.nix;
+    privateUsers = "identity";
 
     bindMounts = {
       "/var/lib/postgresql" = {
@@ -13,5 +13,6 @@
         isReadOnly = false;
       };
     };
+    config = import ./default.nix;
   };
 }

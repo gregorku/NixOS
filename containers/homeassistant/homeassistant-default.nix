@@ -2,8 +2,8 @@
 
 {
   system.stateVersion = "24.05";
-
   networking.hostName = "homeassistant";
+
   networking.useNetworkd = true;
   systemd.network.enable = true;
   networking.useHostResolvConf = false;
@@ -14,37 +14,28 @@
     networkConfig.DHCP = "yes";
   };
 
-  # KEYRING FIX
   virtualisation.containers.containersConf.settings = {
     containers.keyring = false;
   };
 
-  services.openssh.enable = true;
-
-  # Nastavíme fixní GID a UID, abychom mohli nastavit práva na hostiteli
-  users.groups.homeassistant.gid = 911;
-
+  # Definice uživatele s fixním UID pro práva na hostiteli
   users.users.homeassistant = {
     uid = 911;
     isSystemUser = true;
     group = "homeassistant";
     extraGroups = [ "dialout" ];
-    home = "/var/lib/homeassistant";
-    createHome = true;
   };
-
-  networking.firewall.allowedTCPPorts = [ 8123 ];
+  users.groups.homeassistant.gid = 911;
 
   services.home-assistant = {
     enable = true;
-    configDir = "/data/homeassistant/config";
+    configDir = "/config"; # Odpovídá bindMount v container.nix
     openFirewall = true;
 
-    # ZDE BÝVALA CHYBA: Nyní načítáme configuration.nix
+    # [cite_start]Načtení YAML/Nix konfigurace [cite: 9]
     config = import ./configuration.nix;
 
-    extraPackages = python3Packages: with python3Packages;
-    [
+    extraPackages = python3Packages: with python3Packages; [
       psycopg2
     ];
   };

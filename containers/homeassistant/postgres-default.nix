@@ -14,26 +14,17 @@
     networkConfig.DHCP = "yes";
   };
 
-  virtualisation.containers.containersConf.settings = {
-    containers.keyring = false;
-  };
-
-  # Vynutíme UID/GID 71 pro postgres (standard v NixOS, ale pro jistotu)
+  # Fixní UID pro postgres (standard v NixOS je 71)
   users.users.postgres.uid = 71;
   users.groups.postgres.gid = 71;
 
   services.postgresql = {
     enable = true;
-    dataDir = "/var/lib/postgresql/data";
+    dataDir = "/var/lib/postgresql/data"; [cite_start]# [cite: 7]
 
-    # Povolit naslouchání na všech IP (v kontejneru je to bezpečné, blokuje se firewallem nebo sítí)
-    settings = {
-      listen_addresses = "*";
-    };
-
+    # Povolení připojení z HA kontejneru
+    settings = { listen_addresses = "*"; };
     authentication = pkgs.lib.mkOverride 10 ''
-      # Povolit přístup pro homeassistant z celé sítě (nebo specifikujte subnet 10.x.x.x)
-      # TYPE  DATABASE        USER            ADDRESS                 METHOD
       local   all             all                                     trust
       host    homeassistant   homeassistant   0.0.0.0/0               trust
     '';
