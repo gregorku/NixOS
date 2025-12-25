@@ -29,7 +29,7 @@
 
     bindMounts = {
       "/var/lib/postgresql" = {
-        hostPath = "/data/homeassistant/postgres";
+        hostPath = "/data/databaze/postgres-ha";
         isReadOnly = false;
       };
     };
