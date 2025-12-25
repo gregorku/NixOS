@@ -34,7 +34,8 @@
     config = import ./configuration.nix;
 
     extraPackages = python3Packages: with python3Packages; [
-      psycopg2
+      psycopg2      # Pro PostgreSQL
+      gtts          # Pro Google Text-to-Speech
     ];
   };
 }
