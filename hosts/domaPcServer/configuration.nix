@@ -133,29 +133,17 @@
   ## NIXOS KOMPATIBILITA
   ## =========================
   system.stateVersion = "24.05";
-  ##############################
-  # CrowdSec – HOSTITEL (manual)
-  ##############################
+    ################################
+  # CrowdSec – NATIVNÍ NixOS modul
+  ################################
 
-  environment.systemPackages = with pkgs; [ crowdsec ];
+  services.crowdsec = {
+    enable = true;
+    webUi.enable = true;
 
-  systemd.services.crowdsec = {
-    description = "CrowdSec Agent";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.crowdsec}/bin/crowdsec";
-      Restart = "always";
-    };
-  };
-
-  systemd.services.crowdsec-api = {
-    description = "CrowdSec API";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "crowdsec.service" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.crowdsec}/bin/crowdsec -c /etc/crowdsec/config.yaml";
-      Restart = "always";
-    };
+    collections = [
+      "crowdsecurity/linux"
+      "crowdsecurity/traefik"
+    ];
   };
 }
