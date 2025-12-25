@@ -21,6 +21,11 @@
   environment.systemPackages = with pkgs; [
     mc
   ];
+  ## =========================
+  ## FIREWALL
+  ## =========================
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 8123 ];
 
   users.users.homeassistant = {
     uid = 911;
