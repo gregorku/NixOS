@@ -28,7 +28,7 @@
 
   services.home-assistant = {
     enable = true;
-    configDir = "/config";
+    configDir = "/data/homeassistant/config";";
     openFirewall = true;
 
     config = import ./configuration.nix;
