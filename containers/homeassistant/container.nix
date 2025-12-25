@@ -8,6 +8,13 @@
     enableTun = true;
     privateUsers = "identity";
 
+    allowedDevices = [
+      {
+        node = "/dev/serial/by-id/usb-SMLIGHT_SMLIGHT_SLZB-07Mg24_0ab50f4025adef1196c58a4ba8793231-if00-port0";
+        modifier = "rw";
+      }
+    ];
+
     bindMounts = {
       "/config" = {
         hostPath = "/data/homeassistant";
