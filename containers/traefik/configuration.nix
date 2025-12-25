@@ -1,6 +1,9 @@
-services.traefik = {
-  enable = true;
-  environmentFiles = [ "/run/secrets/crowdsec/env" ];
+{ config, pkgs, ... }:
+
+{
+  services.traefik = {
+    enable = true;
+    environmentFiles = [ "/run/secrets/crowdsec/env" ];
 
   staticConfigOptions.experimental.plugins.crowdsec = {
     moduleName = "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin";
