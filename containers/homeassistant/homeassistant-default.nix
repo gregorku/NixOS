@@ -41,6 +41,12 @@
 
     config = import ./configuration.nix;
 
+    extraComponents = [
+      "hardware"
+      "usb"
+      "bluetooth"
+     ];
+
     extraPackages = python3Packages: with python3Packages; [
       psycopg2
       gtts
