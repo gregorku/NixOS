@@ -6,55 +6,24 @@
   };
 
   outputs = { self, nixpkgs, ... }:
-  {
-    nixosConfigurations = {
-      ntbDell = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/ntbDell/configuration.nix
-        ];
-      };
+  let
+    mkHost = host: nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
 
-      ntbLenovo = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/ntbLenovo/configuration.nix
-        ];
-      };
-
-      pracovniPc = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/pracovniPc/configuration.nix
-        ];
-      };
-
-      # ⬇⬇⬇ server domaPc
-      nixosConfigurations.domaPcServer = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
+      specialArgs = {
         secretsPath = "/etc/nixos/secrets";
       };
-        modules = [
-          ./hosts/domaPcServer/configuration.nix
-        ];
-      };
 
-
-      test = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/test/configuration.nix
-        ];
-      };
-
-      # ⬇⬇⬇ NOVÝ SERVER (VM test)
-      testServer = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./hosts/testServer/configuration.nix
-        ];
-      };
+      modules = [
+        ./hosts/${host}/configuration.nix
+      ];
+    };
+  in {
+    nixosConfigurations = {
+      ntbDell      = mkHost "ntbDell";
+      domaPcServer = mkHost "domaPcServer";
+      test         = mkHost "test";
+      testServer   = mkHost "testServer";
     };
   };
 }
