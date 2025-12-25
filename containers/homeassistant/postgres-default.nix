@@ -22,7 +22,7 @@
     dataDir = "/var/lib/postgresql/data";
 
     settings = {
-      listen_addresses = "*";
+      listen_addresses = pkgs.lib.mkForce "*";
     };
 
     authentication = pkgs.lib.mkOverride 10 ''
