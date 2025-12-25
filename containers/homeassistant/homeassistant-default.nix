@@ -51,7 +51,7 @@
   extraPackages = python3Packages: [
       python3Packages.psycopg2
       python3Packages.gtts
-      python3Packages.metno  # Zde použijeme přímou cestu místo 'with'
+      python3Packages.pymetno  # Opravený název (původně metno)
       python3Packages.home-assistant-chip-clusters
     ];
   };
