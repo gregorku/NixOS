@@ -58,6 +58,8 @@
       python3Packages.zha                    # Samotná knihovna ZHA
       python3Packages.zigpy-znp              # Pokud byste někdy přešel na TI čip (pro jistotu)
       python3Packages.zigpy-deconz           # Pro podporu různých adaptérů
+      python3Packages.bellows                # Protokol pro Silicon Labs (EZSP)
+      python3Packages.zigpy                  # Základní knihovna pro Zigbee
     ];
   };
 }
