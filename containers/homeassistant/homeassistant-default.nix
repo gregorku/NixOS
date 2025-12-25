@@ -26,12 +26,14 @@
   };
   users.groups.homeassistant.gid = 911;
 
-services.home-assistant = {
+  services.home-assistant = {
     enable = true;
     configDir = "/config";
+
+    config = {};
+
     extraPackages = python3Packages: with python3Packages; [
       psycopg2
       gtts
     ];
   };
-}
