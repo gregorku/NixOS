@@ -9,14 +9,8 @@
   let
     mkHost = host: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-
       modules = [
         ./hosts/${host}/configuration.nix
-
-        # secretsPath přidáme jako modul, NE přes specialArgs
-        ({ ... }: {
-          _module.args.secretsPath = "/etc/nixos/secrets";
-        })
       ];
     };
   in {
