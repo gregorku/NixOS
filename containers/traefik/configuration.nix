@@ -19,8 +19,8 @@
   };
 
   imports = [
-    "${secretsPath}/traefik/default.nix"
-    "${secretsPath}/crowdsec/default.nix"
+    /run/secrets/traefik/default.nix
+    /run/secrets/crowdsec/default.nix
   ];
 
   services.traefik = {
