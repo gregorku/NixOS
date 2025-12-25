@@ -18,18 +18,14 @@
     firewall.allowedTCPPorts = [ 443 8888 ];
   };
 
-  imports = [
-    /run/secrets/traefik/default.nix
-    /run/secrets/crowdsec/default.nix
-  ];
-
   services.traefik = {
     enable = true;
+    environmentFiles = [ "/run/secrets/traefik/env" ];
 
     staticConfigOptions = {
       entryPoints = {
         websecure.address = ":443";
-        admin.address     = ":8888";
+        admin.address = ":8888";
       };
 
       api.dashboard = true;
@@ -88,6 +84,7 @@
   services.crowdsec = {
     enable = true;
     webUi.enable = true;
+    environmentFiles = [ "/run/secrets/crowdsec/env" ];
   };
 
   services.crowdsec.bouncers.traefik.enable = true;
