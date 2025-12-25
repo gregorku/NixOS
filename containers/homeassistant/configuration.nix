@@ -13,10 +13,10 @@
     db_url = "postgresql://homeassistant@192.168.100.21/homeassistant";
   };
 
-  zha = {
-    usb_path = "/dev/zigbee";
-  };
-
+#  zha = {
+#    usb_path = "/dev/zigbee";
+#  };
+#
   automation = "!include_dir_merge_list automations";
   sensor = "!include_dir_merge_list sensors";
   template = "!include_dir_merge_list templates";
