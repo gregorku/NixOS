@@ -54,6 +54,10 @@
       python3Packages.pymetno
       python3Packages.home-assistant-chip-clusters
       python3Packages.universal-silabs-flasher
+      python3Packages.zha-quirks             # Knihovna pro specifická zařízení
+      python3Packages.zha                    # Samotná knihovna ZHA
+      python3Packages.zigpy-znp              # Pokud byste někdy přešel na TI čip (pro jistotu)
+      python3Packages.zigpy-deconz           # Pro podporu různých adaptérů
     ];
   };
 }
