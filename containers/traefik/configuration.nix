@@ -1,8 +1,9 @@
 { config, pkgs, ... }:
 
-imports = [
-  <nixpkgs/nixos/modules/services/security/crowdsec.nix>
-];
+{
+  imports = [
+    <nixpkgs/nixos/modules/services/security/crowdsec.nix>
+  ];
 {
   system.stateVersion = "24.05";
 
