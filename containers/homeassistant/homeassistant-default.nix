@@ -14,12 +14,13 @@
     networkConfig.DHCP = "yes";
   };
 
-  environment.systemPackages = with pkgs; [
-    git vim nano mc
-
   virtualisation.containers.containersConf.settings = {
     containers.keyring = false;
   };
+
+  environment.systemPackages = with pkgs; [
+    mc
+  ];
 
   users.users.homeassistant = {
     uid = 911;
