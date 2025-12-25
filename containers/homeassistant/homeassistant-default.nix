@@ -45,11 +45,13 @@
       "hardware"
       "usb"
       "bluetooth"
+      "met"
      ];
 
     extraPackages = python3Packages: with python3Packages; [
       psycopg2
       gtts
+      metno
     ];
   };
 }
