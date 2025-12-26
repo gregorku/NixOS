@@ -27,5 +27,8 @@
     virtualHosts."homeassistant.serveftp.org".extraConfig = ''
       reverse_proxy 192.168.100.230:8123
     '';
+    virtualHosts."http://homeassistant.serveftp.org".extraConfig = ''
+    redir https://{host}{uri}
+    '';
   };
 }
