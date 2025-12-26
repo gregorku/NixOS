@@ -7,7 +7,6 @@
   # Musíme povolit networkd, aby tvá konfigurace níže fungovala
   networking.useNetworkd = true;
   networking.useDHCP = false; # Globální DHCP vypneme, řešíme ho per-interface
-  networking.useHostResolvConf = false;
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
