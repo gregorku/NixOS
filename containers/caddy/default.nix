@@ -14,9 +14,7 @@
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
-    networkConfig = {
     networkConfig.DHCP = "yes";
-    };
   };
 
   services.caddy = {
