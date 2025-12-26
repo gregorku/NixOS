@@ -23,9 +23,9 @@
       reverse_proxy 192.168.100.230:8123
     '';
 
-  systemd.services.caddy.serviceConfig = {
+  services.caddy.serviceConfig = {
     User = "root";
     Group = "root";
-    };  
+    }; 
   };
 }
