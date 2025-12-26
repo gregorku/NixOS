@@ -125,5 +125,4 @@
   ## NIXOS KOMPATIBILITA
   ## =========================
   system.stateVersion = "24.05";
-  };
 }
