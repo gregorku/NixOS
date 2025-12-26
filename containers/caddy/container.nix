@@ -19,7 +19,7 @@
       hostPath = "/data/caddy/data";
       isReadOnly = false;
     };
-    config = ./default.nix.nix;
+    config = ./default.nix;
     };
   };
 }
