@@ -1,12 +1,20 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   system.stateVersion = "25.05";
-  networking.hostName = "caddy";
 
-  systemd.network.networks."10-macvlan" = {
-    matchConfig.Name = "mv-*";
-    networkConfig.DHCP = "yes";
+  networking = {
+    hostName = "caddy";
+    useDHCP = false;
+
+    interfaces.eth0.ipv4.addresses = [{
+      address = "192.168.100.232";
+      prefixLength = 24;
+    }];
+
+    defaultGateway = "192.168.100.1";
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
+    firewall.allowedTCPPorts = [ 443 ];
   };
 
   services.caddy = {
