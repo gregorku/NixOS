@@ -5,19 +5,12 @@
 
   networking = {
     hostName = "caddy";
-    useDHCP = false;
-    interfaces.eth0.ipv4.addresses = [{
-      address = "192.168.100.231";
-      prefixLength = 24;
-    }];
-    defaultGateway = "192.168.100.1";
-    nameservers = [ "1.1.1.1" "8.8.8.8" ];
-    firewall.allowedTCPPorts = [ 443 ];
+    useDHCP = true;
   };
 
   services.caddy = {
     enable = true;
-    virtualHosts."homeassistant.serveftp.org".extraConfig = ''
+    virtualHosts."xxx.ftp.org".extraConfig = ''
       reverse_proxy 192.168.100.230:8123
     '';
   };
