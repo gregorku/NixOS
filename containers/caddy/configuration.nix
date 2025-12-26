@@ -2,12 +2,11 @@
 
 {
   system.stateVersion = "25.05";
+  networking.hostName = "caddy";
 
-  networking = {
-    hostName = "caddy";
-    useDHCP = lib.mkForce true;
-
-    firewall.allowedTCPPorts = [ 443 ];
+  systemd.network.networks."10-macvlan" = {
+    matchConfig.Name = "mv-*";
+    networkConfig.DHCP = "yes";
   };
 
   services.caddy = {
