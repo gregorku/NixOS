@@ -1,20 +1,18 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  system.stateVersion = "25.05";
+  system.stateVersion = "24.11"; # Doporučuji použít stabilní verzi, pokud nejsi na unstable
+  networking.hostName = "caddy";
 
-  networking = {
-    hostName = "caddy";
-    useDHCP = false;
+  # Musíme povolit networkd, aby tvá konfigurace níže fungovala
+  networking.useNetworkd = true;
+  networking.useDHCP = false; # Globální DHCP vypneme, řešíme ho per-interface
 
-    interfaces.eth0.ipv4.addresses = [{
-      address = "192.168.100.232";
-      prefixLength = 24;
-    }];
-
-    defaultGateway = "192.168.100.1";
-    nameservers = [ "1.1.1.1" "8.8.8.8" ];
-    firewall.allowedTCPPorts = [ 443 ];
+  systemd.network.networks."10-macvlan" = {
+    matchConfig.Name = "mv-*";
+    networkConfig.DHCP = "yes";
+    # Důležité pro kontejnery, aby DHCP klient nezahodil konfiguraci při čekání
+    linkConfig.RequiredForOnline = "routable";
   };
 
   services.caddy = {
