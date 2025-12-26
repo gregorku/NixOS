@@ -22,10 +22,5 @@
     virtualHosts."homeassistant.serveftp.org".extraConfig = ''
       reverse_proxy 192.168.100.230:8123
     '';
-
-  services.caddy.serviceConfig = {
-    User = "root";
-    Group = "root";
-    }; 
   };
 }
