@@ -1,11 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   system.stateVersion = "25.05";
 
   networking = {
     hostName = "caddy";
-    useDHCP = true;
+    useDHCP = lib.mkForce true;
 
     firewall.allowedTCPPorts = [ 443 ];
   };
