@@ -3,6 +3,7 @@
 {
   containers.caddy = {
     autoStart = true;
+    config = import ./default.nix;
     ephemeral = true; # Doporučeno pro čisté starty
 
     # Aktivuje izolovanou síť pro kontejner
@@ -18,8 +19,7 @@
     "/var/lib/caddy" = {
       hostPath = "/data/caddy/data";
       isReadOnly = false;
-    };
-    config = ./default.nix;
-    };
+     };
+   };
   };
 }
