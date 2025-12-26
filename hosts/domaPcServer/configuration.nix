@@ -30,6 +30,7 @@
     # NSPAWN containers
     ##################################################
     ../../containers/homeassistant/container.nix
+    ../../containers/caddy/container.nix
 #    ../../containers/postgres-ha/container.nix
     ../../containers/jellyfin/container.nix
   ];
