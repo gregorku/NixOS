@@ -1,12 +1,13 @@
 { config, pkgs, lib, ... }:
 
 {
-  system.stateVersion = "24.11"; # Doporučuji použít stabilní verzi, pokud nejsi na unstable
+  system.stateVersion = "24.05"; # Doporučuji použít stabilní verzi, pokud nejsi na unstable
   networking.hostName = "caddy";
 
   # Musíme povolit networkd, aby tvá konfigurace níže fungovala
   networking.useNetworkd = true;
   networking.useDHCP = false; # Globální DHCP vypneme, řešíme ho per-interface
+  networking.useHostResolvConf = false;
 
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
