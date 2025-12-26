@@ -6,11 +6,13 @@
   networking = {
     hostName = "caddy";
     useDHCP = true;
+
+    firewall.allowedTCPPorts = [ 443 ];
   };
 
   services.caddy = {
     enable = true;
-    virtualHosts."xxx.ftp.org".extraConfig = ''
+    virtualHosts."homeassistant.serveftp.org".extraConfig = ''
       reverse_proxy 192.168.100.230:8123
     '';
   };
