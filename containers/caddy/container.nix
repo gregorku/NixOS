@@ -20,5 +20,6 @@
       isReadOnly = false;
     };
     config = ./default.nix.nix;
+    };
   };
 }
