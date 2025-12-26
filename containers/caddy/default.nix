@@ -16,6 +16,11 @@
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";
   };
+    ## =========================
+  ## FIREWALL
+  ## =========================
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   services.caddy = {
     enable = true;
