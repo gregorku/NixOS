@@ -34,10 +34,9 @@
         acl = [ "pattern readwrite #" ];
         address = "0.0.0.0";
         port = 1883;
-        # SPRÁVNĚ: password_file je přímo v listeneru
-        password_file = "/etc/mosquitto/secrets/passwd";
         settings = {
           allow_anonymous = false;
+          password_file = "/etc/mosquitto/secrets/passwd";
         };
       }
     ];
