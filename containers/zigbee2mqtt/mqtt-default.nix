@@ -1,11 +1,18 @@
 { config, pkgs, ... }:
 
 {
-  containers.mosquitto = {
-    autoStart = true;
-    privateNetwork = false;  # Adjust as needed
+  ## SÍŤOVÁ KONFIGURACE (Stejná jako u MQTT - pro macvlan nutnost)
+  networking.useDHCP = false;
+  networking.useNetworkd = true;
+  networking.useHostResolvConf = false; # Vlastní DNS (volitelné)
+  services.resolved.enable = true;
 
-    config = { config, pkgs, ... }: {
+  systemd.network.enable = true;
+  systemd.network.networks."10-macvlan" = {
+    matchConfig.Name = "mv-*";
+    networkConfig.DHCP = "yes";
+    dhcpV4Config.ClientIdentifier = "mac";
+  };
       services.mosquitto = {
         enable = true;
         listeners = [
@@ -26,6 +33,4 @@
       networking.firewall.allowedTCPPorts = [ 1883 ];
 
       system.stateVersion = "24.05";  # Or match your host's version
-    };
-  };
 }

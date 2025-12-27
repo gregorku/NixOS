@@ -1,7 +1,7 @@
 { lib, ... }:
 
 {
-  containers.mqtt = {
+  containers.mosquitto = {
     autoStart = true;
     privateNetwork = true;
     macvlans = [ "br0" ];
