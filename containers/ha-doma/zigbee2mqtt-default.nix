@@ -55,12 +55,11 @@
         adapter = "ember"; 
       };
 
-      # MQTT konfigurace (Změň IP na adresu tvého brokeru!)
-      mqtt = {
-        server = "mqtt://192.168.1.10:1883";
-        # user = "tvuj_user";
-        # password = "tvoje_heslo";
-      };
+      # NAČTENÍ EXTERNÍ KONFIGURACE (Sekrety mimo Git)
+      # Tento řádek vloží obsah souboru mqtt-secrets.yaml (server, user, password) do této sekce
+      # Soubor musí být v kontejneru dostupný v cestě /data/mqtt-secrets.yaml
+      # V Nixu musíme použít speciální zápis pro klíč začínající vykřičníkem
+      "${"!include"}" = "mqtt-secrets.yaml";
 
       # Webové rozhraní
       frontend = {
