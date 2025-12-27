@@ -18,7 +18,7 @@
 
   networking.firewall.allowedTCPPorts = [ 1883 ];
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.11";
 
   ## =========================================================
   ## MOSQUITTO – RUČNÍ SYSTEMD SERVICE

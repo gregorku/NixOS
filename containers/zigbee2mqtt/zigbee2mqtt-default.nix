@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  system.stateVersion = "24.05"; # Opraveno z 25.05 na existující verzi
+  system.stateVersion = "25.11"; # Opraveno z 25.05 na existující verzi
   networking.hostName = "zigbee2mqtt";
 
   ## SÍŤOVÁ KONFIGURACE (Stejná jako u MQTT - pro macvlan nutnost)

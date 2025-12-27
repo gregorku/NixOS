@@ -2,7 +2,7 @@
 
 {
   # Verze stavu systému uvnitř kontejneru
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.11";
 
   # Název hostitele uvnitř kontejneru
   networking.hostName = "zigbee2mqtt";

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.11";
   networking.hostName = "homeassistant";
 
   networking.useNetworkd = true;
