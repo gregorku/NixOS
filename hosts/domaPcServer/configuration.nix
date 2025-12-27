@@ -44,6 +44,8 @@
   i18n.defaultLocale = "cs_CZ.UTF-8";
   console.keyMap = "cz";
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   ## =========================
   ## BOOTLOADER
   ## =========================
