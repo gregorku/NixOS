@@ -25,7 +25,7 @@
 
       networking.firewall.allowedTCPPorts = [ 1883 ];
 
-      system.stateVersion = "25.05";  # Or match your host's version
+      system.stateVersion = "24.05";  # Or match your host's version
     };
   };
 }
