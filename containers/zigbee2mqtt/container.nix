@@ -19,6 +19,6 @@
       };
     };
 
-    path = ./mqtt-default.nix;
+    config = import ./mqtt-default.nix;
   };
 }
