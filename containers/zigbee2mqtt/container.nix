@@ -4,8 +4,7 @@
   containers.mqtt = {
     autoStart = true;
     privateNetwork = true;
-    macvlans = [ "br0" ]; # Stejný bridge jako u Zigbee2MQTT
-
+    macvlans = [ "br0" ];
     bindMounts = {
       # Perzistentní data (databáze, logy)
       "/var/lib/mosquitto" = {
