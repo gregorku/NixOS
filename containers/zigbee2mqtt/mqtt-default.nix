@@ -12,7 +12,7 @@
   systemd.network.enable = true;
 
 # OPRAVA: Vypnutí sdílení resolv.conf z hostitele
-  networking.useHostResolvConf = false; 
+  networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
   systemd.network.networks."10-macvlan" = {
@@ -34,13 +34,12 @@
         acl = [ "pattern readwrite #" ];
         address = "0.0.0.0";
         port = 1883;
+        settings = {
+          allow_anonymous = false;
+          # Cesta uvnitř kontejneru k souboru s hesly
+          password_file = "/etc/mosquitto/secrets/passwd";
+        };
       }
     ];
-    # ZDE JE FINÁLNÍ OPRAVA:
-    # Globální extraConfig, který Mosquitto přiřadí k poslednímu listeneru
-    extraConfig = ''
-      allow_anonymous false
-      password_file /etc/mosquitto/secrets/passwd
-    '';
   };
 }
