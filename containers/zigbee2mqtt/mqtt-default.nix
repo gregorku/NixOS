@@ -20,9 +20,10 @@
             address = "0.0.0.0";
             port = 1883;
             # Allow anonymous access (for testing only!)
-            omitPasswordAuth = true;                # Skip password checks entirely
+            omitPasswordAuth = false;                # Skip password checks entirely
             settings = {
-              allow_anonymous = true;               # Explicitly enable anonymous (Mosquitto native option)
+              allow_anonymous = false;
+              password_file = "/etc/mosquitto/secrets/passwd";              # Explicitly enable anonymous (Mosquitto native option)
             };
             # Optional: Add a broad ACL for anonymous clients
             acl = [ "pattern readwrite #" ];        # Allow read/write on all topics
