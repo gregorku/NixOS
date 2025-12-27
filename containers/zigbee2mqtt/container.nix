@@ -42,7 +42,7 @@
     };
 
     # Načtení vnitřní konfigurace (logika, sítě, služby)
-    config = import ./zigbee2mqtt-default.nix;
+    config = ./zigbee2mqtt-default.nix;
   };
 
   containers.mqtt = {
@@ -63,6 +63,6 @@
       };
     };
 
-    config = import ./mqtt-default.nix;
+    config = ./mqtt-default.nix;
   };
 }

@@ -1,25 +1,48 @@
 { config, pkgs, ... }:
 
 {
-  system.stateVersion = "25.05";
+  system.stateVersion = "24.05"; # Opraveno z 25.05 na existující verzi
+  networking.hostName = "zigbee2mqtt";
 
-  networking.useDHCP = true;
+  ## SÍŤOVÁ KONFIGURACE (Stejná jako u MQTT - pro macvlan nutnost)
+  networking.useDHCP = false;
+  networking.useNetworkd = true;
+  networking.useHostResolvConf = false; # Vlastní DNS (volitelné)
+  services.resolved.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    nodejs
-    yarn
-    git
-  ];
+  systemd.network.enable = true;
+  systemd.network.networks."10-macvlan" = {
+    matchConfig.Name = "mv-*";
+    networkConfig.DHCP = "yes";
+    dhcpV4Config.ClientIdentifier = "mac";
+  };
 
-  systemd.services.zigbee2mqtt = {
-    description = "Zigbee2MQTT";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+  networking.firewall.allowedTCPPorts = [ 8080 ];
 
-    serviceConfig = {
-      ExecStart = "${pkgs.nodejs}/bin/node /data/index.js";
-      WorkingDirectory = "/data";
-      Restart = "always";
+  ## SLUŽBA ZIGBEE2MQTT (Deklarativní)
+  services.zigbee2mqtt = {
+    enable = true;
+    dataDir = "/data"; # Data budou v bind-mountu
+
+    settings = {
+      serial = {
+        port = "/dev/zigbee"; # Odkaz na bind-mount
+        adapter = "ember";    # Pro SLZB-07
+      };
+
+      frontend = {
+        port = 8080;
+        host = "0.0.0.0";
+      };
+
+      permit_join = false;
+      homeassistant = true;
+
+      # Načtení externího souboru s hesly (bind-mount)
+      "${"!include"}" = "mqtt-secrets.yaml";
     };
   };
+  
+  # Práva pro přístup k USB
+  users.users.zigbee2mqtt.extraGroups = [ "dialout" ];
 }
