@@ -21,26 +21,49 @@
     dhcpV4Config.ClientIdentifier = "mac";
   };
 
-    # --------------------------------------------------------------------
-  # Services – Mosquitto
-  # --------------------------------------------------------------------
+   # --------------------------------------------------------------
+  # Filesystems – the bind‑mounts are declared in the outer
+  # `containers.mqtt.bindMounts` attribute, but we expose the paths
+  # here so the service can see them.
+  # --------------------------------------------------------------
+  fileSystems."/var/lib/mosquitto".neededForBoot = true;
+  fileSystems."/etc/mosquitto/secrets".neededForBoot = true;
+
+  # --------------------------------------------------------------
+  # Users & permissions – Mosquitto runs as its own system user.
+  # --------------------------------------------------------------
+  users.users.mosquitto = {
+    isSystemUser = true;
+    group = "mosquitto";
+    home = "/var/lib/mosquitto";
+  };
+  users.groups.mosquitto = {};
+
+  # --------------------------------------------------------------
+  # Mosquitto service
+  # --------------------------------------------------------------
   services.mosquitto = {
     enable = true;
 
-    # The default config works fine, but we point it to the mounted
-    # secrets directory for passwords / ACL files.
-    configFile = "/etc/mosquitto/mosquitto.conf";
-
-    # Optional: listen only on the container’s interface.
+    # Minimal built‑in configuration – you can extend it via
+    # `settings` or `extraConfig` below.
     listeners = [
       {
-        port = 1883;
+        port    = 1883;          # plain MQTT
         address = "0.0.0.0";
       }
     ];
 
-    # If you want TLS, uncomment and adjust the paths (they will be
-    # read from the mounted secrets directory):
+    # Example: load password / ACL files that you placed in the
+    # read‑only bind‑mount “/etc/mosquitto/secrets”.
+    # Uncomment if you actually have those files.
+    #
+    # extraConfig = ''
+    #   password_file /etc/mosquitto/secrets/passwordfile
+    #   acl_file      /etc/mosquitto/secrets/aclfile
+    # '';
+
+    # If you need TLS, add another listener block with a `tls` sub‑attr:
     #
     # listeners = [
     #   {
@@ -54,25 +77,10 @@
     # ];
   };
 
-  # --------------------------------------------------------------------
-  # Filesystem – mount points that you declared in the outer config.
-  # --------------------------------------------------------------------
-  # The bind mounts are already defined in the container declaration,
-  # but we expose the paths here so the services can see them.
-  fileSystems."/var/lib/mosquitto".neededForBoot = true;
-  fileSystems."/etc/mosquitto/secrets".neededForBoot = true;
-
-  # --------------------------------------------------------------------
-  # Users & Permissions
-  # --------------------------------------------------------------------
-  users.users.mosquitto = {
-    isSystemUser = true;
-    group = "mosquitto";
-    home = "/var/lib/mosquitto";
-  };
-  users.groups.mosquitto = {};
-
-  # Ensure the data directory is owned by the mosquitto user.
+  # --------------------------------------------------------------
+  # Systemd tweaks – run Mosquitto as the dedicated user and lock
+  # down the service a bit.
+  # --------------------------------------------------------------
   systemd.services.mosquitto.serviceConfig = {
     User = "mosquitto";
     Group = "mosquitto";
@@ -80,17 +88,17 @@
     PrivateTmp = true;
   };
 
-  # --------------------------------------------------------------------
-  # Miscellaneous – keep the container lightweight.
-  # --------------------------------------------------------------------
+  # --------------------------------------------------------------
+  # Optional utilities you might want inside the container.
+  # --------------------------------------------------------------
   environment.systemPackages = with pkgs; [
-    # Optional utilities you might find handy inside the container.
     curl
     jq
   ];
 
-  # Disable unnecessary services that would otherwise start in a full
-  # NixOS system.
+  # --------------------------------------------------------------
+  # Turn off services we definitely don’t need in a tiny container.
+  # --------------------------------------------------------------
   services.openssh.enable = false;
   services.xserver.enable = false;
 }
