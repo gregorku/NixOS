@@ -21,23 +21,76 @@
     dhcpV4Config.ClientIdentifier = "mac";
   };
 
-  ## ========================================================
-  ## MOSQUITTO
-  ## ========================================================
+    # --------------------------------------------------------------------
+  # Services – Mosquitto
+  # --------------------------------------------------------------------
   services.mosquitto = {
     enable = true;
 
-    # Použijte `settings` místo `extraConfig` pro novější verze NixOS
-    settings = {
-      allow_anonymous = false;
-      password_file = "/etc/mosquitto/secrets/passwd";
-      listener = {
-        protocol = "mqtt";
+    # The default config works fine, but we point it to the mounted
+    # secrets directory for passwords / ACL files.
+    configFile = "/etc/mosquitto/mosquitto.conf";
+
+    # Optional: listen only on the container’s interface.
+    listeners = [
+      {
         port = 1883;
-        bind_address = "0.0.0.0";
-      };
-    };
+        address = "0.0.0.0";
+      }
+    ];
+
+    # If you want TLS, uncomment and adjust the paths (they will be
+    # read from the mounted secrets directory):
+    #
+    # listeners = [
+    #   {
+    #     port = 8883;
+    #     address = "0.0.0.0";
+    #     tls = {
+    #       certfile = "/etc/mosquitto/secrets/server.crt";
+    #       keyfile  = "/etc/mosquitto/secrets/server.key";
+    #     };
+    #   }
+    # ];
   };
 
-  networking.firewall.allowedTCPPorts = [ 1883 ];
+  # --------------------------------------------------------------------
+  # Filesystem – mount points that you declared in the outer config.
+  # --------------------------------------------------------------------
+  # The bind mounts are already defined in the container declaration,
+  # but we expose the paths here so the services can see them.
+  fileSystems."/var/lib/mosquitto".neededForBoot = true;
+  fileSystems."/etc/mosquitto/secrets".neededForBoot = true;
+
+  # --------------------------------------------------------------------
+  # Users & Permissions
+  # --------------------------------------------------------------------
+  users.users.mosquitto = {
+    isSystemUser = true;
+    group = "mosquitto";
+    home = "/var/lib/mosquitto";
+  };
+  users.groups.mosquitto = {};
+
+  # Ensure the data directory is owned by the mosquitto user.
+  systemd.services.mosquitto.serviceConfig = {
+    User = "mosquitto";
+    Group = "mosquitto";
+    ProtectSystem = "full";
+    PrivateTmp = true;
+  };
+
+  # --------------------------------------------------------------------
+  # Miscellaneous – keep the container lightweight.
+  # --------------------------------------------------------------------
+  environment.systemPackages = with pkgs; [
+    # Optional utilities you might find handy inside the container.
+    curl
+    jq
+  ];
+
+  # Disable unnecessary services that would otherwise start in a full
+  # NixOS system.
+  services.openssh.enable = false;
+  services.xserver.enable = false;
 }
