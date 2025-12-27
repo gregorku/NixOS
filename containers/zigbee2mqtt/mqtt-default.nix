@@ -29,15 +29,15 @@
   ## ========================================================
   services.mosquitto = {
     enable = true;
-  listeners = [
-    {
-      address = "0.0.0.0";
-      port = 1883;
-      acl = [ "pattern readwrite #" ];
+    listeners = [
+      {
+        address = "0.0.0.0";
+        port = 1883;
+        acl = [ "pattern readwrite #" ];
 
-      allowAnonymous = false;
-      passwordFile = "/etc/mosquitto/secrets/passwd";
-    }
-  ];
- };
+        allowAnonymous = false;
+        passwordFile = "/etc/mosquitto/secrets/passwd";
+      }
+    ];
+  };
 };   
