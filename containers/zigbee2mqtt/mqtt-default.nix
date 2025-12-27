@@ -25,10 +25,11 @@
   networking.firewall.allowedTCPPorts = [ 1883 ];
 
   ## ========================================================
-  ## SLUŽBA MOSQUITTO
+  ## MOSQUITTO
   ## ========================================================
   services.mosquitto = {
     enable = true;
+
     listeners = [
       {
         address = "0.0.0.0";
@@ -40,4 +41,4 @@
       }
     ];
   };
-};   
+}
