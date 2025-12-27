@@ -1,10 +1,12 @@
 { config, pkgs, ... }:
 
 {
-  ## SÍŤOVÁ KONFIGURACE (Stejná jako u MQTT - pro macvlan nutnost)
+  ## =========================================================
+  ## SÍŤOVÁ KONFIGURACE – beze změn
+  ## =========================================================
   networking.useDHCP = false;
   networking.useNetworkd = true;
-  networking.useHostResolvConf = false; # Vlastní DNS (volitelné)
+  networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
   systemd.network.enable = true;
@@ -13,25 +15,29 @@
     networkConfig.DHCP = "yes";
     dhcpV4Config.ClientIdentifier = "mac";
   };
-      services.mosquitto = {
-        enable = true;
-        listeners = [
-          {
-            address = "0.0.0.0";
-            port = 1883;
-            # Allow anonymous access (for testing only!)
-            omitPasswordAuth = false;                # Skip password checks entirely
-            settings = {
-              allow_anonymous = false;
-              password_file = "/etc/mosquitto/secrets/passwd";              # Explicitly enable anonymous (Mosquitto native option)
-            };
-            # Optional: Add a broad ACL for anonymous clients
-            acl = [ "pattern readwrite #" ];        # Allow read/write on all topics
-          }
-        ];
-      };
 
-      networking.firewall.allowedTCPPorts = [ 1883 ];
+  networking.firewall.allowedTCPPorts = [ 1883 ];
 
-      system.stateVersion = "24.05";  # Or match your host's version
+  system.stateVersion = "24.05";
+
+  ## =========================================================
+  ## MOSQUITTO – RUČNÍ SYSTEMD SERVICE
+  ## =========================================================
+  environment.systemPackages = [ pkgs.mosquitto ];
+
+  environment.etc."mosquitto/mosquitto.conf".text = ''
+    allow_anonymous false
+    password_file /etc/mosquitto/secrets/passwd
+    listener 1883 0.0.0.0
+  '';
+
+  systemd.services.mosquitto = {
+    description = "Mosquitto MQTT broker";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network-online.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c /etc/mosquitto/mosquitto.conf";
+      Restart = "always";
+    };
+  };
 }
