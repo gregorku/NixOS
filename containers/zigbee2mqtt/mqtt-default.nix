@@ -36,8 +36,8 @@
         port = 1883;
         acl = [ "pattern readwrite #" ];
 
-        allowAnonymous = false;
-        passwordFile = "/etc/mosquitto/secrets/passwd";
+        allow_anonymous = false;
+        password_file = "/etc/mosquitto/secrets/passwd";
       }
     ];
   };
