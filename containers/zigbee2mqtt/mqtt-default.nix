@@ -2,11 +2,8 @@
 
 {
   containers.mosquitto = {
-    autoStart = true;              # Start on boot
-    privateNetwork = false;        # Share host network (simplest; change to true for isolation)
-    # If privateNetwork = true, add:
-    # hostAddress = "192.168.100.1";
-    # localAddress = "192.168.100.2";
+    autoStart = true;
+    privateNetwork = false;  # Adjust as needed
 
     config = { config, pkgs, ... }: {
       services.mosquitto = {
@@ -15,19 +12,20 @@
           {
             address = "0.0.0.0";
             port = 1883;
-            allowAnonymous = true;  # Adjust as needed
+            # Allow anonymous access (for testing only!)
+            omitPasswordAuth = true;                # Skip password checks entirely
+            settings = {
+              allow_anonymous = true;               # Explicitly enable anonymous (Mosquitto native option)
+            };
+            # Optional: Add a broad ACL for anonymous clients
+            acl = [ "pattern readwrite #" ];        # Allow read/write on all topics
           }
         ];
       };
 
       networking.firewall.allowedTCPPorts = [ 1883 ];
 
-      system.stateVersion = "25.05";  # Match your host's version or recent stable
+      system.stateVersion = "25.05";  # Or match your host's version
     };
   };
-
-  # If privateNetwork = true on container, forward port from host:
-  # networking.nat.enable = true;
-  # networking.nat.internalInterfaces = ["ve-mosquitto"];
-  # networking.nat.externalInterface = "br0";  # Your external interface
 }
