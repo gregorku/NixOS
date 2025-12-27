@@ -34,11 +34,13 @@
         acl = [ "pattern readwrite #" ];
         address = "0.0.0.0";
         port = 1883;
-        extraConfig = ''
-          allow_anonymous false
-          password_file /etc/mosquitto/secrets/passwd
-        '';
       }
     ];
+    # ZDE JE FINÁLNÍ OPRAVA:
+    # Globální extraConfig, který Mosquitto přiřadí k poslednímu listeneru
+    extraConfig = ''
+      allow_anonymous false
+      password_file /etc/mosquitto/secrets/passwd
+    '';
   };
 }
