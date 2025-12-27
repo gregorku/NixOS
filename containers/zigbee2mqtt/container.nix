@@ -44,25 +44,4 @@
     # Načtení vnitřní konfigurace (logika, sítě, služby)
     path = ./zigbee2mqtt-default.nix;
   };
-
-  containers.mqtt = {
-    autoStart = true;
-    privateNetwork = true;
-    macvlans = [ "br0" ]; # Stejný bridge jako u Zigbee2MQTT
-
-    bindMounts = {
-      # Perzistentní data (databáze, logy)
-      "/var/lib/mosquitto" = {
-        hostPath = "/data/mqtt";
-        isReadOnly = false;
-      };
-      # Připojení složky s hesly
-      "/etc/mosquitto/secrets" = {
-        hostPath = "/etc/nixos/secrets/mqtt";
-        isReadOnly = true;
-      };
-    };
-
-    path = ./mqtt-default.nix;
-  };
 }
