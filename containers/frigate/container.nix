@@ -46,13 +46,12 @@
       "--system-call-filter=@system-service"
       "--property=DeviceAllow=char-usb_device rwm" 
       "--property=DeviceAllow=/dev/bus/usb rwm"
-      "--bind=/dev/bus/usb"
+      "--property=DeviceAllow=/dev/dri/renderD128 rwm"
     ];
 
+    # Zde ponecháme pouze statické uzly bez hvězdiček
     allowedDevices = [
       { node = "/dev/dri/renderD128"; modifier = "rw"; }
-      { node = "/dev/bus/usb"; modifier = "rw"; }
-      { node = "/dev/bus/usb/*"; modifier = "rw"; }
     ];
   };
 }
