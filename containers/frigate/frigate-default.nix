@@ -25,13 +25,10 @@
   };
 
   environment.systemPackages = with pkgs; [
+  frigate
   ffmpeg
-  (pkgs.python3.withPackages (ps: with ps; [
-    frigate
-    numpy
-    opencv4
-  ]))
   ];
+
 
   systemd.targets.multi-user.enable = true;
   systemd.defaultUnit = "multi-user.target";
@@ -43,7 +40,7 @@
     after = [ "network-online.target" ];
 
     serviceConfig = {
-      ExecStart = "${pkgs.python3.withPackages (ps: with ps; [ ps.frigate ])}/bin/python -m frigate.app -c /data/frigate/config/config.yml";
+      ExecStart = "${pkgs.frigate}/bin/frigate-wrapper -c /data/frigate/config/config.yml";
       Restart = "always";
       User = "frigate";
       Group = "frigate";
