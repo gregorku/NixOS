@@ -39,6 +39,8 @@
     serviceConfig = {
       ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c /etc/mosquitto/mosquitto.conf";
       Restart = "always";
+      User = "root";
+      Group = "root";
     };
   };
 }
