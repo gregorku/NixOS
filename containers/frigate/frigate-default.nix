@@ -23,8 +23,8 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-driver   # Pro moderní procesory (Broadwell a novější)
-      intel-vaapi-driver   # Přejmenováno z vaapiIntel (pro starší procesory)
+      intel-media-driver
+      intel-vaapi-driver
       libvdpau-va-gl
     ];
   };
@@ -32,16 +32,7 @@
   ## =========================
   ## FIX PRO KEYRING
   ## =========================
-  virtualisation.containers.containersConf.settings = {
-    containers = {
-      keyring = false;
-    };
-  };
-
-  ## =========================
-  ## UŽIVATELÉ A SKUPINY
-  ## =========================
-  users.users.frigate.extraGroups = [ "video" "render" "dialout" ];
+  virtualisation.containers.containersConf.settings.containers.keyring = false;
 
   ## =========================
   ## SLUŽBA FRIGATE
@@ -50,49 +41,48 @@
     enable = true;
     hostname = "frigate-nvr";
 
+    # Všechna nastavení musí být uvnitř tohoto bloku
     settings = {
-      # === MQTT KONFIGURACE ===
+      database.path = "/var/lib/frigate/frigate.db";
+      
       mqtt = {
-        host = "192.168.100.234";      # <--- ZDE ZADEJTE IP ADRESU MQTT BROKERA
-        user = "frigate";  # <--- ZDE ZADEJTE UŽIVATELSKÉ JMÉNO
-        password = "gregorek"; # <--- ZDE ZADEJTE HESLO
+        host = "192.168.100.234";      # <--- DOPLŇTE IP
+        user = "frigate";  # <--- DOPLŇTE JMÉNO
+        password = "gregorek"; # <--- DOPLŇTE HESLO
       };
 
-      # Detektor (Google Coral USB)
       detectors.coral = {
         type = "edgetpu";
         device = "usb";
       };
 
-      ## =========================
-      ## === KAMERY ===
-      ## =========================
-      services.frigate.settings.cameras = {
-        # Název kamery (používejte pouze malá písmena, čísla a podtržítka)
+      cameras = {
         kamera_loznice = { 
+          ffmpeg.hwaccel_args = "preset-vaapi";
           ffmpeg.inputs = [
             {
-              # RTSP adresa: doplňte své jméno, heslo a IP adresu kamery
-                  path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/001/?transportmode=unicast"; 
-                  roles = [ "detect" "record" ];
+              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/001/?transportmode=unicast"; 
+              roles = [ "detect" "record" ];
             }
           ];
           detect = {
             enabled = true;
-            width = 1280; # Zkontrolujte rozlišení streamu
+            width = 1280; 
             height = 720;
+            fps = 5;
           };
+          record.enabled = true;
         };
       };
-      
-      record.enabled = true;
     };
   };
 
   ## =========================
-  ## FIREWALL A SSH
+  ## FIREWALL A OPRÁVNĚNÍ
   ## =========================
   networking.firewall.allowedTCPPorts = [ 5000 8554 8555 ];
+
+  users.users.frigate.extraGroups = [ "video" "render" "dialout" ];
 
   services.openssh = {
     enable = true;
@@ -101,5 +91,10 @@
   
   environment.systemPackages = with pkgs; [
     git vim nano htop libva-utils
+  ];
+
+  systemd.tmpfiles.rules = [
+    "d /var/lib/frigate 0755 frigate frigate -"
+    "d /media/frigate 0755 frigate frigate -"
   ];
 }
