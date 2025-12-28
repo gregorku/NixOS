@@ -18,6 +18,11 @@
         hostPath = "/data/frigate";
         isReadOnly = false;
       };
+      # PŘIDEJTE TENTO ŘÁDEK:
+      "/dev/shm" = { 
+        hostPath = "/dev/shm"; 
+        isReadOnly = false; 
+      };
       # Nahrávky a klipy
       "/media/frigate" = {
         hostPath = "/video";

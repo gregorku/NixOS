@@ -61,7 +61,7 @@
           ffmpeg.hwaccel_args = "preset-vaapi";
           ffmpeg.inputs = [
             {
-              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/001/?transportmode=unicast"; 
+              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/002/?transportmode=unicast"; 
               roles = [ "detect" "record" ];
             }
           ];
@@ -82,7 +82,7 @@
   ## =========================
   networking.firewall.allowedTCPPorts = [ 5000 8554 8555 ];
 
-  users.users.frigate.extraGroups = [ "video" "render" "dialout" ];
+  users.users.frigate.extraGroups = [ "video" "render" "dialout" "users" ];
 
   services.openssh = {
     enable = true;
