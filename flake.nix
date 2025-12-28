@@ -2,10 +2,15 @@
   description = "NixOS configuration for multiple devices";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    # Hlavní větev – 25.11
+    nixpkgs = {
+      url = "tarball+https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-25.11.tar.gz";
+    };
 
-    # Stabilní balíky pro problematické služby (Home Assistant apod.)
-    nixpkgs2411.url = "github:NixOS/nixpkgs/nixos-24.11";
+    # Stabilní balíky – 24.11 (např. Home Assistant, esphome, mqtt apod.)
+    nixpkgs2411 = {
+      url = "tarball+https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-24.11.tar.gz";
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs2411, ... }:
@@ -33,4 +38,3 @@
     };
   };
 }
-
