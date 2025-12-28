@@ -82,7 +82,7 @@
   ## =========================
   networking.firewall.allowedTCPPorts = [ 5000 8554 8555 ];
 
-  users.users.frigate.extraGroups = [ "video" "render" "dialout" "users" ];
+  users.users.frigate.extraGroups = [ "video" "render" "dialout" "users" "plugdev" ];
 
   services.openssh = {
     enable = true;
@@ -90,7 +90,7 @@
   };
   
   environment.systemPackages = with pkgs; [
-    git vim nano htop libva-utils
+    git vim nano htop libva-utils libedgetpu usbutils
   ];
 
   systemd.tmpfiles.rules = [

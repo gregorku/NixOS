@@ -3,11 +3,11 @@
 {
   containers.frigate = {
     autoStart = true;
-    ephemeral = true; # Při restartu se systém resetuje, data zůstanou v bind mountech
+    ephemeral = true; # Při restartu se systém v kontejneru resetuje, data v bind mountech zůstanou
     config = import ./frigate-default.nix;
 
     # === SÍŤ ===
-    # Aktivuje izolovanou síť a vytvoří macvlan z bridge (br0)
+    # Aktivuje izolovanou síť pro kontejner a vytvoří macvlan z bridge hostitele
     privateNetwork = true;
     macvlans = [ "br0" ]; 
 
@@ -18,7 +18,7 @@
         hostPath = "/data/frigate";
         isReadOnly = false;
       };
-      # PŘIDEJTE TENTO ŘÁDEK:
+      # Sdílená paměť (nutné pro předávání video streamů mezi procesy)
       "/dev/shm" = { 
         hostPath = "/dev/shm"; 
         isReadOnly = false; 
@@ -28,7 +28,7 @@
         hostPath = "/video";
         isReadOnly = false;
       };
-      # Přístup ke Google Coral (USB)
+      # Přístup ke Google Coral (USB sběrnice)
       "/dev/bus/usb" = {
         hostPath = "/dev/bus/usb";
         isReadOnly = false;
@@ -40,11 +40,19 @@
       };
     };
     
-    # Povolení přístupu k zařízením pro kontejner
-    extraFlags = [ "--system-call-filter=@system-service" ];
+    # === PŘÍSTUPOVÁ PRÁVA A EXTRA PŘÍZNAKY ===
+    # extraFlags nastavují nspawn tak, aby povolil přístup k hardware
+    extraFlags = [ 
+      "--system-call-filter=@system-service"
+      "--property=DeviceAllow=char-usb_device rwm" 
+      "--property=DeviceAllow=/dev/bus/usb rwm"
+      "--bind=/dev/bus/usb"
+    ];
+
     allowedDevices = [
       { node = "/dev/dri/renderD128"; modifier = "rw"; }
       { node = "/dev/bus/usb"; modifier = "rw"; }
+      { node = "/dev/bus/usb/*"; modifier = "rw"; }
     ];
   };
 }
