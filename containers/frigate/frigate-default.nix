@@ -41,17 +41,20 @@
     ffmpeg
   ];
 
-  systemd.services.frigate = {
-    description = "Frigate NVR";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
+  ssystemd.services.frigate = {
+  description = "Frigate NVR";
 
-    serviceConfig = {
-      ExecStart = "${pkgs.frigate}/bin/frigate -c /data/frigate/config/config.yml";
-      Restart = "always";
-      User = "frigate";
-      Group = "frigate";
-      WorkingDirectory = "/data/frigate";
+  wantedBy = [ "multi-user.target" ];
+
+  wants = [ "network-online.target" ];
+  after  = [ "network-online.target" ];
+
+  serviceConfig = {
+    ExecStart = "${pkgs.frigate}/bin/frigate -c /data/frigate/config/config.yml";
+    Restart = "always";
+    User = "frigate";
+    Group = "frigate";
+    WorkingDirectory = "/data/frigate";
     };
   };
 }
