@@ -1,46 +1,102 @@
 { config, pkgs, ... }:
 
 {
-  networking.useDHCP = false;
+  system.stateVersion = "25.11";
+  networking.hostName = "frigate-nvr";
+
+  ## =========================
+  ## SÍŤ – macvlan
+  ## =========================
   networking.useNetworkd = true;
+  systemd.network.enable = true;
   networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
-  systemd.network.enable = true;
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";
-    dhcpV4Config.ClientIdentifier = "mac";
   };
 
-  networking.firewall.allowedTCPPorts = [ 5000 1935 ];
-
-  system.stateVersion = "25.11";
-
-  users.groups.frigate = {};
-  users.users.frigate = {
-    isSystemUser = true;
-    group = "frigate";
-    home = "/data/frigate";
+  ## =========================
+  ## HARDWARE AKCELERACE
+  ## =========================
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vaapiIntel
+    ];
   };
 
-  environment.systemPackages = with pkgs; [
-  frigate
-  ffmpeg
-];
-
-systemd.services.frigate = {
-  description = "Frigate NVR";
-  wantedBy = [ "multi-user.target" ];
-  wants = [ "network-online.target" ];
-  after = [ "network-online.target" ];
-
-  serviceConfig = {
-    ExecStart = "${pkgs.frigate}/libexec/frigate/bin/python -m frigate.app -c /data/frigate/config/config.yml";
-    Restart = "always";
-    User = "frigate";
-    Group = "frigate";
-    WorkingDirectory = "/data/frigate";
+  ## =========================
+  ## FIX PRO KEYRING
+  ## =========================
+  virtualisation.containers.containersConf.settings = {
+    containers = {
+      keyring = false;
     };
   };
+
+  ## =========================
+  ## UŽIVATELÉ A SKUPINY
+  ## =========================
+  users.users.frigate.extraGroups = [ "video" "render" "dialout" ];
+
+  ## =========================
+  ## SLUŽBA FRIGATE
+  ## =========================
+  services.frigate = {
+    enable = true;
+    hostname = "frigate-nvr";
+
+    settings = {
+      # === MQTT KONFIGURACE ===
+      mqtt = {
+        host = "192.168.100.234";      # <--- ZDE ZADEJTE IP ADRESU MQTT BROKERA
+        user = "frigate";  # <--- ZDE ZADEJTE UŽIVATELSKÉ JMÉNO
+        password = "gregorek"; # <--- ZDE ZADEJTE HESLO
+      };
+
+      # Detektor (Google Coral USB)
+      detectors.coral = {
+        type = "edgetpu";
+        device = "usb";
+      };
+
+      # === KAMERY ===
+      cameras = {
+        # Příklad kamery - upravte název 'kamera_1'
+        kamera_loznice: { 
+          ffmpeg.inputs = [
+            {
+              # <--- ZDE UPRAVTE RTSP ADRESU (IP kamery, login, heslo)
+              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/001/?transportmode=unicast"; 
+              roles = [ "detect" "record" ];
+            }
+          ];
+          detect = {
+            enabled = true;
+            width = 1280; # Zkontrolujte rozlišení streamu
+            height = 720;
+          };
+        };
+      };
+      
+      record.enabled = true;
+    };
+  };
+
+  ## =========================
+  ## FIREWALL A SSH
+  ## =========================
+  networking.firewall.allowedTCPPorts = [ 5000 8554 8555 ];
+
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = true;
+  };
+  
+  environment.systemPackages = with pkgs; [
+    git vim nano htop libva-utils
+  ];
 }
