@@ -37,7 +37,6 @@
 
   services.home-assistant = {
     enable = true;
-    package = pkgs2411.home-assistant;
     configDir = "/config";
 
     config = import ./configuration.nix;
