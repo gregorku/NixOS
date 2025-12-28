@@ -43,35 +43,38 @@
 
     # Všechna nastavení musí být uvnitř tohoto bloku
     settings = {
+      version = "0.16"; 
       database.path = "/var/lib/frigate/frigate.db";
       
       mqtt = {
-        host = "192.168.100.234";      # <--- DOPLŇTE IP
-        user = "frigate";  # <--- DOPLŇTE JMÉNO
-        password = "gregorek"; # <--- DOPLŇTE HESLO
+        host = "192.168.100.234";
+        user = "frigate";
+        password = "gregorek";
       };
 
-      detectors.coral = {
-        type = "edgetpu";
-        device = "usb";
+      # Definice detektorů - opravená struktura
+      detectors = {
+        coral = {
+          type = "edgetpu";
+          device = "usb";
         };
         cpu_fallback = {
-        type = "cpu";
+          type = "cpu";
+        };
       };
 
       cameras = {
         kamera_loznice = { 
-          detect.enabled = true;
           ffmpeg.hwaccel_args = "preset-vaapi";
           ffmpeg.inputs = [
             {
-              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/002/?transportmode=unicast"; 
+              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/002/?transportmode=unicast";
               roles = [ "detect" "record" ];
             }
           ];
           detect = {
             enabled = true;
-            width = 1280; 
+            width = 1280;
             height = 720;
             fps = 5;
           };
@@ -85,7 +88,8 @@
   ## FIREWALL A OPRÁVNĚNÍ
   ## =========================
   networking.firewall.allowedTCPPorts = [ 5000 8554 8555 ];
-
+  
+  # Přidání uživatele frigate do skupin pro přístup k HW a USB
   users.users.frigate.extraGroups = [ "video" "render" "dialout" "users" "plugdev" ];
 
   services.openssh = {
@@ -96,7 +100,7 @@
   environment.systemPackages = with pkgs; [
     git vim nano htop libva-utils libedgetpu usbutils
   ];
-
+  
   systemd.tmpfiles.rules = [
     "d /var/lib/frigate 0755 frigate frigate -"
     "d /media/frigate 0755 frigate frigate -"
