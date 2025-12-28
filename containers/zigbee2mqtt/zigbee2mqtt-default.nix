@@ -36,7 +36,6 @@
       };
 
       permit_join = false;
-      homeassistant = true;
 
       # Načtení externího souboru s hesly (bind-mount)
       "${"!include"}" = "mqtt-secrets.yaml";
