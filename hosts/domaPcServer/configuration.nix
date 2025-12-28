@@ -86,7 +86,6 @@
   boot.supportedFilesystems = [ "zfs" ];
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
-  };
 
   ## =========================
   ## SMART monitoring disků (KRITICKÉ)
