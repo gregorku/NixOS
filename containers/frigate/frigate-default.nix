@@ -54,10 +54,14 @@
       detectors.coral = {
         type = "edgetpu";
         device = "usb";
+        };
+        cpu_fallback = {
+        type = "cpu";
       };
 
       cameras = {
         kamera_loznice = { 
+          detect.enabled = true;
           ffmpeg.hwaccel_args = "preset-vaapi";
           ffmpeg.inputs = [
             {
