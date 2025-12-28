@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs2411 ... }:
 
 {
   system.stateVersion = "25.11";
@@ -37,6 +37,7 @@
 
   services.home-assistant = {
     enable = true;
+    package = pkgs2411.home-assistant;
     configDir = "/config";
 
     config = import ./configuration.nix;
