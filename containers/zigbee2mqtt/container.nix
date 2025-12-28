@@ -6,32 +6,29 @@
     privateNetwork = true;
     macvlans = [ "br0" ];
     bindMounts = {
-      # Perzistentní data (databáze, logy)
       "/var/lib/mosquitto" = {
         hostPath = "/data/mqtt";
         isReadOnly = false;
       };
-      # Připojení složky s hesly
       "/etc/mosquitto/secrets" = {
         hostPath = "/etc/nixos/secrets/mqtt";
         isReadOnly = true;
       };
     };
-
     config = import ./mqtt-default.nix;
   };
 
-    containers.zigbee2mqtt = {
+  containers.zigbee2mqtt = {
     autoStart = true;
     privateNetwork = true;
     
     # Propojení s fyzickou sítí routeru přes bridge br0
     macvlans = [ "br0" ];
+    
+    # OPRAVA: privateUsers často rozbíjí přístup k USB (protože mění UID). 
+    # Pokud to není nezbytně nutné, doporučuji vypnout pro přístup k HW.
+    # privateUsers = "identity"; 
 
-    # Izolace uživatelů (volitelné, ale bezpečnější)
-    privateUsers = "identity";
-
-    # Povolení přístupu k USB hardwaru na úrovni cgroups
     allowedDevices = [
       {
         node = "/dev/serial/by-id/usb-SMLIGHT_SMLIGHT_SLZB-07Mg24_0ab50f4025adef1196c58a4ba8793231-if00-port0";
@@ -39,29 +36,28 @@
       }
     ];
 
-    # Mapování souborů a složek z hostitele do kontejneru
     bindMounts = {
-      # 1. Perzistentní data (databáze zařízení, stav sítě)
+      # 1. Perzistentní data
       "/data" = {
         hostPath = "/data/zigbee2mqtt";
         isReadOnly = false;
       };
 
-      # 2. Mapování USB koordinátoru na fixní a krátký název
+      # 2. Mapování USB koordinátoru
       "/dev/zigbee" = {
         hostPath = "/dev/serial/by-id/usb-SMLIGHT_SMLIGHT_SLZB-07Mg24_0ab50f4025adef1196c58a4ba8793231-if00-port0";
         isReadOnly = false;
       };
 
-      # 3. TAJNÉ ÚDAJE (IP adresa brokeru, hesla), které nejsou v Gitu
-      # Tento soubor se v kontejneru objeví v /data/mqtt-secrets.yaml
+      # 3. TAJNÉ ÚDAJE
+      # Soubor bude v kontejneru dostupný jako /run/secrets/mqtt.env
       "/run/secrets/mqtt.env" = {
         hostPath = "/etc/nixos/secrets/zigbee2mqtt/mqtt-secret.env";
         isReadOnly = true;
       };
     };
 
-    # Načtení vnitřní konfigurace (logika, sítě, služby)
-    path = ./zigbee2mqtt-default.nix;
+    # OPRAVA: Pro deklarativní konfiguraci se používá 'config = import ...', nikoliv 'path'.
+    config = import ./zigbee2mqtt-default.nix;
   };
 }
