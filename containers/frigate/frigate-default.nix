@@ -23,8 +23,9 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-driver
-      vaapiIntel
+      intel-media-driver   # Pro moderní procesory (Broadwell a novější)
+      intel-vaapi-driver   # Přejmenováno z vaapiIntel (pro starší procesory)
+      libvdpau-va-gl
     ];
   };
 
