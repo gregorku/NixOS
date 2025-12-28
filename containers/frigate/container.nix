@@ -17,9 +17,9 @@
       # SEM UŽ /dev/shm NEDÁVEJTE
     };
 
-    extraFlags = [ 
+    eextraFlags = [ 
       "--system-call-filter=@system-service"
-      # Vytvoří 512MB sdílené paměti přímo pro kontejner
+      # Toto vytvoří čerstvou a dostatečně velkou sdílenou paměť pro kontejner
       "--tmpfs=/dev/shm:size=512M,mode=1777"
     ];
 
