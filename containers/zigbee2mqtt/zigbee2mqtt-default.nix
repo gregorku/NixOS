@@ -38,7 +38,11 @@
       permit_join = false;
 
       # Načtení externího souboru s hesly (bind-mount)
-      #extraSettingsFiles = [ "/data/mqtt-secrets.yaml" ];
+      mqtt = {
+        server   = mqttSecrets.server;
+        user     = mqttSecrets.user;
+        password = mqttSecrets.password;
+      };
     };
   };
   
