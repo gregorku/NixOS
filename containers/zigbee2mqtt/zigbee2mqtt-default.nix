@@ -38,10 +38,36 @@
       permit_join = false;
 
       # Načtení externího souboru s hesly (bind-mount)
-      extraSettingsFiles = [ "/data/mqtt-secrets.yaml" ];
+      #extraSettingsFiles = [ "/data/mqtt-secrets.yaml" ];
     };
   };
   
+  ## ========================================================
+  ## HOOK – sloučení MQTT secrets do configuration.yaml
+  ## ========================================================
+  systemd.services.zigbee2mqtt.preStart = ''
+    set -e
+
+    CFG="/data/configuration.yaml"
+    SECRETS="/data/mqtt-secrets.yaml"
+
+    if [ -f "$SECRETS" ]; then
+      # smaž starý mqtt blok
+      awk '
+        BEGIN {skip=0}
+        /^mqtt:/ {skip=1; next}
+        skip && /^[^ ]/ {skip=0}
+        !skip {print}
+      ' "$CFG" > /tmp/z2m.yml
+
+      # přidej secrets
+      echo "mqtt:" >> /tmp/z2m.yml
+      sed 's/^/  /' "$SECRETS" >> /tmp/z2m.yml
+
+      mv /tmp/z2m.yml "$CFG"
+    fi
+  '';
+
   # Práva pro přístup k USB
   users.users.zigbee2mqtt.extraGroups = [ "dialout" ];
 }
