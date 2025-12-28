@@ -61,18 +61,18 @@
       "zeroconf" # Nutné pro mDNS/ESPHome vyhledávání
      ];
 
-  extraPackages = python3Packages: [
-      python3Packages.psycopg2
-      python3Packages.gtts
-      python3Packages.pymetno
-      python3Packages.home-assistant-chip-clusters
-      python3Packages.universal-silabs-flasher
-      python3Packages.zha-quirks             # Knihovna pro specifická zařízení
-      python3Packages.zha                    # Samotná knihovna ZHA
-      python3Packages.zigpy-znp              # Pokud byste někdy přešel na TI čip (pro jistotu)
-      python3Packages.zigpy-deconz           # Pro podporu různých adaptérů
-      python3Packages.bellows                # Protokol pro Silicon Labs (EZSP)
-      python3Packages.zigpy                  # Základní knihovna pro Zigbee
+  extraPackages = python3Packages: with python3Packages; [
+      psycopg2
+      gtts
+      pymetno
+      home-assistant-chip-clusters
+      universal-silabs-flasher
+      zha-quirks
+      zha
+      zigpy-znp
+      zigpy-deconz
+      bellows
+      zigpy
       # Přidáno pro opravu chyb 'Invalid handler' a MQTT v5 konektivity
       aioesphomeapi
       cryptography
