@@ -32,14 +32,8 @@
   '';
 
   systemd.services.mosquitto = {
-  description = "Mosquitto MQTT broker";
-  wantedBy = [ "multi-user.target" ];
-  after = [ "network-online.target" ];
-  wants = [ "network-online.target" ];
-
-  serviceConfig = {
-    ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c /etc/mosquitto/mosquitto.conf";
-    Restart = "always";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.ExecStart =
+      "${pkgs.mosquitto}/bin/mosquitto -c /etc/mosquitto/mosquitto.conf";
     };
-  };
 }
