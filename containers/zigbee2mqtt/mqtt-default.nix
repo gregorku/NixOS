@@ -20,6 +20,15 @@
 
   system.stateVersion = "25.11";
 
+  ## ---------------------------------------------------------
+  ## Uživatel mosquitto
+  ## ---------------------------------------------------------
+  users.groups.mosquitto = {};
+  users.users.mosquitto = {
+    isSystemUser = true;
+    group = "mosquitto";
+  };
+
   ## =========================================================
   ## MOSQUITTO – RUČNÍ SYSTEMD SERVICE
   ## =========================================================
