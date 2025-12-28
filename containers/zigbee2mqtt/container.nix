@@ -55,8 +55,8 @@
 
       # 3. TAJNÉ ÚDAJE (IP adresa brokeru, hesla), které nejsou v Gitu
       # Tento soubor se v kontejneru objeví v /data/mqtt-secrets.yaml
-      "/data/mqtt-secrets.yaml" = {
-        hostPath = "/etc/nixos/secrets/zigbee2mqtt/mqtt-secret.yaml";
+      "/run/secrets/mqtt.env" = {
+        hostPath = "/etc/nixos/secrets/zigbee2mqtt/mqtt-secret.env";
         isReadOnly = true;
       };
     };
