@@ -11,16 +11,16 @@
 
     bindMounts = {
       "/var/lib/frigate" = { hostPath = "/data/frigate"; isReadOnly = false; };
-      "/dev/shm" = { hostPath = "/dev/shm"; isReadOnly = false; };
       "/media/frigate" = { hostPath = "/video"; isReadOnly = false; };
       "/dev/bus/usb" = { hostPath = "/dev/bus/usb"; isReadOnly = false; };
       "/dev/dri" = { hostPath = "/dev/dri"; isReadOnly = false; };
+      # SEM UŽ /dev/shm NEDÁVEJTE
     };
-    
-    # Zjednodušené Flags - nspawn v NixOS automaticky povolí zařízení 
-    # v bindMounts, pokud nejsou flags v konfliktu.
+
     extraFlags = [ 
       "--system-call-filter=@system-service"
+      # Vytvoří 512MB sdílené paměti přímo pro kontejner
+      "--tmpfs=/dev/shm:size=512M,mode=1777"
     ];
 
     # Práva definujeme pouze zde, bez zástupných znaků
