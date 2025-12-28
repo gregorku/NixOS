@@ -66,22 +66,6 @@
   extraPackages = python3Packages: with python3Packages; [
       psycopg2
       gtts
-      pymetno
-      home-assistant-chip-clusters
-      universal-silabs-flasher
-      zha-quirks
-      zha
-      zigpy-znp
-      zigpy-deconz
-      bellows
-      zigpy
-      # Přidáno pro opravu chyb 'Invalid handler' a MQTT v5 konektivity
-      aioesphomeapi
-      cryptography
-      pillow
-      paho-mqttextraPackages = python3Packages: with python3Packages; [
-      psycopg2
-      gtts
       paho-mqtt
       cryptography
       # Knihovny vyžadované podle vašeho logu:
