@@ -11,9 +11,10 @@
     privateUsers = "identity";
 
     bindMounts = {
-      "/data/frigate" = {
-        hostPath = "/data/frigate";
-        isReadOnly = false;
+  "/data/frigate" = {
+    hostPath = "/data/frigate";
+    isReadOnly = false;
+    mountOptions = [ "bind" "rw" "exec" ];
       };
     };
   };
