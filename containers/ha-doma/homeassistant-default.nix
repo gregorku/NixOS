@@ -1,4 +1,4 @@
-{ config, pkgs, pkgs2411 ... }:
+{ config, pkgs, pkgs2411, ... }:
 
 {
   system.stateVersion = "25.11";
