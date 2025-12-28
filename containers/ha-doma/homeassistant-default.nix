@@ -59,6 +59,8 @@
       "met"
       "esphome" # Explicitně přidáno
       "zeroconf" # Nutné pro mDNS/ESPHome vyhledávání
+      "default_config"
+      "mqtt"
      ];
 
   extraPackages = python3Packages: with python3Packages; [
@@ -77,7 +79,20 @@
       aioesphomeapi
       cryptography
       pillow
+      paho-mqttextraPackages = python3Packages: with python3Packages; [
+      psycopg2
+      gtts
       paho-mqtt
+      cryptography
+      # Knihovny vyžadované podle vašeho logu:
+      androidtvremote2
+      pyipp
+      haphilipsjs
+      brother
+      pyheos
+      # Doporučené pro ESPHome a Zeroconf (řeší neviditelné hodnoty)
+      aioesphomeapi
+      zeroconf
     ];
   };
 }
