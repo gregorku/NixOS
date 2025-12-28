@@ -9,6 +9,9 @@
   networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
+  systemd.targets.multi-user.enable = true;
+  systemd.defaultUnit = "multi-user.target";
+
   systemd.network.enable = true;
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
