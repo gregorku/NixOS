@@ -32,24 +32,14 @@
   '';
 
   systemd.services.mosquitto = {
-    description = "Mosquitto MQTT broker";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c /etc/mosquitto/mosquitto.conf";
-      Restart = "always";
-      User = "root";
-      Group = "root";
+  description = "Mosquitto MQTT broker";
+  wantedBy = [ "multi-user.target" ];
+  after = [ "network-online.target" ];
+  wants = [ "network-online.target" ];
 
-      # 🔑 Povolit přístup k secrets mountu
-      ProtectSystem = "no";
-      ProtectHome = "no";
-      PrivateDevices = false;
-      PrivateTmp = false;
-      NoNewPrivileges = false;
-      RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-      ReadWritePaths = [ "/etc/mosquitto/secrets" "/data/mqtt" ];
+  serviceConfig = {
+    ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c /etc/mosquitto/mosquitto.conf";
+    Restart = "always";
     };
   };
 }
