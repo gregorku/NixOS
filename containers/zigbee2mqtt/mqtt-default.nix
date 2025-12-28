@@ -43,9 +43,13 @@
       Group = "root";
 
       # 🔑 Povolit přístup k secrets mountu
-      ProtectSystem = "off";
-      ProtectHome = false;
-      ReadOnlyPaths = [ "/etc/mosquitto/secrets" ];
+      ProtectSystem = "no";
+      ProtectHome = "no";
+      PrivateDevices = false;
+      PrivateTmp = false;
+      NoNewPrivileges = false;
+      RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+      ReadWritePaths = [ "/etc/mosquitto/secrets" "/data/mqtt" ];
     };
   };
 }
