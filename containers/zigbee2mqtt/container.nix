@@ -21,7 +21,7 @@
     config = import ./mqtt-default.nix;
   };
 
-  containers.zigbee2mqtt = {
+    containers.zigbee2mqtt = {
     autoStart = true;
     privateNetwork = true;
     
@@ -61,29 +61,7 @@
       };
     };
 
-    config = {
-      imports = [ ./zigbee2mqtt-default.nix ];
-
-      systemd.services.zigbee2mqtt.preStart = ''
-        set -e
-
-        CFG="/data/configuration.yaml"
-        SECRETS="/data/mqtt-secrets.yaml"
-
-        if [ -f "$SECRETS" ]; then
-          awk '
-            BEGIN {skip=0}
-            /^mqtt:/ {skip=1; next}
-            skip && /^[^ ]/ {skip=0}
-            !skip {print}
-          ' "$CFG" > /tmp/z2m.yml
-
-          echo "mqtt:" >> /tmp/z2m.yml
-          sed 's/^/  /' "$SECRETS" >> /tmp/z2m.yml
-
-          mv /tmp/z2m.yml "$CFG"
-        fi
-      '';
-    };
+    # Načtení vnitřní konfigurace (logika, sítě, služby)
+    path = ./zigbee2mqtt-default.nix;
   };
 }
