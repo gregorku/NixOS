@@ -38,7 +38,7 @@
       permit_join = false;
 
       # Načtení externího souboru s hesly (bind-mount)
-      "${"!include"}" = "mqtt-secrets.yaml";
+      secretsFile = "/data/mqtt-secrets.yaml";
     };
   };
   
