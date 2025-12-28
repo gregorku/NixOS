@@ -3,7 +3,7 @@
 {
   system.stateVersion = "25.11";
   networking.hostName = "zigbee2mqtt";
-  
+
   ## SÍŤOVÁ KONFIGURACE
   networking.useDHCP = false;
   networking.useNetworkd = true;
@@ -36,28 +36,31 @@
 
       permit_join = false;
       
-      # MQTT sekci necháváme prázdnou, bude naplněna dynamicky z EnvironmentFile
+      # MQTT sekci necháváme prázdnou, bude naplněna dynamicky startovacím skriptem
       mqtt = {};
     };
   };
 
-  # Oprava: Načtení environment proměnných a spuštění
+  # OPRAVA: Řešení konfliktu "Conflicting definition values"
+  # Místo použití 'script' (který koliduje s defaultním ExecStart),
+  # vynutíme (mkForce) vlastní ExecStart, který provede mapování proměnných.
   systemd.services.zigbee2mqtt = {
     serviceConfig = {
       # Načte soubor /run/secrets/mqtt.env (namapovaný v container.nix)
       EnvironmentFile = "/run/secrets/mqtt.env";
-    };
-
-    # Přepíšeme startovací skript, abychom namapovali vaše proměnné (MQTT_SERVER)
-    # na proměnné, které Zigbee2MQTT očekává (ZIGBEE2MQTT_CONFIG_MQTT_SERVER).
-    script = lib.mkForce ''
-      export ZIGBEE2MQTT_CONFIG_MQTT_SERVER="$MQTT_SERVER"
-      export ZIGBEE2MQTT_CONFIG_MQTT_USER="$MQTT_USER"
-      export ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD="$MQTT_PASSWORD"
       
-      # Spuštění samotné služby
-      ${pkgs.zigbee2mqtt}/bin/zigbee2mqtt
-    '';
+      # Zde přepíšeme spouštěcí příkaz. 
+      # writeShellScript vytvoří spustitelný soubor v /nix/store
+      ExecStart = lib.mkForce "${pkgs.writeShellScript "z2m-wrapper" ''
+        # 1. Přemapování obecných proměnných na ty, které chce Zigbee2MQTT
+        export ZIGBEE2MQTT_CONFIG_MQTT_SERVER="$MQTT_SERVER"
+        export ZIGBEE2MQTT_CONFIG_MQTT_USER="$MQTT_USER"
+        export ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD="$MQTT_PASSWORD"
+        
+        # 2. Spuštění samotné aplikace
+        exec ${pkgs.zigbee2mqtt}/bin/zigbee2mqtt
+      ''}";
+    };
   };
 
   users.users.zigbee2mqtt.extraGroups = [ "dialout" ];
