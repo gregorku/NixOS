@@ -36,7 +36,7 @@
     after = [ "network-online.target" ];
 
     serviceConfig = {
-      ExecStart = "${pkgs.frigate}/bin/frigate -c /data/frigate/config/config.yml";
+      ExecStart = "${pkgs.frigate}/bin/python -m frigate.app -c /data/frigate/config/config.yml";
       Restart = "always";
       User = "frigate";
       Group = "frigate";
