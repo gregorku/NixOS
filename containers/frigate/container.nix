@@ -27,6 +27,7 @@
     allowedDevices = [
       { node = "/dev/dri/renderD128"; modifier = "rw"; }
       { node = "/dev/bus/usb"; modifier = "rw"; }
+      { node = "/dev/char"; modifier = "rw"; }
     ];
   };
 }

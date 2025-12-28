@@ -57,8 +57,10 @@
   };
 
   ## =========================
-  ## UŽIVATEL
+  ## UŽIVATEL A SKUPINY
   ## =========================
+  users.groups.plugdev = {}; # Skupina pro přístup k USB zařízením
+
   users.users.gregor = {
     isNormalUser = true;
     initialPassword = "zmenit";
@@ -66,8 +68,19 @@
       "wheel"
       "networkmanager"
       "libvirtd"
+      "plugdev"
     ];
   };
+
+  ## =========================
+  ## UDEV PRAVIDLA (Google Coral)
+  ## =========================
+  services.udev.extraRules = ''
+    # Google Coral USB (inicializační stav)
+    SUBSYSTEM=="usb", ATTRS{idVendor} == "1a6e", ATTRS{idProduct} == "089a", GROUP="plugdev", MODE="0660"
+    # Google Coral USB (stav po načtení firmware)
+    SUBSYSTEM=="usb", ATTRS{idVendor} == "18d1", ATTRS{idProduct} == "9302", GROUP="plugdev", MODE="0660"
+  '';
 
   ## =========================
   ## VIDEO DISK (sdb → /video)
