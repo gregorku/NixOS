@@ -73,6 +73,11 @@
       python3Packages.zigpy-deconz           # Pro podporu různých adaptérů
       python3Packages.bellows                # Protokol pro Silicon Labs (EZSP)
       python3Packages.zigpy                  # Základní knihovna pro Zigbee
+      # Přidáno pro opravu chyb 'Invalid handler' a MQTT v5 konektivity
+      aioesphomeapi
+      cryptography
+      pillow
+      paho-mqtt
     ];
   };
 }
