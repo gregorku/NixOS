@@ -7,7 +7,7 @@
       url = "tarball+https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-25.11.tar.gz";
     };
 
-    # Stabilní balíky – 24.11 (např. Home Assistant, esphome, mqtt apod.)
+    # Stabilní balíky – 24.11 (Home Assistant, ESPHome, MQTT…)
     nixpkgs2411 = {
       url = "tarball+https://github.com/NixOS/nixpkgs/archive/refs/heads/nixos-24.11.tar.gz";
     };
@@ -18,14 +18,15 @@
     mkHost = host: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
-      specialArgs = {
-        pkgs2411 = import nixpkgs2411 {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-        };
-      };
-
       modules = [
+        # 🔑 ZDE se pkgs2411 zavede do _module.args
+        {
+          _module.args.pkgs2411 = import nixpkgs2411 {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+        }
+
         ./hosts/${host}/configuration.nix
       ];
     };
