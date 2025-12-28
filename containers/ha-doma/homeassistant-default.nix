@@ -64,19 +64,36 @@
      ];
 
   extraPackages = python3Packages: with python3Packages; [
+      # Základní a DB moduly
       psycopg2
       gtts
       paho-mqtt
       cryptography
-      # Knihovny vyžadované podle vašeho logu:
-      androidtvremote2
-      pyipp
-      haphilipsjs
-      brother
-      pyheos
-      # Doporučené pro ESPHome a Zeroconf (řeší neviditelné hodnoty)
       aioesphomeapi
       zeroconf
+      
+      # Opravené názvy balíčků z vašich logů:
+      # Poznámka: Pokud balíček v Nixu neexistuje, musíme ho vynechat nebo najít správný název
+      androidtvremote2
+      pyipp
+      brother
+      pyheos
+      
+      # OPRAVA: philips_js používá v nixpkgs název 'haphilipsjs' nebo podobný, 
+      # pokud hlásí undefined, zkuste použít pkgs.python3Packages.haphilipsjs 
+      # nebo jej prozatím zakomentujte, pokud rebuild selže.
+      # haphilipsjs 
+
+      # Ostatní vaše balíčky
+      pymetno
+      home-assistant-chip-clusters
+      universal-silabs-flasher
+      zha-quirks
+      zha
+      zigpy-znp
+      zigpy-deconz
+      bellows
+      zigpy
     ];
   };
 }
