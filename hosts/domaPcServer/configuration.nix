@@ -84,6 +84,9 @@
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.extraPools = [ "datapool" ]; # Explicitní import
+  networking.hostId = "8425e349"; # Nutné pro stabilitu
+
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
 
