@@ -14,7 +14,6 @@
   "/data/frigate" = {
     hostPath = "/data/frigate";
     isReadOnly = false;
-    mountOptions = [ "bind" "rw" "exec" ];
       };
     };
   };

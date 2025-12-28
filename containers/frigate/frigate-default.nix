@@ -25,32 +25,22 @@
   };
 
   environment.systemPackages = with pkgs; [
+  frigate
   ffmpeg
-  (pkgs.python3.withPackages (ps: with ps; [
-    ps.numpy
-    ps.opencv4
-    ps.paho-mqtt
-    ps.requests
-    ps.ruamel-yaml
-  ]))
-  pkgs.frigate
-  ];
+];
 
-  systemd.targets.multi-user.enable = true;
-  systemd.defaultUnit = "multi-user.target";
+systemd.services.frigate = {
+  description = "Frigate NVR";
+  wantedBy = [ "multi-user.target" ];
+  wants = [ "network-online.target" ];
+  after = [ "network-online.target" ];
 
-  systemd.services.frigate = {
-    description = "Frigate NVR";
-    wantedBy = [ "multi-user.target" ];
-    wants = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-
-    serviceConfig = {
-      ExecStart = "/data/frigate/run-frigate.sh";
-      Restart = "always";
-      User = "frigate";
-      Group = "frigate";
-      WorkingDirectory = "/data/frigate";
+  serviceConfig = {
+    ExecStart = "${pkgs.frigate}/libexec/frigate/bin/python -m frigate.app -c /data/frigate/config/config.yml";
+    Restart = "always";
+    User = "frigate";
+    Group = "frigate";
+    WorkingDirectory = "/data/frigate";
     };
   };
 }
