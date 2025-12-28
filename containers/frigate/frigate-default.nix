@@ -63,15 +63,17 @@
         device = "usb";
       };
 
-      # === KAMERY ===
-      cameras = {
-        # Příklad kamery - upravte název 'kamera_1'
-        kamera_loznice: { 
+      ## =========================
+      ## === KAMERY ===
+      ## =========================
+      services.frigate.settings.cameras = {
+        # Název kamery (používejte pouze malá písmena, čísla a podtržítka)
+        kamera_loznice = { 
           ffmpeg.inputs = [
             {
-              # <--- ZDE UPRAVTE RTSP ADRESU (IP kamery, login, heslo)
-              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/001/?transportmode=unicast"; 
-              roles = [ "detect" "record" ];
+              # RTSP adresa: doplňte své jméno, heslo a IP adresu kamery
+                  path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/001/?transportmode=unicast"; 
+                  roles = [ "detect" "record" ];
             }
           ];
           detect = {
