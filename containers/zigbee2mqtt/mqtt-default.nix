@@ -41,6 +41,11 @@
       Restart = "always";
       User = "root";
       Group = "root";
+
+      # 🔑 Povolit přístup k secrets mountu
+      ProtectSystem = "off";
+      ProtectHome = false;
+      ReadOnlyPaths = [ "/etc/mosquitto/secrets" ];
     };
   };
 }
