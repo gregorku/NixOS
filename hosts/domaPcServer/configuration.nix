@@ -122,11 +122,16 @@
   networking.useHostResolvConf = false;
 
   ## =========================
-  ## Google Coral EdgeTPU (HOST ONLY)
+  ## Google Coral EdgeTPU – firmware loader
   ## =========================
-  services.udev.packages = with pkgs; [
-  coral-edgetpu
+  environment.systemPackages = with pkgs; [
+    libedgetpu
   ];
+
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", \
+      RUN+="${pkgs.libedgetpu}/bin/edgetpu_firmware.sh"
+  '';
 
   boot.kernelModules = [ "apex" ];
 
