@@ -128,11 +128,6 @@
     libedgetpu
   ];
 
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", \
-      RUN+="${pkgs.libedgetpu}/bin/edgetpu_firmware.sh"
-  '';
-
   boot.kernelModules = [ "apex" ];
 
   ## =========================
