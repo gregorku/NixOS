@@ -1,5 +1,11 @@
 { config, pkgs, ... }:
 
+let
+  coralFwLoader = pkgs.writeShellScript "load-coral-fw.sh" ''
+    DEVPATH=$(udevadm info -q path -n "$DEVNAME")
+    echo /opt/coral-fw/apex_fw.bin > /sys$DEVPATH/firmware
+  '';
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -75,10 +81,7 @@
   fileSystems."/video" = {
     device = "/dev/disk/by-uuid/4cf97703-5ef4-43e0-a73a-b1b2fcdc133d";
     fsType = "xfs";
-    options = [
-      "noatime"
-      "nofail"
-    ];
+    options = [ "noatime" "nofail" ];
   };
 
   ## =========================
