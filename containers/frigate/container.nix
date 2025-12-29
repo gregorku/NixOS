@@ -3,31 +3,28 @@
 {
   containers.frigate = {
     autoStart = true;
-    ephemeral = true;
-    config = import ./frigate-default.nix;
+    # ... vaše ostatní nastavení ...
 
-    privateNetwork = true;
-    macvlans = [ "br0" ]; 
-
-    bindMounts = {
-      "/var/lib/frigate" = { hostPath = "/data/frigate"; isReadOnly = false; };
-      "/media/frigate" = { hostPath = "/video"; isReadOnly = false; };
-      "/dev/bus/usb" = { hostPath = "/dev/bus/usb"; isReadOnly = false; };
-      "/dev/dri" = { hostPath = "/dev/dri"; isReadOnly = false; };
-      # SEM UŽ /dev/shm NEDÁVEJTE
+    config = { config, pkgs, ... }: {
+      # Instalace knihovny i uvnitř kontejneru
+      environment.systemPackages = [ pkgs.libedgetpu ];
+      
+      # Frigate konfigurace (zjednodušeně)
+      services.frigate = {
+        enable = true;
+        settings = {
+          detectors.coral = {
+            type = "edgetpu";
+            device = "usb"; # Frigate si ho najde přes USB sběrnici
+          };
+          # ... zbytek frigate.yml ...
+        };
+      };
     };
 
-    extraFlags = [ 
-      "--system-call-filter=@system-service"
-      # Toto vytvoří čerstvou a dostatečně velkou sdílenou paměť pro kontejner
-      "--tmpfs=/dev/shm:size=512M,mode=1777"
-    ];
-
-    # Práva definujeme pouze zde, bez zástupných znaků
-    allowedDevices = [
-      { node = "/dev/dri/renderD128"; modifier = "rw"; }
-      { node = "/dev/bus/usb"; modifier = "rw"; }
-      { node = "/dev/char"; modifier = "rw"; }
-    ];
+    # KLÍČOVÉ: Povolení přístupu k hardwaru z hostitele do kontejneru
+    bindMounts = {
+      "/dev/bus/usb" = { hostPath = "/dev/bus/usb"; isReadOnly = false; };
+    };
   };
 }
