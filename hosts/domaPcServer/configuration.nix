@@ -76,11 +76,11 @@
   ## UDEV PRAVIDLA (Google Coral)
   ## =========================
   services.udev.extraRules = ''
-    # Google Coral USB (inicializační stav)
-    SUBSYSTEM=="usb", ATTRS{idVendor} == "1a6e", ATTRS{idProduct} == "089a", GROUP="plugdev", MODE="0660"
-    # Google Coral USB (stav po načtení firmware)
-    SUBSYSTEM=="usb", ATTRS{idVendor} == "18d1", ATTRS{idProduct} == "9302", GROUP="plugdev", MODE="0660"
-  '';
+  ##  # Google Coral USB (inicializační stav)
+  ##  SUBSYSTEM=="usb", ATTRS{idVendor} == "1a6e", ATTRS{idProduct} == "089a", GROUP="plugdev", MODE="0660"
+  ##  # Google Coral USB (stav po načtení firmware)
+  ##  SUBSYSTEM=="usb", ATTRS{idVendor} == "18d1", ATTRS{idProduct} == "9302", GROUP="plugdev", MODE="0660"
+  ##'';
 
   ## =========================
   ## VIDEO DISK (sdb → /video)
@@ -133,6 +133,36 @@
   networking.firewall.enable = true;
   services.resolved.enable = true;
   networking.useHostResolvConf = false;
+
+  ## =========================
+  ## Home Assistant nspawn – multicast bridge
+  ## =========================
+
+  systemd.network.netdevs."br-homeassistant" = {
+    netdevConfig = {
+      Name = "br-homeassistant";
+      Kind = "bridge";
+    };
+  };
+
+  systemd.network.networks."10-br-homeassistant" = {
+    matchConfig.Name = "br-homeassistant";
+    networkConfig = {
+      ConfigureWithoutCarrier = true;
+      DHCPServer = true;
+    };
+  };
+
+  systemd.network.networks."20-ve-homeassistant" = {
+    matchConfig.Name = "ve-homeassistant";
+    networkConfig = {
+      Bridge = "br-homeassistant";
+      DHCP = "yes";
+      MulticastDNS = true;
+      LLMNR = true;
+    };
+  };
+
 
   ## =========================
   ## NIXOS KOMPATIBILITA

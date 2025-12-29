@@ -4,7 +4,8 @@
   containers.homeassistant = {
     autoStart = true;
     privateNetwork = false;
-    macvlans = [ "br0" ];
+    #macvlans = [ "br0" ];
+    interface = "ve-homeassistant";
     privateUsers = "identity";
 
     bindMounts = {
