@@ -125,7 +125,7 @@
   ## Google Coral EdgeTPU (HOST ONLY)
   ## =========================
   services.udev.packages = with pkgs; [
-    google-coral-edgetpu
+    libedgetpu
   ];
 
   boot.kernelModules = [ "apex" ];
