@@ -1,11 +1,5 @@
 { config, pkgs, ... }:
 
-let
-  coralFwLoader = pkgs.writeShellScript "load-coral-fw.sh" ''
-    DEVPATH=$(udevadm info -q path -n "$DEVNAME")
-    echo /opt/coral-fw/apex_fw.bin > /sys$DEVPATH/firmware
-  '';
-in
 {
   imports = [
     ./hardware-configuration.nix
@@ -81,15 +75,18 @@ in
   fileSystems."/video" = {
     device = "/dev/disk/by-uuid/4cf97703-5ef4-43e0-a73a-b1b2fcdc133d";
     fsType = "xfs";
-    options = [ "noatime" "nofail" ];
+    options = [
+      "noatime"
+      "nofail"
+    ];
   };
 
   ## =========================
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "datapool" ];
-  networking.hostId = "deadbeef";
+  boot.zfs.extraPools = [ "datapool" ]; # Explicitní import
+  networking.hostId = "deadbeef"; # Nutné pro stabilitu
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
@@ -123,20 +120,6 @@ in
   networking.firewall.enable = true;
   services.resolved.enable = true;
   networking.useHostResolvConf = false;
-
-  ## =========================
-  ## Google Coral EdgeTPU – firmware loader
-  ## =========================
-  environment.systemPackages = with pkgs; [
-    libedgetpu
-  ];
-
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", \
-      RUN+="${coralFwLoader}"
-  '';
-
-  boot.kernelModules = [ "apex" ];
 
   ## =========================
   ## NIXOS KOMPATIBILITA
