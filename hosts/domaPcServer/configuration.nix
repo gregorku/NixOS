@@ -128,6 +128,11 @@
     libedgetpu
   ];
 
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", \
+      RUN+="${coralFwLoader}"
+  '';
+
   boot.kernelModules = [ "apex" ];
 
   ## =========================
