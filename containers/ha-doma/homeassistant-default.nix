@@ -9,12 +9,6 @@
   networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
-  # ❗ Capability musí být v kontejneru, ne na hostiteli
-  security.capabilities = {
-    CAP_NET_RAW = true;
-    CAP_NET_ADMIN = true;
-  };
-
   # macvlan rozhraní Shelly broadcast
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
