@@ -27,5 +27,6 @@
     tree
     smartmontools
     lm_sensors
+    usbutils
   ];
 }
