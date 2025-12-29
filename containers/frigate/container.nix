@@ -4,20 +4,12 @@
   containers.frigate = {
     autoStart = true;
     
-    # 1. Povolení surového přístupu k hardwaru pro nspawn
-    additionalCapabilities = [ "CAP_SYS_RAWIO" ];
-
-    # 2. Mapování USB sběrnice (ponecháme)
+    # Pouze základní bezpečné mapování
     bindMounts = {
       "/dev/bus/usb" = { hostPath = "/dev/bus/usb"; isReadOnly = false; };
     };
 
-    # 3. Povolení přístupu k USB zařízením v cgroups
-    extraFlags = [ "--property=DeviceAllow=char-usb_device rwm" ];
-
     config = { config, pkgs, ... }: {
-      # ... vaše stávající config.services.frigate ...
-      # Ujistěte se, že uvnitř zůstává:
       nixpkgs.config.allowUnfree = true;
       services.frigate = {
         enable = true;
