@@ -56,7 +56,8 @@
     efiSysMountPoint = "/boot/efi";
   };
 
-  # Podpora pro Google Coral (Gasket driver + Apex module)
+  # --- PŘIDÁNO: Podpora Google Coral USB ---
+  # Načtení ovladače Gasket a modulu Apex
   boot.extraModulePackages = [ config.boot.kernelPackages.gasket ];
   boot.kernelModules = [ "gasket" "apex" ];
 
@@ -70,16 +71,16 @@
       "wheel"
       "networkmanager"
       "libvirtd"
-      "render"   # Pro přístup k akceleraci (Coral/GPU)
-      "plugdev"  # Pro USB zařízení
+      "render"   # PŘIDÁNO: Přístup k /dev/apex_0 a GPU
+      "plugdev"  # PŘIDÁNO: Obecný přístup k USB zařízením
     ];
   };
 
   ## =========================
-  ## HARDWARE / USB (Google Coral)
+  ## PRAVIDLA PRO ZAŘÍZENÍ (UDEV)
   ## =========================
+  # PŘIDÁNO: Pravidla pro Google Coral (před i po inicializaci)
   services.udev.extraRules = ''
-    # Google Coral USB Accelerator (před a po inicializaci firmwaru)
     SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", GROUP="render", MODE="0660"
     SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="9302", GROUP="render", MODE="0660"
   '';
@@ -100,14 +101,14 @@
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "datapool" ];
-  networking.hostId = "deadbeef"; # Nutné pro stabilitu ZFS
+  boot.zfs.extraPools = [ "datapool" ]; # Explicitní import
+  networking.hostId = "deadbeef"; # Nutné pro stabilitu
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
 
   ## =========================
-  ## MONITORING A ÚDRŽBA
+  ## SMART monitoring disků (KRITICKÉ)
   ## =========================
   services.smartd = {
     enable = true;
@@ -115,8 +116,14 @@
     notifications.mail.enable = false;
   };
 
+  ## =========================
+  ## SSD / NVMe TRIM
+  ## =========================
   services.fstrim.enable = true;
 
+  ## =========================
+  ## Ochrana paměti (earlyoom)
+  ## =========================
   services.earlyoom = {
     enable = true;
     freeMemThreshold = 5;
@@ -124,7 +131,7 @@
   };
 
   ## =========================
-  ## SÍŤ A BEZPEČNOST
+  ## BEZPEČNÉ DEFAULTY
   ## =========================
   networking.firewall.enable = true;
   services.resolved.enable = true;
