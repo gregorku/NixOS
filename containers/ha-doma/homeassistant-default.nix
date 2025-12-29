@@ -9,6 +9,11 @@
   networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
+  security.capabilities = {
+  CAP_NET_RAW = true;
+  CAP_NET_ADMIN = true;
+   };
+
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";

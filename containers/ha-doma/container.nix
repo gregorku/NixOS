@@ -3,10 +3,10 @@
 {
   containers.homeassistant = {
     autoStart = true;
-    privateNetwork = true;
+    privateNetwork = false;
     macvlans = [ "br0" ];
     enableTun = true;
-    #privateUsers = "identity";
+    privateUsers = "identity";
 
     bindMounts = {
       "/config" = {
