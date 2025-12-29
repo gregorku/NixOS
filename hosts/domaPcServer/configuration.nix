@@ -69,8 +69,10 @@
 
   # 3. Vaše vlastní pravidla pro oprávnění (Ponecháno pro jistotu skupiny 'render')
   services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", GROUP="render", MODE="0660"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="9302", GROUP="render", MODE="0660"
+  # Coral v bootloader režimu
+  SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", MODE="0666", GROUP="users"
+  # Coral po nahrání firmwaru
+  SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="9302", MODE="0666", GROUP="users"
   '';
 
   ## =========================
