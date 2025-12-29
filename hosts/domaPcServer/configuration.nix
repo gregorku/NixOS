@@ -56,10 +56,22 @@
     efiSysMountPoint = "/boot/efi";
   };
 
-  # --- PŘIDÁNO: Podpora Google Coral USB ---
-  # Načtení ovladače Gasket a modulu Apex
+  ## =========================
+  ## HARDWARE / USB (Google Coral)
+  ## =========================
+  
+  # 1. Ovladače jádra (Gasket + Apex)
   boot.extraModulePackages = [ config.boot.kernelPackages.gasket ];
   boot.kernelModules = [ "gasket" "apex" ];
+
+  # 2. Udev pravidla z balíčku libedgetpu (TOTO NAHRÁVÁ FIRMWARE)
+  services.udev.packages = [ pkgs.libedgetpu ];
+
+  # 3. Vaše vlastní pravidla pro oprávnění (Ponecháno pro jistotu skupiny 'render')
+  services.udev.extraRules = ''
+    SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", GROUP="render", MODE="0660"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="9302", GROUP="render", MODE="0660"
+  '';
 
   ## =========================
   ## UŽIVATEL
@@ -75,15 +87,6 @@
       "plugdev"  # PŘIDÁNO: Obecný přístup k USB zařízením
     ];
   };
-
-  ## =========================
-  ## PRAVIDLA PRO ZAŘÍZENÍ (UDEV)
-  ## =========================
-  # PŘIDÁNO: Pravidla pro Google Coral (před i po inicializaci)
-  services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTR{idVendor}=="1a6e", ATTR{idProduct}=="089a", GROUP="render", MODE="0660"
-    SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="9302", GROUP="render", MODE="0660"
-  '';
 
   ## =========================
   ## VIDEO DISK (sdb → /video)
