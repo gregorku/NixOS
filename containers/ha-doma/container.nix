@@ -5,7 +5,6 @@
     autoStart = true;
     privateNetwork = false;
     macvlans = [ "br0" ];
-    enableTun = true;
     privateUsers = "identity";
 
     bindMounts = {
