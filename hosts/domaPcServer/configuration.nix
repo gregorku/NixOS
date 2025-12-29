@@ -85,8 +85,8 @@
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "datapool" ]; # Explicitní import
-  networking.hostId = "deadbeef"; # Nutné pro stabilitu
+  boot.zfs.extraPools = [ "datapool" ];
+  networking.hostId = "deadbeef";
 
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
@@ -120,6 +120,15 @@
   networking.firewall.enable = true;
   services.resolved.enable = true;
   networking.useHostResolvConf = false;
+
+  ## =========================
+  ## Google Coral EdgeTPU (HOST ONLY)
+  ## =========================
+  services.udev.packages = with pkgs; [
+    google-coral-edgetpu
+  ];
+
+  boot.kernelModules = [ "apex" ];
 
   ## =========================
   ## NIXOS KOMPATIBILITA
