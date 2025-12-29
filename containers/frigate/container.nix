@@ -4,40 +4,41 @@
   containers.frigate = {
     autoStart = true;
     
-    # KLÍČOVÉ: Propojení USB z hostitele do kontejneru
-    # Toto umožní kontejneru vidět Coral i předtím, než vznikne /dev/apex_0
+    # Propojení USB sběrnice, aby kontejner mohl inicializovat Coral
     bindMounts = {
       "/dev/bus/usb" = { hostPath = "/dev/bus/usb"; isReadOnly = false; };
     };
 
     config = { config, pkgs, ... }: {
-      # Povolení unfree balíčků uvnitř kontejneru (pokud je třeba pro Coral/GPU)
+      # Nutné pro libedgetpu a případné ovladače
       nixpkgs.config.allowUnfree = true;
 
       services.frigate = {
         enable = true;
+        hostname = "frigate.doma.lan"; # Povinné
         
-        # OPRAVA CHYBY: Hostname je povinný
-        hostname = "frigate.doma.lan";
-
         settings = {
-          # Detektory - definice Coralu
+          # Detektor Coral
           detectors.coral = {
             type = "edgetpu";
             device = "usb";
           };
 
-          # Zde pokračuje vaše stávající konfigurace (kamery, atd.)
-          # cameras = { ... };
+          # OPRAVA CHYBY: Musí zde být definována alespoň jedna (třeba i vypnutá) kamera
+          cameras.test_camera = {
+            enabled = false;
+            ffmpeg.inputs = [{
+              path = "rtsp://127.0.0.1:554/live";
+              roles = [ "detect" ];
+            }];
+          };
+
+          # Minimální nutná konfigurace pro start
+          mqtt.enabled = false; 
         };
       };
 
-      # Instalace knihoven pro Coral i uvnitř kontejneru
       environment.systemPackages = [ pkgs.libedgetpu ];
-
-      # Firewall v kontejneru (pokud ho máte aktivní)
-      networking.firewall.allowedTCPPorts = [ 5000 1935 ];
-      
       system.stateVersion = "25.11";
     };
   };
