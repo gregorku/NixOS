@@ -1,108 +1,44 @@
 { config, pkgs, ... }:
 
 {
-  system.stateVersion = "25.11";
-  networking.hostName = "frigate-nvr";
+  nixpkgs.config.allowUnfree = true;
 
-  ## =========================
-  ## SÍŤ – macvlan
-  ## =========================
+  networking.useDHCP = false;
   networking.useNetworkd = true;
-  systemd.network.enable = true;
-  networking.useHostResolvConf = false;
   services.resolved.enable = true;
 
+  systemd.network.enable = true;
   systemd.network.networks."10-macvlan" = {
     matchConfig.Name = "mv-*";
     networkConfig.DHCP = "yes";
   };
 
-  ## =========================
-  ## HARDWARE AKCELERACE
-  ## =========================
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-vaapi-driver
-      libvdpau-va-gl
-    ];
+  virtualisation.docker.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    docker-compose
+    libedgetpu
+  ];
+
+  users.users.frigate = {
+    isSystemUser = true;
+    group = "frigate";
+    extraGroups = [ "docker" ];
   };
+  users.groups.frigate = {};
 
-  ## =========================
-  ## FIX PRO KEYRING
-  ## =========================
-  virtualisation.containers.containersConf.settings.containers.keyring = false;
+  systemd.services.frigate = {
+    wantedBy = [ "multi-user.target" ];
+    after = [ "docker.service" ];
+    wants = [ "docker.service" ];
 
-  ## =========================
-  ## SLUŽBA FRIGATE
-  ## =========================
-  services.frigate = {
-    enable = true;
-    hostname = "frigate-nvr";
-
-    # Všechna nastavení musí být uvnitř tohoto bloku
-    settings = {
-      version = "0.16"; 
-      database.path = "/var/lib/frigate/frigate.db";
-      
-      mqtt = {
-        host = "192.168.100.234";
-        user = "frigate";
-        password = "gregorek";
-      };
-
-      # Definice detektorů - opravená struktura
-      detectors = {
-        coral = {
-          type = "edgetpu";
-          device = "usb";
-        };
-        cpu_fallback = {
-          type = "cpu";
-        };
-      };
-
-      cameras = {
-        kamera_loznice = { 
-          ffmpeg.hwaccel_args = "preset-vaapi";
-          ffmpeg.inputs = [
-            {
-              path = "rtsp://admin:gregorku__55882@192.168.100.112:554/Streaming/channels/002/?transportmode=unicast";
-              roles = [ "detect" "record" ];
-            }
-          ];
-          detect = {
-            enabled = true;
-            width = 1280;
-            height = 720;
-            fps = 5;
-          };
-          record.enabled = true;
-        };
-      };
+    serviceConfig = {
+      ExecStart = "${pkgs.docker-compose}/bin/docker-compose -f /data/frigate/docker-compose.yml up";
+      ExecStop  = "${pkgs.docker-compose}/bin/docker-compose -f /data/frigate/docker-compose.yml down";
+      Restart = "always";
+      User = "root";
     };
   };
 
-  ## =========================
-  ## FIREWALL A OPRÁVNĚNÍ
-  ## =========================
-  networking.firewall.allowedTCPPorts = [ 5000 8554 8555 ];
-  
-  # Přidání uživatele frigate do skupin pro přístup k HW a USB
-  users.users.frigate.extraGroups = [ "video" "render" "dialout" "users" "plugdev" ];
-
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = true;
-  };
-  
-  environment.systemPackages = with pkgs; [
-    git vim nano htop libva-utils libedgetpu usbutils
-  ];
-  
-  systemd.tmpfiles.rules = [
-    "d /var/lib/frigate 0755 frigate frigate -"
-    "d /media/frigate 0755 frigate frigate -"
-  ];
+  system.stateVersion = "25.11";
 }

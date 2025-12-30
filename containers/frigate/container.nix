@@ -1,32 +1,24 @@
-{ config, pkgs, ... }:
+{ lib, ... }:
 
 {
   containers.frigate = {
     autoStart = true;
-    
-    # Pouze základní bezpečné mapování
+    privateNetwork = true;
+    macvlans = [ "br0" ];
+    enableTun = true;
+    privateUsers = "identity";
+
+    extraFlags = [
+      "--device=/dev/bus/usb"
+    ];
+
     bindMounts = {
-      "/dev/bus/usb" = { hostPath = "/dev/bus/usb"; isReadOnly = false; };
+      "/data/frigate" = {
+        hostPath = "/data/frigate";
+        isReadOnly = false;
+      };
     };
 
-    config = { config, pkgs, ... }: {
-      nixpkgs.config.allowUnfree = true;
-      services.frigate = {
-        enable = true;
-        hostname = "frigate.doma.lan";
-        settings = {
-          detectors.coral = {
-            type = "edgetpu";
-            device = "usb";
-          };
-          cameras.test_camera = {
-            enabled = false;
-            ffmpeg.inputs = [{ path = "rtsp://127.0.0.1:554/live"; roles = [ "detect" ]; }];
-          };
-        };
-      };
-      environment.systemPackages = [ pkgs.libedgetpu ];
-      system.stateVersion = "25.11";
-    };
+    config = import ./frigate-default.nix;
   };
 }
