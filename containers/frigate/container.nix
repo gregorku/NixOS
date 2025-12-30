@@ -6,19 +6,25 @@
     privateNetwork = true;
     macvlans = [ "br0" ];
     enableTun = true;
+
     privateUsers = "no";
 
-    bindMounts = {
-  "/data/frigate" = {
-    hostPath = "/data/frigate";
-    isReadOnly = false;
-  };
+    extraFlags = [
+      "--capability=CAP_SYS_ADMIN"
+      "--bind=/sys"
+      "--bind=/proc"
+    ];
 
-  "/dev/bus/usb" = {
-    hostPath = "/dev/bus/usb";
-    isReadOnly = false;
-  };
-};
+    bindMounts = {
+      "/data/frigate" = {
+        hostPath = "/data/frigate";
+        isReadOnly = false;
+      };
+      "/dev/bus/usb" = {
+        hostPath = "/dev/bus/usb";
+        isReadOnly = false;
+      };
+    };
 
     config = import ./frigate-default.nix;
   };

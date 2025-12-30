@@ -22,12 +22,6 @@
     libedgetpu
   ];
 
-  extraFlags = [
-  "--capability=CAP_SYS_ADMIN"
-  "--bind=/sys"
-  "--bind=/proc"
-  ];
-
   users.users.frigate = {
     isSystemUser = true;
     group = "frigate";
