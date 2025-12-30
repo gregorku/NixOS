@@ -6,7 +6,7 @@
     privateNetwork = true;
     macvlans = [ "br0" ];
     enableTun = true;
-    privateUsers = "identity";
+    privateUsers = "no";
 
     bindMounts = {
   "/data/frigate" = {
