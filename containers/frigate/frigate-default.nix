@@ -5,7 +5,9 @@
 
   networking.useDHCP = false;
   networking.useNetworkd = true;
+  networking.useHostResolvConf = false;
   services.resolved.enable = true;
+
 
   systemd.network.enable = true;
   systemd.network.networks."10-macvlan" = {
