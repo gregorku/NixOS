@@ -8,16 +8,17 @@
     enableTun = true;
     privateUsers = "identity";
 
-    extraFlags = [
-      "--device=/dev/bus/usb"
-    ];
-
     bindMounts = {
-      "/data/frigate" = {
-        hostPath = "/data/frigate";
-        isReadOnly = false;
-      };
-    };
+  "/data/frigate" = {
+    hostPath = "/data/frigate";
+    isReadOnly = false;
+  };
+
+  "/dev/bus/usb" = {
+    hostPath = "/dev/bus/usb";
+    isReadOnly = false;
+  };
+};
 
     config = import ./frigate-default.nix;
   };
