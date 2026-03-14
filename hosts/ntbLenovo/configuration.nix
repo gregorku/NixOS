@@ -42,9 +42,9 @@
 
   console.keyMap = "cz";
 
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "cz";
-    xkbVariant = "";
+    variant = "";
   };
 
   # ----------------------
@@ -56,5 +56,5 @@
   # ----------------------
   # Povinné – NIKDY neměnit po instalaci
   # ----------------------
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }
