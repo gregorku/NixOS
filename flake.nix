@@ -15,6 +15,7 @@
     };
   in {
     nixosConfigurations = {
+      ntbLenovo    = mkHost "ntbLenovo";
       ntbDell      = mkHost "ntbDell";
       domaPcServer = mkHost "domaPcServer";
       test         = mkHost "test";
