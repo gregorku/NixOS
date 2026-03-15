@@ -7,6 +7,7 @@
     ./hardware-configuration.nix
 
     ../../modules/common-users.nix
+    ../../modules/common-audio.nix
     ../../modules/common-desktop-kde.nix
     ../../modules/common-security.nix
     ../../modules/common-bluetooth.nix
