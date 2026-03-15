@@ -21,21 +21,21 @@
   # --------------------------------------------------
   # Touchpad (libinput)
   # --------------------------------------------------
-  services.xserver.libinput = {
-    enable = true;
+  services.libinput = {
+  enable = true;
 
-    touchpad = {
-      tapping = true;
-      naturalScrolling = true;
-      disableWhileTyping = true;
-    };
+  touchpad = {
+    tapping = true;
+    naturalScrolling = true;
+    disableWhileTyping = true;
   };
+};
 
   # --------------------------------------------------
   # Suspend / resume
   # --------------------------------------------------
-  services.logind = {
-    lidSwitch = "suspend";
-    lidSwitchExternalPower = "ignore";
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchExternalPower = "ignore";
   };
 }
