@@ -55,6 +55,7 @@
   options = [
     "compress=zstd"
     "noatime"
+    "space_cache=v2"
   ];
   };
   # ----------------------
