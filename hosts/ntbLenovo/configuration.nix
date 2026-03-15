@@ -57,8 +57,9 @@
     "compress=zstd"
     "noatime"
     "space_cache=v2"
+    "nofail"
   ];
-  };
+};
   # ----------------------
   # Bootloader (UEFI)
   # ----------------------
