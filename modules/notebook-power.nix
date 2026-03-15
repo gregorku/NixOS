@@ -9,15 +9,14 @@
   # Preferuj úspornější chování na baterii
   powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
 
-  # --------------------------------------------------
-  # Wi-Fi / Bluetooth power saving
-  # --------------------------------------------------
-  networking.networkmanager.wifi.powersave = true;
+# Wi-Fi / Bluetooth power saving
+# --------------------------------------------------
+networking.networkmanager.wifi.powersave = true;
 
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = false;
-  };
+hardware.bluetooth = {
+  enable = true;
+  powerOnBoot = lib.mkDefault false;
+};
 
   # --------------------------------------------------
   # Touchpad (libinput)
