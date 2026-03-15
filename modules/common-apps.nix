@@ -8,6 +8,8 @@
     # ======================
     git
     vscodium
+    mc
+    nano
     sshfs
     gocryptfs
     krusader
