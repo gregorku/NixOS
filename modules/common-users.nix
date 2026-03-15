@@ -4,10 +4,19 @@
   users.users.gregor = {
     isNormalUser = true;
     description = "Gregor";
-    extraGroups = [ "wheel" "networkmanager" "audio" "video" ];
     shell = pkgs.bashInteractive;
+
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "audio"
+      "video"
+      "input"
+    ];
   };
 
-  security.sudo.enable = true;
-  security.sudo.wheelNeedsPassword = true;
+  security.sudo = {
+    enable = true;
+    wheelNeedsPassword = true;
+  };
 }
