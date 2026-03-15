@@ -48,7 +48,15 @@
     layout = "cz";
     variant = "";
   };
-
+  #disk DataLinux
+  fileSystems."/mnt/DataLinux" = {
+  device = "/dev/disk/by-label/DataLinux";
+  fsType = "btrfs";
+  options = [
+    "compress=zstd"
+    "noatime"
+  ];
+  };
   # ----------------------
   # Bootloader (UEFI)
   # ----------------------
