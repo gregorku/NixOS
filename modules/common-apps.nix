@@ -7,6 +7,7 @@
     # 📦 SYSTÉM / ZÁKLAD (DESKTOP)
     # ======================
     gitkraken
+    vscodium
     sshfs
     gocryptfs
     krusader
