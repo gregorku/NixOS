@@ -38,11 +38,4 @@
     lidSwitch = "suspend";
     lidSwitchExternalPower = "ignore";
   };
-
-  # --------------------------------------------------
-  # Kernel / VM drobnosti
-  # --------------------------------------------------
-  boot.kernel.sysctl = {
-    "vm.swappiness" = 10;
-  };
 }
