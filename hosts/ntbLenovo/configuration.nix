@@ -50,7 +50,7 @@
     variant = "";
   };
   #disk DataLinux
-  fileSystems."/mnt/DataLinux" = {
+  fileSystems."/run/media/gregor/DataLinux" = {
   device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
   fsType = "btrfs";
   options = [
