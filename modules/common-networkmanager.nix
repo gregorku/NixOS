@@ -1,18 +1,34 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Použít NetworkManager
+  # ----------------------
+  # NetworkManager
+  # ----------------------
   networking.networkmanager.enable = true;
 
   # Nepoužívat systemd-networkd
   networking.useNetworkd = false;
 
-  # Nástroje pro síť (server-friendly)
+  # ----------------------
+  # mDNS / Service discovery (tiskárny, skenery, AirPrint)
+  # ----------------------
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
+
+  # ----------------------
+  # Síťové nástroje
+  # ----------------------
   environment.systemPackages = with pkgs; [
     networkmanager
     wireguard-tools
+    avahi
   ];
 
+  # ----------------------
   # Uživatel může spravovat síť
+  # ----------------------
   users.users.gregor.extraGroups = [ "networkmanager" ];
 }
