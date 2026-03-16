@@ -1,13 +1,30 @@
 { config, pkgs, ... }:
 
 {
-  services.printing.enable = true;
-  services.printing.drivers = with pkgs; [
-    gutenprint
-    hplip
-    splix
-    brlaser
-  ];
+  # ----------------------
+  # TISK (CUPS)
+  # ----------------------
+  services.printing = {
+    enable = true;
 
-  hardware.sane.enable = true;
+    drivers = with pkgs; [
+      brlaser
+    ];
+  };
+
+  # ----------------------
+  # SKENER (SANE)
+  # ----------------------
+  hardware.sane = {
+    enable = true;
+
+    extraBackends = with pkgs; [
+      brscan4
+    ];
+  };
+
+  # ----------------------
+  # Firewall pro CUPS
+  # ----------------------
+  networking.firewall.allowedTCPPorts = [ 631 ];
 }
