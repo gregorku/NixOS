@@ -9,18 +9,18 @@
   # ======================
   # Vypnout starý PulseAudio
   # ======================
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
 
   # ======================
   # Moderní audio stack: PipeWire
   # ======================
   services.pipewire = {
-    enable = true;           # spustí PipeWire
-    audio.enable = true;     # ALSA + Pulse kompatibilita
-    pulse.enable = true;     # emulace PulseAudio
-    alsa.enable = true;      # ALSA zařízení
-    alsa.support32Bit = true;# 32-bit aplikace
-    jack.enable = true;      # JACK pro profi audio
+    enable = true;            # spustí PipeWire
+    audio.enable = true;      # ALSA + Pulse kompatibilita
+    pulse.enable = true;      # emulace PulseAudio
+    alsa.enable = true;       # ALSA zařízení
+    alsa.support32Bit = true; # 32-bit aplikace
+    jack.enable = true;       # JACK pro profi audio
   };
 
   # ======================
