@@ -6,10 +6,6 @@
   # ----------------------
   services.printing = {
     enable = true;
-
-    drivers = with pkgs; [
-      brlaser
-    ];
   };
 
   # ----------------------
@@ -22,6 +18,13 @@
       brscan4
     ];
   };
+
+  # ----------------------
+  # Program pro skenování
+  # ----------------------
+  environment.systemPackages = with pkgs; [
+    simple-scan
+  ];
 
   # ----------------------
   # Firewall pro CUPS
