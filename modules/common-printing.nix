@@ -4,9 +4,7 @@
   # ----------------------
   # TISK (CUPS)
   # ----------------------
-  services.printing = {
-    enable = true;
-  };
+  services.printing.enable = true;
 
   # ----------------------
   # SKENER (SANE)
@@ -15,7 +13,7 @@
     enable = true;
 
     extraBackends = with pkgs; [
-      brscan4
+      sane-airscan
     ];
   };
 

@@ -17,7 +17,6 @@
     gnome-calendar
     keepassxc
     system-config-printer
-    megasync
 
     # ======================
     # 🌐 INTERNET / SÍTĚ
