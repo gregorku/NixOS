@@ -7,7 +7,7 @@
     # 📦 SYSTÉM / ZÁKLAD (DESKTOP)
     # ======================
     git
-    vscodium
+    unstable.vscodium
     mc
     nano
     sshfs
