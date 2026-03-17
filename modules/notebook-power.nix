@@ -4,10 +4,25 @@
   # --------------------------------------------------
   # Notebook power management
   # --------------------------------------------------
-  services.power-profiles-daemon.enable = true;
 
-  # Preferuj úspornější chování CPU
-  powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
+  # ❌ vypnout PPD (důležité)
+  services.power-profiles-daemon.enable = false;
+
+  # ✅ použít TLP
+  services.tlp.enable = true;
+  services.thermald.enable = true;
+  powerManagement.powertop.enable = true;
+
+  # CPU chování
+  powerManagement.cpuFreqGovernor = "powersave";
+
+  services.tlp.settings = {
+    CPU_MAX_PERF_ON_AC = 60;
+    CPU_MAX_PERF_ON_BAT = 40;
+
+    CPU_BOOST_ON_AC = 0;
+    CPU_BOOST_ON_BAT = 0;
+  };
 
   # --------------------------------------------------
   # Wi-Fi / Bluetooth power saving
@@ -33,7 +48,7 @@
   };
 
   # --------------------------------------------------
-  # Suspend / resume (nové logind nastavení)
+  # Suspend / resume
   # --------------------------------------------------
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";
