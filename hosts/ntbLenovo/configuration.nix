@@ -59,7 +59,7 @@
     "usbcore.autosuspend=-1"
   ];
 
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   # 🔧 HARD FIX – reload touchpadu po probuzení
   systemd.services.fix-touchpad = {
