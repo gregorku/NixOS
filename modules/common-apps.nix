@@ -17,6 +17,7 @@
     gnome-calendar
     keepassxc
     system-config-printer
+    usbutils
 
     # ======================
     # 🌐 INTERNET / SÍTĚ
