@@ -28,7 +28,6 @@
     #../../modules/common-wireguard.nix
     #../../modules/hosts/ntbLenovo-wireguard.nix
     ../../modules/common-networkmanager.nix
-
   ];
 
   networking.hostName = "ntbLenovo";
@@ -49,17 +48,46 @@
     layout = "cz";
     variant = "";
   };
-  #disk DataLinux
-  fileSystems."/run/media/gregor/DataLinux" = {
-  device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
-  fsType = "btrfs";
-  options = [
-    "compress=zstd"
-    "noatime"
-    "space_cache=v2"
-    "nofail"
+
+  # ----------------------
+  # 🔧 FIX: suspend / input (Lenovo Legion)
+  # ----------------------
+  boot.kernelParams = [
+    "i8042.nopnp=1"
+    "i8042.reset"
+    "pci=nocrs"
+    "usbcore.autosuspend=-1"
   ];
-};
+
+  services.xserver.libinput.enable = true;
+
+  # 🔧 HARD FIX – reload touchpadu po probuzení
+  systemd.services.fix-touchpad = {
+    description = "Fix touchpad after suspend";
+    wantedBy = [ "suspend.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = ''
+        ${pkgs.kmod}/bin/modprobe -r i2c_hid_acpi
+        ${pkgs.kmod}/bin/modprobe i2c_hid_acpi
+      '';
+    };
+  };
+
+  # ----------------------
+  # disk DataLinux
+  # ----------------------
+  fileSystems."/run/media/gregor/DataLinux" = {
+    device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
+    fsType = "btrfs";
+    options = [
+      "compress=zstd"
+      "noatime"
+      "space_cache=v2"
+      "nofail"
+    ];
+  };
+
   # ----------------------
   # Bootloader (UEFI)
   # ----------------------
