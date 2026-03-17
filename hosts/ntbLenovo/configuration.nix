@@ -1,130 +1,110 @@
 { config, pkgs, ... }:
 
 {
-nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
 
-imports = [
-./hardware-configuration.nix
+  imports = [
+    ./hardware-configuration.nix
 
-```
-../../modules/common-users.nix
-../../modules/common-audio.nix
-../../modules/common-desktop-kde.nix
-../../modules/common-security.nix
-../../modules/common-bluetooth.nix
-../../modules/common-printing.nix
-../../modules/common-apps.nix
-../../modules/common-flatpak.nix
-../../modules/common-filesystems.nix
-../../modules/common-snapshots.nix
-../../modules/gpu-nvidia-amd.nix
+    ../../modules/common-users.nix
+    ../../modules/common-audio.nix
+    ../../modules/common-desktop-kde.nix
+    ../../modules/common-security.nix
+    ../../modules/common-bluetooth.nix
+    ../../modules/common-printing.nix
+    ../../modules/common-apps.nix
+    ../../modules/common-flatpak.nix
+    ../../modules/common-filesystems.nix
+    ../../modules/common-snapshots.nix
+    ../../modules/gpu-nvidia-amd.nix
 
-# Notebook-specific power optimizations
-../../modules/notebook-power.nix
+    # Notebook-specific power optimizations
+    ../../modules/notebook-power.nix
 
-../../modules/common-virtualization.nix
-../../modules/common-swap.nix
+    ../../modules/common-virtualization.nix
+    ../../modules/common-swap.nix
 
-../../modules/common-networkmanager.nix
-```
+    ../../modules/common-networkmanager.nix
+  ];
 
-];
+  networking.hostName = "ntbLenovo";
 
-networking.hostName = "ntbLenovo";
+  # ----------------------
+  # Lokalizace / Jazyk
+  # ----------------------
+  i18n.defaultLocale = "cs_CZ.UTF-8";
+  i18n.supportedLocales = [
+    "cs_CZ.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+  ];
+  time.timeZone = "Europe/Prague";
 
-# ----------------------
+  console.keyMap = "cz";
 
-# Lokalizace / Jazyk
+  services.xserver.xkb = {
+    layout = "cz";
+    variant = "";
+  };
 
-# ----------------------
+  # ----------------------
+  # 🔧 Lenovo fixy
+  # ----------------------
+  boot.kernelParams = [
+    "i8042.nopnp=1"
+    "i8042.reset"
+    "pci=nocrs"
+  ];
 
-i18n.defaultLocale = "cs_CZ.UTF-8";
-i18n.supportedLocales = [
-"cs_CZ.UTF-8/UTF-8"
-"en_US.UTF-8/UTF-8"
-];
-time.timeZone = "Europe/Prague";
+  services.libinput.enable = true;
 
-console.keyMap = "cz";
+  # 🔧 FIX – reload touchpadu po probuzení
+  systemd.services.fix-touchpad = {
+    description = "Fix touchpad after suspend";
+    wantedBy = [ "suspend.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = ''
+        ${pkgs.kmod}/bin/modprobe -r i2c_hid_acpi
+        ${pkgs.kmod}/bin/modprobe i2c_hid_acpi
+      '';
+    };
+  };
 
-services.xserver.xkb = {
-layout = "cz";
-variant = "";
-};
+  # 🔧 FIX – USB myš po uspání
+  systemd.services.fix-usb = {
+    description = "Fix USB mouse after suspend";
+    wantedBy = [ "suspend.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = ''
+        ${pkgs.kmod}/bin/modprobe -r usbhid
+        ${pkgs.kmod}/bin/modprobe usbhid
+      '';
+    };
+  };
 
-# ----------------------
+  # ----------------------
+  # disk DataLinux
+  # ----------------------
+  fileSystems."/run/media/gregor/DataLinux" = {
+    device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
+    fsType = "btrfs";
+    options = [
+      "compress=zstd"
+      "noatime"
+      "space_cache=v2"
+      "nofail"
+    ];
+  };
 
-# 🔧 Lenovo fixy (bez USB hacku!)
+  # ----------------------
+  # Bootloader (UEFI)
+  # ----------------------
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
-# ----------------------
-
-boot.kernelParams = [
-"i8042.nopnp=1"
-"i8042.reset"
-"pci=nocrs"
-];
-
-services.libinput.enable = true;
-
-# 🔧 FIX – reload touchpadu po probuzení
-
-systemd.services.fix-touchpad = {
-description = "Fix touchpad after suspend";
-wantedBy = [ "suspend.target" ];
-serviceConfig = {
-Type = "oneshot";
-ExecStart = ''
-${pkgs.kmod}/bin/modprobe -r i2c_hid_acpi
-${pkgs.kmod}/bin/modprobe i2c_hid_acpi
-'';
-};
-};
-
-# 🔧 FIX – USB zařízení (myš) po uspání
-
-systemd.services.fix-usb = {
-description = "Fix USB mouse after suspend";
-wantedBy = [ "suspend.target" ];
-serviceConfig = {
-Type = "oneshot";
-ExecStart = ''
-${pkgs.kmod}/bin/modprobe -r usbhid
-${pkgs.kmod}/bin/modprobe usbhid
-'';
-};
-};
-
-# ----------------------
-
-# disk DataLinux
-
-# ----------------------
-
-fileSystems."/run/media/gregor/DataLinux" = {
-device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
-fsType = "btrfs";
-options = [
-"compress=zstd"
-"noatime"
-"space_cache=v2"
-"nofail"
-];
-};
-
-# ----------------------
-
-# Bootloader (UEFI)
-
-# ----------------------
-
-boot.loader.systemd-boot.enable = true;
-boot.loader.efi.canTouchEfiVariables = true;
-
-# ----------------------
-
-# Povinné – NIKDY neměnit po instalaci
-
-# ----------------------
-
-system.stateVersion = "25.11";
+  # ----------------------
+  # Povinné – NIKDY neměnit po instalaci
+  # ----------------------
+  system.stateVersion = "25.11";
 }
