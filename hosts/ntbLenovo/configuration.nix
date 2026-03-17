@@ -24,17 +24,11 @@
     ../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
 
-    # Modul Wireguard
-    #../../modules/common-wireguard.nix
-    #../../modules/hosts/ntbLenovo-wireguard.nix
     ../../modules/common-networkmanager.nix
   ];
 
   networking.hostName = "ntbLenovo";
 
-  # ----------------------
-  # Lokalizace / Jazyk
-  # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
   i18n.supportedLocales = [
     "cs_CZ.UTF-8/UTF-8"
@@ -49,19 +43,15 @@
     variant = "";
   };
 
-  # ----------------------
-  # 🔧 FIX: suspend / input (Lenovo Legion)
-  # ----------------------
+  # 🔧 Lenovo fixy (ponecháno, fungují)
   boot.kernelParams = [
     "i8042.nopnp=1"
     "i8042.reset"
     "pci=nocrs"
-    "usbcore.autosuspend=-1"
   ];
 
   services.libinput.enable = true;
 
-  # 🔧 HARD FIX – reload touchpadu po probuzení
   systemd.services.fix-touchpad = {
     description = "Fix touchpad after suspend";
     wantedBy = [ "suspend.target" ];
@@ -74,9 +64,6 @@
     };
   };
 
-  # ----------------------
-  # disk DataLinux
-  # ----------------------
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
     fsType = "btrfs";
@@ -88,14 +75,8 @@
     ];
   };
 
-  # ----------------------
-  # Bootloader (UEFI)
-  # ----------------------
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # ----------------------
-  # Povinné – NIKDY neměnit po instalaci
-  # ----------------------
   system.stateVersion = "25.11";
 }

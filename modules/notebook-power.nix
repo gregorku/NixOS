@@ -5,15 +5,12 @@
   # Notebook power management
   # --------------------------------------------------
 
-  # ❌ vypnout PPD (důležité)
-  services.power-profiles-daemon.enable = false;
+  services.power-profiles-daemon.enable = lib.mkForce false;
 
-  # ✅ použít TLP
   services.tlp.enable = true;
   services.thermald.enable = true;
   powerManagement.powertop.enable = true;
 
-  # CPU chování
   powerManagement.cpuFreqGovernor = "powersave";
 
   services.tlp.settings = {
@@ -22,10 +19,15 @@
 
     CPU_BOOST_ON_AC = 0;
     CPU_BOOST_ON_BAT = 0;
+
+    USB_AUTOSUSPEND = 1;
+
+    # 👉 doplníme podle lsusb (zatím prázdné)
+    USB_DENYLIST = "";
   };
 
   # --------------------------------------------------
-  # Wi-Fi / Bluetooth power saving
+  # Wi-Fi / Bluetooth
   # --------------------------------------------------
   networking.networkmanager.wifi.powersave = true;
 
@@ -35,7 +37,7 @@
   };
 
   # --------------------------------------------------
-  # Touchpad (libinput)
+  # Touchpad
   # --------------------------------------------------
   services.libinput = {
     enable = true;
@@ -48,7 +50,7 @@
   };
 
   # --------------------------------------------------
-  # Suspend / resume
+  # Suspend
   # --------------------------------------------------
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";
