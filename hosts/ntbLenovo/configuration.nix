@@ -1,82 +1,130 @@
 { config, pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
+nixpkgs.config.allowUnfree = true;
 
-  imports = [
-    ./hardware-configuration.nix
+imports = [
+./hardware-configuration.nix
 
-    ../../modules/common-users.nix
-    ../../modules/common-audio.nix
-    ../../modules/common-desktop-kde.nix
-    ../../modules/common-security.nix
-    ../../modules/common-bluetooth.nix
-    ../../modules/common-printing.nix
-    ../../modules/common-apps.nix
-    ../../modules/common-flatpak.nix
-    ../../modules/common-filesystems.nix
-    ../../modules/common-snapshots.nix
-    ../../modules/gpu-nvidia-amd.nix
+```
+../../modules/common-users.nix
+../../modules/common-audio.nix
+../../modules/common-desktop-kde.nix
+../../modules/common-security.nix
+../../modules/common-bluetooth.nix
+../../modules/common-printing.nix
+../../modules/common-apps.nix
+../../modules/common-flatpak.nix
+../../modules/common-filesystems.nix
+../../modules/common-snapshots.nix
+../../modules/gpu-nvidia-amd.nix
 
-    # Notebook-specific power optimizations
-    ../../modules/notebook-power.nix
+# Notebook-specific power optimizations
+../../modules/notebook-power.nix
 
-    ../../modules/common-virtualization.nix
-    ../../modules/common-swap.nix
+../../modules/common-virtualization.nix
+../../modules/common-swap.nix
 
-    ../../modules/common-networkmanager.nix
-  ];
+../../modules/common-networkmanager.nix
+```
 
-  networking.hostName = "ntbLenovo";
+];
 
-  i18n.defaultLocale = "cs_CZ.UTF-8";
-  i18n.supportedLocales = [
-    "cs_CZ.UTF-8/UTF-8"
-    "en_US.UTF-8/UTF-8"
-  ];
-  time.timeZone = "Europe/Prague";
+networking.hostName = "ntbLenovo";
 
-  console.keyMap = "cz";
+# ----------------------
 
-  services.xserver.xkb = {
-    layout = "cz";
-    variant = "";
-  };
+# Lokalizace / Jazyk
 
-  # 🔧 Lenovo fixy (ponecháno, fungují)
-  boot.kernelParams = [
-    "i8042.nopnp=1"
-    "i8042.reset"
-    "pci=nocrs"
-  ];
+# ----------------------
 
-  services.libinput.enable = true;
+i18n.defaultLocale = "cs_CZ.UTF-8";
+i18n.supportedLocales = [
+"cs_CZ.UTF-8/UTF-8"
+"en_US.UTF-8/UTF-8"
+];
+time.timeZone = "Europe/Prague";
 
-  systemd.services.fix-touchpad = {
-    description = "Fix touchpad after suspend";
-    wantedBy = [ "suspend.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''
-        ${pkgs.kmod}/bin/modprobe -r i2c_hid_acpi
-        ${pkgs.kmod}/bin/modprobe i2c_hid_acpi
-      '';
-    };
-  };
+console.keyMap = "cz";
 
-  fileSystems."/run/media/gregor/DataLinux" = {
-    device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
-    fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "noatime"
-      "space_cache=v2"
-      "nofail"
-    ];
-  };
+services.xserver.xkb = {
+layout = "cz";
+variant = "";
+};
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+# ----------------------
 
-  system.stateVersion = "25.11";
+# 🔧 Lenovo fixy (bez USB hacku!)
+
+# ----------------------
+
+boot.kernelParams = [
+"i8042.nopnp=1"
+"i8042.reset"
+"pci=nocrs"
+];
+
+services.libinput.enable = true;
+
+# 🔧 FIX – reload touchpadu po probuzení
+
+systemd.services.fix-touchpad = {
+description = "Fix touchpad after suspend";
+wantedBy = [ "suspend.target" ];
+serviceConfig = {
+Type = "oneshot";
+ExecStart = ''
+${pkgs.kmod}/bin/modprobe -r i2c_hid_acpi
+${pkgs.kmod}/bin/modprobe i2c_hid_acpi
+'';
+};
+};
+
+# 🔧 FIX – USB zařízení (myš) po uspání
+
+systemd.services.fix-usb = {
+description = "Fix USB mouse after suspend";
+wantedBy = [ "suspend.target" ];
+serviceConfig = {
+Type = "oneshot";
+ExecStart = ''
+${pkgs.kmod}/bin/modprobe -r usbhid
+${pkgs.kmod}/bin/modprobe usbhid
+'';
+};
+};
+
+# ----------------------
+
+# disk DataLinux
+
+# ----------------------
+
+fileSystems."/run/media/gregor/DataLinux" = {
+device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
+fsType = "btrfs";
+options = [
+"compress=zstd"
+"noatime"
+"space_cache=v2"
+"nofail"
+];
+};
+
+# ----------------------
+
+# Bootloader (UEFI)
+
+# ----------------------
+
+boot.loader.systemd-boot.enable = true;
+boot.loader.efi.canTouchEfiVariables = true;
+
+# ----------------------
+
+# Povinné – NIKDY neměnit po instalaci
+
+# ----------------------
+
+system.stateVersion = "25.11";
 }
