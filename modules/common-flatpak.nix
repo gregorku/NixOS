@@ -3,9 +3,11 @@
 {
   services.flatpak.enable = true;
 
-  # Přidání Flathub repozitáře
+  # ----------------------
+  # Přidání Flathub repo
+  # ----------------------
   systemd.services.flatpak-repo = {
-    wantedBy = [ "multi-user.target" ];
+    description = "Add Flathub repository";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
 
@@ -16,11 +18,17 @@
           https://flathub.org/repo/flathub.flatpakrepo
       '';
     };
+
+    install = {
+      WantedBy = [ "multi-user.target" ];
+    };
   };
 
-  # Instalace Flatpak aplikací (system-wide)
+  # ----------------------
+  # Instalace aplikací
+  # ----------------------
   systemd.services.flatpak-install = {
-    wantedBy = [ "multi-user.target" ];
+    description = "Install Flatpak apps";
     after = [
       "flatpak-repo.service"
       "network-online.target"
@@ -31,8 +39,12 @@
       Type = "oneshot";
       ExecStart = ''
         ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub \
-          nz.mega.MEGAsync
+          nz.mega.MEGAsync || true
       '';
+    };
+
+    install = {
+      WantedBy = [ "multi-user.target" ];
     };
   };
 }
