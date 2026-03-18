@@ -1,15 +1,15 @@
 { config, pkgs, ... }:
 
 let
-  # Stažení komunitního modulu nix-flatpak s AKTUALIZOVANÝM SHA256
+  # Stažení komunitního modulu nix-flatpak
   nix-flatpak = builtins.fetchTarball {
     url = "https://github.com/gmodena/nix-flatpak/archive/main.tar.gz";
     sha256 = "0gpn5fval9b74fqf6aarzvdrf3qb28c6mx0jxxka3i0wpggp9f29";
   };
 in
 {
-  # Import staženého modulu
-  imports = [ nix-flatpak ];
+  # ⚠️ Změna tady: musíme odkázat přímo na soubor module.nix
+  imports = [ "${nix-flatpak}/module.nix" ];
 
   services.flatpak = {
     enable = true;
