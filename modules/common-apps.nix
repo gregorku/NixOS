@@ -32,6 +32,12 @@
     kdePackages.ktorrent
 
     # ======================
+    # 🌐 SÍŤOVÉ NÁSTROJE
+    # ======================
+    openconnect
+    vpn-slice
+
+    # ======================
     # 🖥️ MULTIMÉDIA / GRAFIKA
     # ======================
     vlc
