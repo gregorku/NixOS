@@ -13,13 +13,12 @@
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
 
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''
-        ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub \
-          https://flathub.org/repo/flathub.flatpakrepo
-      '';
-    };
+    serviceConfig.Type = "oneshot";
+    
+    # Použijeme 'script', který NixOS spustí v shellu
+    script = ''
+      ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    '';
   };
 
   # ----------------------
@@ -35,9 +34,11 @@
     ];
     wants = [ "network-online.target" ];
 
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub nz.mega.MEGAsync || true'";
-    };
+    serviceConfig.Type = "oneshot";
+    
+    # Opět čistší zápis přes 'script' místo volání bashe v ExecStart
+    script = ''
+      ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub nz.mega.MEGAsync || true
+    '';
   };
 }
