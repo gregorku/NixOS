@@ -1,7 +1,6 @@
 { inputs, ... }:
 
 {
-  # 🔧 Oprava: Změna z .default na .nix-flatpak
   imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
 
   services.flatpak = {
@@ -14,8 +13,9 @@
       }
     ];
 
+    # 🔧 OPRAVA: Odstraněna dvojtečka a název remota
     packages = [
-      "flathub:nz.mega.MEGAsync"
+      "nz.mega.MEGAsync"
     ];
 
     update.auto = {
