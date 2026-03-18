@@ -8,6 +8,8 @@
   # ----------------------
   systemd.services.flatpak-repo = {
     description = "Add Flathub repository";
+
+    wantedBy = [ "multi-user.target" ];
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
 
@@ -18,10 +20,6 @@
           https://flathub.org/repo/flathub.flatpakrepo
       '';
     };
-
-    install = {
-      WantedBy = [ "multi-user.target" ];
-    };
   };
 
   # ----------------------
@@ -29,6 +27,8 @@
   # ----------------------
   systemd.services.flatpak-install = {
     description = "Install Flatpak apps";
+
+    wantedBy = [ "multi-user.target" ];
     after = [
       "flatpak-repo.service"
       "network-online.target"
@@ -41,10 +41,6 @@
         ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub \
           nz.mega.MEGAsync || true
       '';
-    };
-
-    install = {
-      WantedBy = [ "multi-user.target" ];
     };
   };
 }
