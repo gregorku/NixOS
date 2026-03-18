@@ -70,19 +70,6 @@
     };
   };
 
-  # 🔧 FIX – USB myš po uspání
-  systemd.services.fix-usb = {
-    description = "Fix USB mouse after suspend";
-    wantedBy = [ "suspend.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''
-        ${pkgs.kmod}/bin/modprobe -r usbhid
-        ${pkgs.kmod}/bin/modprobe usbhid
-      '';
-    };
-  };
-
   # ----------------------
   # disk DataLinux
   # ----------------------
