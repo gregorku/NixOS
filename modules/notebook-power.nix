@@ -21,10 +21,13 @@
     CPU_BOOST_ON_AC = 0;
     CPU_BOOST_ON_BAT = 0;
 
-    # USB power saving (bez hacků)
+    # USB power saving
     USB_AUTOSUSPEND = 1;
 
-    # Lenovo platform profile (velmi důležité pro hluk)
+    # 👉 FIX pro tvoji USB myš (YICHIP 3151:3000)
+    USB_DENYLIST = "3151:3000";
+
+    # Lenovo platform profile (tichý režim)
     PLATFORM_PROFILE_ON_AC = "low-power";
     PLATFORM_PROFILE_ON_BAT = "low-power";
 
