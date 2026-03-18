@@ -1,11 +1,13 @@
 { inputs, ... }:
 
 {
+  # Import modulu definovaného ve tvém flake.nix
   imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
 
   services.flatpak = {
     enable = true;
 
+    # Nastavení repozitářů
     remotes = [
       {
         name = "flathub";
@@ -13,11 +15,13 @@
       }
     ];
 
-    # 🔧 OPRAVA: Odstraněna dvojtečka a název remota
+    # Seznam aplikací
     packages = [
-      "nz.mega.MEGAsync"
+      "nz.mega.MEGAsync"           # Cloudové úložiště
+      "com.github.tchx84.Flatseal" # Správce oprávnění pro Flatpaky
     ];
 
+    # Automatické aktualizace (jednou týdně)
     update.auto = {
       enable = true;
       onCalendar = "weekly";
