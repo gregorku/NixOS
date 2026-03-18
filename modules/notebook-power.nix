@@ -22,8 +22,6 @@
 
     USB_AUTOSUSPEND = 1;
 
-    # 👉 doplníme podle lsusb (zatím prázdné)
-    USB_DENYLIST = "";
   };
 
   # --------------------------------------------------

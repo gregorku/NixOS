@@ -47,28 +47,25 @@
   };
 
   # ----------------------
-  # 🔧 Lenovo fixy
+  # 🔧 Lenovo fixy (SAFE verze)
   # ----------------------
   boot.kernelParams = [
     "i8042.nopnp=1"
     "i8042.reset"
     "pci=nocrs"
+
+    # 👇 jemný fix USB (místo úplného vypnutí)
+    "usbcore.autosuspend=2"
   ];
 
   services.libinput.enable = true;
 
-  # 🔧 FIX – reload touchpadu po probuzení
-  systemd.services.fix-touchpad = {
-    description = "Fix touchpad after suspend";
-    wantedBy = [ "suspend.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''
-        ${pkgs.kmod}/bin/modprobe -r i2c_hid_acpi
-        ${pkgs.kmod}/bin/modprobe i2c_hid_acpi
-      '';
-    };
-  };
+  # ----------------------
+  # Jemné USB power nastavení
+  # ----------------------
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"
+  '';
 
   # ----------------------
   # disk DataLinux
