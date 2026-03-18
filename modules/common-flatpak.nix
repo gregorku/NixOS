@@ -1,18 +1,20 @@
 { config, pkgs, ... }:
 
 let
-  # Definice modulu (stáhne se automaticky z GitHubu)
+  # Stažení komunitního modulu nix-flatpak s kontrolním součtem (SHA256)
   nix-flatpak = builtins.fetchTarball {
     url = "https://github.com/gmodena/nix-flatpak/archive/main.tar.gz";
+    sha256 = "1m6r93nm60563n7pzk8p7s8m0khw4v8f09r5mclm63c1q06b47z8";
   };
 in
 {
+  # Import staženého modulu
   imports = [ nix-flatpak ];
 
   services.flatpak = {
     enable = true;
 
-    # Automaticky přidá Flathub repo (nemusíš psát systemd službu)
+    # Deklarativní správa repozitářů
     remotes = [
       {
         name = "flathub";
@@ -20,15 +22,19 @@ in
       }
     ];
 
-    # Deklarativní seznam aplikací (žádné ExecStart ani bash skripty)
+    # Seznam aplikací k instalaci
+    # Formát: "název_remotu:ID_aplikace"
     packages = [
       "flathub:nz.mega.MEGAsync"
     ];
 
-    # Volitelné: Automatické aktualizace
+    # Volitelné: Nastavení automatických aktualizací
     update.auto = {
       enable = true;
-      onCalendar = "weekly";
+      onCalendar = "weekly"; # aktualizovat jednou týdně
     };
   };
+
+  # Poznámka: Původní systemd služby flatpak-repo a flatpak-install 
+  # byly odstraněny, protože nix-flatpak je nahrazuje interně.
 }
