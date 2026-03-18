@@ -37,10 +37,7 @@
 
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = ''
-        ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub \
-          nz.mega.MEGAsync || true
-      '';
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub nz.mega.MEGAsync || true'";
     };
   };
 }
