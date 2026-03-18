@@ -9,7 +9,7 @@
 
   services.tlp.enable = true;
   services.thermald.enable = true;
-  powerManagement.powertop.enable = true;
+  powerManagement.powertop.enable = false;
 
   powerManagement.cpuFreqGovernor = "powersave";
 
