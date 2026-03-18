@@ -1,8 +1,8 @@
-{ inputs, ... }: # Tady přijímáme 'inputs' ze specialArgs
+{ inputs, ... }:
 
 {
-  # Import modulu přímo z flake inputu
-  imports = [ inputs.nix-flatpak.nixosModules.default ];
+  # 🔧 Oprava: Změna z .default na .nix-flatpak
+  imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
 
   services.flatpak = {
     enable = true;
