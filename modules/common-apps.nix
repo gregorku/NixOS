@@ -14,6 +14,7 @@
     gocryptfs
     krusader
     crystal-dock
+    kitty
     gnome-calendar
     keepassxc
     bitwarden
