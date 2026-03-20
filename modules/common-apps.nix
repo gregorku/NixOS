@@ -17,7 +17,7 @@
     kitty
     gnome-calendar
     keepassxc
-    bitwarden
+    bitwarden-desktop
     system-config-printer
     usbutils
     btop
