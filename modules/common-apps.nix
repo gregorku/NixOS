@@ -49,6 +49,7 @@
     # 📨 KANCELÁŘ / PRODUKTIVITA
     # ======================
     libreoffice-fresh
+    onlyoffice-desktopeditors
     evolution
     pdfarranger
     kdePackages.kate
