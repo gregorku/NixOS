@@ -66,4 +66,12 @@
     aspell
     aspellDicts.cs
   ];
+
+  # ======================
+  # 🔤 FONTY (pro Kitty, IDE, atd.)
+  # ======================
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    corefonts   # Arial, Times New Roman atd. (lepší kompatibilita s MS Office)
+  ];
 }
