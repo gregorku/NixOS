@@ -17,7 +17,6 @@
     kitty
     gnome-calendar
     keepassxc
-    bitwarden-desktop
     system-config-printer
     usbutils
     btop
@@ -46,8 +45,7 @@
     vlc
     xnviewmp
     gimp
-    tidal-hifi
-
+    
     # ======================
     # 📨 KANCELÁŘ / PRODUKTIVITA
     # ======================
@@ -58,7 +56,6 @@
     kdePackages.kate
     kdePackages.okular
     dbeaver-bin
-    obsidian
 
     # --- Jazyky / dictionaries ---
     hunspell
