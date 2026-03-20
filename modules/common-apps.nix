@@ -54,6 +54,7 @@
     pdfarranger
     kdePackages.kate
     kdePackages.okular
+    dbeaver-bin
 
     # --- Jazyky / dictionaries ---
     hunspell
