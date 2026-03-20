@@ -16,8 +16,10 @@
     crystal-dock
     gnome-calendar
     keepassxc
+    bitwarden
     system-config-printer
     usbutils
+    btop
 
     # ======================
     # 🌐 INTERNET / SÍTĚ
@@ -55,6 +57,7 @@
     kdePackages.kate
     kdePackages.okular
     dbeaver-bin
+    obsidian
 
     # --- Jazyky / dictionaries ---
     hunspell
