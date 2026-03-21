@@ -52,8 +52,7 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # ⭐ Starship (správná aktivace)
-      set -x STARSHIP_CONFIG /etc/starship.toml
+      # ⭐ Starship init
       ${pkgs.starship}/bin/starship init fish | source
 
       alias ll="ls -lah"
@@ -68,7 +67,8 @@
   # ----------------------
   programs.starship.enable = true;
 
-  environment.etc."starship.toml".text = ''
+  # ✅ SPRÁVNÉ UMÍSTĚNÍ CONFIGU
+  environment.etc."xdg/starship.toml".text = ''
     add_newline = false
 
     format = "$username@$hostname $directory $git_branch $git_status $character"
