@@ -52,26 +52,23 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # Aliasy zůstávají
+      # Nastavení cesty ke globálnímu konfiguračnímu souboru Starshipu
+      set -x STARSHIP_CONFIG /etc/starship.toml
+      
+      # RUČNÍ AKTIVACE STARSHIPU (Neprůstřelná metoda pro NixOS)
+      ${pkgs.starship}/bin/starship init fish | source
+
       alias ll="ls -lah"
       alias rebuild="sudo nixos-rebuild switch"
       
-      # Zakážeme uvítací zprávu, ať vidíme hned prompt
       set -g fish_greeting ""
     '';
   };
 
-  # ----------------------
-  # ⭐ Starship (Správná NixOS integrace)
-  # ----------------------
-  programs.starship = {
-    enable = true;
-    # Tato volba zajistí, že se starship správně "vstříkne" do Fishe
-    enableFishIntegration = true;
-  };
+  # Aktivuje starship binárku
+  programs.starship.enable = true;
 
-  # Vytvoření konfiguračního souboru Starshipu. 
-  # NixOS modul programs.starship očekává konfig v /etc/starship.toml
+  # Generování konfiguračního souboru Starshipu
   environment.etc."starship.toml".text = ''
     add_newline = false
 
@@ -104,7 +101,7 @@
   '';
 
   # ----------------------
-  # 🐱 Kitty Terminal
+  # 🐱 Kitty Terminal (Globální konfigurace)
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
