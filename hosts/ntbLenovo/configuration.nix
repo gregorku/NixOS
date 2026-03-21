@@ -27,7 +27,7 @@
   networking.hostName = "ntbLenovo";
 
   # ----------------------
-  # Lokalizace / Jazyk
+  # 🌍 Lokalizace
   # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
   i18n.supportedLocales = [
@@ -49,13 +49,15 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # ⭐ Starship – globální config
+      # ⭐ Starship config
       set -gx STARSHIP_CONFIG /etc/starship.toml
       ${pkgs.starship}/bin/starship init fish | source
 
+      # Aliasy
       alias ll="ls -lah"
       alias rebuild="sudo nixos-rebuild switch"
 
+      # Bez úvodní hlášky
       set -g fish_greeting ""
     '';
   };
@@ -68,7 +70,7 @@
   environment.etc."starship.toml".text = ''
     add_newline = false
 
-    format = "$username$hostname $directory $character"
+    format = "$username$hostname $directory $git_branch $git_status $character"
 
     [username]
     show_always = true
@@ -82,25 +84,38 @@
 
     [directory]
     style = "blue"
+    truncation_length = 3
+
+    [git_branch]
+    symbol = "🌱 "
+    style = "yellow"
+
+    [git_status]
+    style = "red"
 
     [character]
     success_symbol = "[➜](green)"
+    error_symbol = "[✗](red)"
   '';
 
   # ----------------------
-  # 🐱 Kitty Terminal
+  # 🐱 Kitty terminal
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
     font_size 12
     background_opacity 0.9
+
     confirm_os_window_close 0
     enable_audio_bell no
     copy_on_select yes
     scrollback_lines 10000
 
+    # splity
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
+
+    # navigace
     map ctrl+alt+h neighboring_window left
     map ctrl+alt+l neighboring_window right
     map ctrl+alt+k neighboring_window up
@@ -108,7 +123,7 @@
   '';
 
   # ----------------------
-  # 🔧 Systém / Boot
+  # 🔧 Systém
   # ----------------------
   boot.kernelParams = [ "pci=nocrs" ];
   services.libinput.enable = true;
@@ -124,8 +139,14 @@
     ];
   };
 
+  # ----------------------
+  # 🧱 Bootloader
+  # ----------------------
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # ----------------------
+  # ⚠️ NEMĚNIT
+  # ----------------------
   system.stateVersion = "25.11";
 }
