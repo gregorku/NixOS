@@ -26,6 +26,9 @@
 
   networking.hostName = "ntbLenovo";
 
+  # ----------------------
+  # Lokalizace / Jazyk
+  # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
   i18n.supportedLocales = [
     "cs_CZ.UTF-8/UTF-8"
@@ -41,11 +44,12 @@
   };
 
   # ----------------------
-  # 🐟 Fish
+  # 🐟 Fish shell
   # ----------------------
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      # ⭐ Starship – globální config
       set -gx STARSHIP_CONFIG /etc/starship.toml
       ${pkgs.starship}/bin/starship init fish | source
 
@@ -64,12 +68,12 @@
   environment.etc."starship.toml".text = ''
     add_newline = false
 
-    # ❗ DŮLEŽITÉ: bez hostname sekce → musí být explicitně zapnutý
     format = "$username$hostname $directory $character"
 
     [username]
     show_always = true
     style_user = "green"
+    format = "$user"
 
     [hostname]
     ssh_only = false
@@ -84,7 +88,7 @@
   '';
 
   # ----------------------
-  # 🐱 Kitty
+  # 🐱 Kitty Terminal
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
@@ -104,7 +108,7 @@
   '';
 
   # ----------------------
-  # System
+  # 🔧 Systém / Boot
   # ----------------------
   boot.kernelParams = [ "pci=nocrs" ];
   services.libinput.enable = true;
@@ -112,7 +116,12 @@
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
     fsType = "btrfs";
-    options = [ "compress=zstd" "noatime" "space_cache=v2" "nofail" ];
+    options = [
+      "compress=zstd"
+      "noatime"
+      "space_cache=v2"
+      "nofail"
+    ];
   };
 
   boot.loader.systemd-boot.enable = true;
