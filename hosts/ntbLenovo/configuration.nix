@@ -52,11 +52,9 @@
   programs.fish.enable = true;
 
   # ----------------------
-  # ⭐ Starship FIX (NixOS)
+  # ⭐ Starship (správná integrace)
   # ----------------------
-  environment.variables = {
-    STARSHIP_CONFIG = "/home/gregor/.config/starship.toml";
-  };
+  programs.starship.enable = true;
 
   # ----------------------
   # 🔧 Lenovo fixy (MINIMAL SAFE)
