@@ -18,27 +18,21 @@
     ../../modules/common-snapshots.nix
     ../../modules/gpu-nvidia-amd.nix
 
-    # Notebook-specific power optimizations
     ../../modules/notebook-power.nix
-
     ../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
-
     ../../modules/common-networkmanager.nix
   ];
 
   networking.hostName = "ntbLenovo";
 
-  # ----------------------
-  # Lokalizace / Jazyk
-  # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
   i18n.supportedLocales = [
     "cs_CZ.UTF-8/UTF-8"
     "en_US.UTF-8/UTF-8"
   ];
-  time.timeZone = "Europe/Prague";
 
+  time.timeZone = "Europe/Prague";
   console.keyMap = "cz";
 
   services.xserver.xkb = {
@@ -47,12 +41,11 @@
   };
 
   # ----------------------
-  # 🐟 Fish shell
+  # 🐟 Fish
   # ----------------------
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # ⭐ Starship init
       ${pkgs.starship}/bin/starship init fish | source
 
       alias ll="ls -lah"
@@ -67,26 +60,17 @@
   # ----------------------
   programs.starship.enable = true;
 
-  # ✅ SPRÁVNÉ UMÍSTĚNÍ CONFIGU
-  environment.etc."xdg/starship.toml".text = ''
+  # ✅ VRÁTÍME CONFIG DO /etc (funguje vždy)
+  environment.etc."starship.toml".text = ''
     add_newline = false
 
-    format = "$username@$hostname $directory $git_branch $git_status $character"
+    format = "$username@$hostname $directory $character"
 
     [character]
     success_symbol = "[➜](green)"
-    error_symbol = "[✗](red)"
 
     [directory]
     style = "blue"
-    truncation_length = 3
-
-    [git_branch]
-    symbol = "🌱 "
-    style = "yellow"
-
-    [git_status]
-    style = "red"
 
     [username]
     style_user = "green"
@@ -97,7 +81,7 @@
   '';
 
   # ----------------------
-  # 🐱 Kitty Terminal
+  # 🐱 Kitty
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
@@ -107,17 +91,10 @@
     enable_audio_bell no
     copy_on_select yes
     scrollback_lines 10000
-
-    map ctrl+alt+enter launch --location=hsplit
-    map ctrl+alt+v launch --location=vsplit
-    map ctrl+alt+h neighboring_window left
-    map ctrl+alt+l neighboring_window right
-    map ctrl+alt+k neighboring_window up
-    map ctrl+alt+j neighboring_window down
   '';
 
   # ----------------------
-  # 🔧 Systém / Boot
+  # System
   # ----------------------
   boot.kernelParams = [ "pci=nocrs" ];
   services.libinput.enable = true;
@@ -125,12 +102,7 @@
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
     fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "noatime"
-      "space_cache=v2"
-      "nofail"
-    ];
+    options = [ "compress=zstd" "noatime" "space_cache=v2" "nofail" ];
   };
 
   boot.loader.systemd-boot.enable = true;
