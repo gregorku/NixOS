@@ -2,7 +2,10 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # SYSTÉM / ZÁKLAD
+
+    # ======================
+    # 📦 SYSTÉM / ZÁKLAD (DESKTOP)
+    # ======================
     git
     unstable.vscodium
     mc
@@ -11,13 +14,16 @@
     gocryptfs
     krusader
     crystal-dock
+    kitty            # <--- Musí tu být, aby se nainstalovala!
     gnome-calendar
     keepassxc
     system-config-printer
     usbutils
     btop
 
-    # INTERNET / SÍTĚ
+    # ======================
+    # 🌐 INTERNET / SÍTĚ
+    # ======================
     vivaldi
     librewolf
     brave
@@ -27,16 +33,22 @@
     nextcloud-client
     kdePackages.ktorrent
 
-    # SÍTĚ
+    # ======================
+    # 🌐 SÍŤOVÉ NÁSTROJE
+    # ======================
     openconnect
     vpn-slice
 
-    # MULTIMÉDIA
+    # ======================
+    # 🖥️ MULTIMÉDIA / GRAFIKA
+    # ======================
     vlc
     xnviewmp
     gimp
     
-    # KANCELÁŘ
+    # ======================
+    # 📨 KANCELÁŘ / PRODUKTIVITA
+    # ======================
     libreoffice-fresh
     onlyoffice-desktopeditors
     evolution
@@ -45,15 +57,16 @@
     kdePackages.okular
     dbeaver-bin
 
-    # Jazyky
+    # --- Jazyky / dictionaries ---
     hunspell
     hunspellDicts.cs_CZ
     aspell
     aspellDicts.cs
-    
-    # Poznámka: kitty, fish a starship jsou aktivovány přes programs.<name>.enable
   ];
 
+  # ======================
+  # 🔤 FONTY (pro Kitty, IDE, atd.)
+  # ======================
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
     corefonts

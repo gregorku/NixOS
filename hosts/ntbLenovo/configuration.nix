@@ -55,8 +55,10 @@
       # Nastavení cesty ke globálnímu konfiguračnímu souboru Starshipu
       set -x STARSHIP_CONFIG /etc/starship.toml
       
-      # Použití absolutní cesty z nix-store, aby shell příkaz našel hned při startu
-      ${pkgs.starship}/bin/starship init fish | source
+      # Inicializace starshipu
+      if type -q starship
+        starship init fish | source
+      end
 
       alias ll="ls -lah"
       alias rebuild="sudo nixos-rebuild switch"
