@@ -14,7 +14,7 @@
     gocryptfs
     krusader
     crystal-dock
-    kitty            # <--- Musí tu být, aby se nainstalovala!
+    kitty
     gnome-calendar
     keepassxc
     system-config-printer
