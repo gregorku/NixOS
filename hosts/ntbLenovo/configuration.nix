@@ -65,7 +65,7 @@
   };
 
   # ----------------------
-  # ⭐ STARSHIP (Catppuccin)
+  # ⭐ STARSHIP (FIX „in“)
   # ----------------------
   programs.starship.enable = true;
 
@@ -76,6 +76,7 @@
 
     [username]
     show_always = true
+    format = "$user"   # 👈 FIX (bez "in")
     style_user = "#a6e3a1"
 
     [hostname]
@@ -105,7 +106,7 @@
   '';
 
   # ----------------------
-  # 🎨 CATPPUCCIN (GTK přes env)
+  # 🎨 CATPPUCCIN (GTK)
   # ----------------------
   environment.systemPackages = with pkgs; [
     catppuccin-gtk
