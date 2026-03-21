@@ -52,30 +52,26 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # Nastavení cesty ke globálnímu konfiguračnímu souboru Starshipu
+      # ⭐ Starship (správná aktivace)
       set -x STARSHIP_CONFIG /etc/starship.toml
-      
-      # RUČNÍ AKTIVACE STARSHIPU (Neprůstřelná metoda pro NixOS)
       ${pkgs.starship}/bin/starship init fish | source
 
       alias ll="ls -lah"
       alias rebuild="sudo nixos-rebuild switch"
-      
+
       set -g fish_greeting ""
     '';
   };
 
-  # Aktivuje starship binárku
+  # ----------------------
+  # ⭐ Starship
+  # ----------------------
   programs.starship.enable = true;
 
-  # Generování konfiguračního souboru Starshipu
   environment.etc."starship.toml".text = ''
     add_newline = false
 
-    format = """
-    $username@$hostname $directory $git_branch $git_status
-    $character
-    """
+    format = "$username@$hostname $directory $git_branch $git_status $character"
 
     [character]
     success_symbol = "[➜](green)"
@@ -101,7 +97,7 @@
   '';
 
   # ----------------------
-  # 🐱 Kitty Terminal (Globální konfigurace)
+  # 🐱 Kitty Terminal
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
@@ -129,10 +125,16 @@
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
     fsType = "btrfs";
-    options = [ "compress=zstd" "noatime" "space_cache=v2" "nofail" ];
+    options = [
+      "compress=zstd"
+      "noatime"
+      "space_cache=v2"
+      "nofail"
+    ];
   };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
   system.stateVersion = "25.11";
 }
