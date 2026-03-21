@@ -16,6 +16,7 @@
     crystal-dock
     kitty
     fish
+    starship
     gnome-calendar
     keepassxc
     system-config-printer
