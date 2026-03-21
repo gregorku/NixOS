@@ -26,9 +26,6 @@
 
   networking.hostName = "ntbLenovo";
 
-  # ----------------------
-  # Lokalizace / Jazyk
-  # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
   i18n.supportedLocales = [
     "cs_CZ.UTF-8/UTF-8"
@@ -44,14 +41,12 @@
   };
 
   # ----------------------
-  # 🐟 Fish shell
+  # 🐟 Fish
   # ----------------------
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # 🔥 KLÍČOVÝ FIX – globální proměnná
       set -gx STARSHIP_CONFIG /etc/starship.toml
-
       ${pkgs.starship}/bin/starship init fish | source
 
       alias ll="ls -lah"
@@ -69,24 +64,27 @@
   environment.etc."starship.toml".text = ''
     add_newline = false
 
-    format = "$username@$hostname $directory $character"
+    # ❗ DŮLEŽITÉ: bez hostname sekce → musí být explicitně zapnutý
+    format = "$username$hostname $directory $character"
 
-    [character]
-    success_symbol = "[➜](green)"
+    [username]
+    show_always = true
+    style_user = "green"
+
+    [hostname]
+    ssh_only = false
+    format = "@$hostname"
+    style = "bold green"
 
     [directory]
     style = "blue"
 
-    [username]
-    style_user = "green"
-    show_always = true
-
-    [hostname]
-    style = "bold green"
+    [character]
+    success_symbol = "[➜](green)"
   '';
 
   # ----------------------
-  # 🐱 Kitty Terminal
+  # 🐱 Kitty
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
@@ -106,7 +104,7 @@
   '';
 
   # ----------------------
-  # 🔧 Systém / Boot
+  # System
   # ----------------------
   boot.kernelParams = [ "pci=nocrs" ];
   services.libinput.enable = true;
@@ -114,12 +112,7 @@
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
     fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "noatime"
-      "space_cache=v2"
-      "nofail"
-    ];
+    options = [ "compress=zstd" "noatime" "space_cache=v2" "nofail" ];
   };
 
   boot.loader.systemd-boot.enable = true;
