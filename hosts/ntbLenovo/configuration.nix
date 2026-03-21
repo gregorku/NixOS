@@ -47,9 +47,16 @@
   };
 
   # ----------------------
-  # 🐟 Fish shell (enabled)
+  # 🐟 Fish shell
   # ----------------------
   programs.fish.enable = true;
+
+  # ----------------------
+  # ⭐ Starship FIX (NixOS)
+  # ----------------------
+  environment.variables = {
+    STARSHIP_CONFIG = "/home/gregor/.config/starship.toml";
+  };
 
   # ----------------------
   # 🔧 Lenovo fixy (MINIMAL SAFE)
