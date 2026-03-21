@@ -105,7 +105,7 @@
   '';
 
   # ----------------------
-  # 🎨 CATPPUCCIN (GTK)
+  # 🎨 CATPPUCCIN (GTK přes env)
   # ----------------------
   environment.systemPackages = with pkgs; [
     catppuccin-gtk
@@ -121,20 +121,6 @@
     tmux
     lazygit
   ];
-
-  gtk = {
-    enable = true;
-
-    theme = {
-      name = "Catppuccin-Mocha-Standard-Blue-Dark";
-      package = pkgs.catppuccin-gtk;
-    };
-
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-  };
 
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
