@@ -4,7 +4,7 @@
   users.users.gregor = {
     isNormalUser = true;
     description = "Gregor";
-    shell = pkgs.bashInteractive;
+    shell = pkgs.fish;  # 👈 změna tady
 
     extraGroups = [
       "wheel"

@@ -47,6 +47,11 @@
   };
 
   # ----------------------
+  # 🐟 Fish shell (enabled)
+  # ----------------------
+  programs.fish.enable = true;
+
+  # ----------------------
   # 🔧 Lenovo fixy (MINIMAL SAFE)
   # ----------------------
   boot.kernelParams = [
