@@ -54,7 +54,9 @@
     interactiveShellInit = ''
       # Nastavení cesty ke globálnímu konfiguračnímu souboru Starshipu
       set -x STARSHIP_CONFIG /etc/starship.toml
-      starship init fish | source
+      
+      # Použití absolutní cesty z nix-store, aby shell příkaz našel hned při startu
+      ${pkgs.starship}/bin/starship init fish | source
 
       alias ll="ls -lah"
       alias rebuild="sudo nixos-rebuild switch"
@@ -99,7 +101,6 @@
   # ----------------------
   # 🐱 Kitty Terminal (Globální konfigurace)
   # ----------------------
-  # Vytvoří konfigurační soubor v /etc/xdg/kitty/kitty.conf
   environment.etc."xdg/kitty/kitty.conf".text = ''
     # FONT
     font_family FiraCode Nerd Font
