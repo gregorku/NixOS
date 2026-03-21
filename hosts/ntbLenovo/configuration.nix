@@ -47,26 +47,31 @@
   };
 
   # ----------------------
-  # 🐟 Fish shell & ⭐ Starship integrace
+  # 🐟 Fish shell
   # ----------------------
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # Nastavení cesty ke globálnímu konfiguračnímu souboru Starshipu
-      set -x STARSHIP_CONFIG /etc/starship.toml
-      
-      # Vynucená inicializace Starshipu přes absolutní cestu
-      ${pkgs.starship}/bin/starship init fish | source
-
+      # Aliasy zůstávají
       alias ll="ls -lah"
       alias rebuild="sudo nixos-rebuild switch"
+      
+      # Zakážeme uvítací zprávu, ať vidíme hned prompt
+      set -g fish_greeting ""
     '';
   };
 
-  # Aktivuje binárku starshipu v systému
-  programs.starship.enable = true;
+  # ----------------------
+  # ⭐ Starship (Správná NixOS integrace)
+  # ----------------------
+  programs.starship = {
+    enable = true;
+    # Tato volba zajistí, že se starship správně "vstříkne" do Fishe
+    enableFishIntegration = true;
+  };
 
-  # Generování konfiguračního souboru pro Starship do /etc/
+  # Vytvoření konfiguračního souboru Starshipu. 
+  # NixOS modul programs.starship očekává konfig v /etc/starship.toml
   environment.etc."starship.toml".text = ''
     add_newline = false
 
@@ -99,29 +104,19 @@
   '';
 
   # ----------------------
-  # 🐱 Kitty Terminal (Globální konfigurace)
+  # 🐱 Kitty Terminal
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
-    # FONT
     font_family FiraCode Nerd Font
     font_size 12
-
-    # VZHLED
     background_opacity 0.9
     confirm_os_window_close 0
     enable_audio_bell no
-
-    # COPY / PASTE
     copy_on_select yes
-
-    # SCROLLBACK
     scrollback_lines 10000
 
-    # SPLIT SHORTCUTS
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
-
-    # NAVIGACE MEZI PANELY
     map ctrl+alt+h neighboring_window left
     map ctrl+alt+l neighboring_window right
     map ctrl+alt+k neighboring_window up
@@ -129,36 +124,18 @@
   '';
 
   # ----------------------
-  # 🔧 Lenovo fixy & Systém
+  # 🔧 Systém / Boot
   # ----------------------
-  boot.kernelParams = [
-    "pci=nocrs"
-  ];
-
+  boot.kernelParams = [ "pci=nocrs" ];
   services.libinput.enable = true;
 
-  # ----------------------
-  # disk DataLinux
-  # ----------------------
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
     fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "noatime"
-      "space_cache=v2"
-      "nofail"
-    ];
+    options = [ "compress=zstd" "noatime" "space_cache=v2" "nofail" ];
   };
 
-  # ----------------------
-  # Bootloader (UEFI)
-  # ----------------------
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # ----------------------
-  # Povinné – NIKDY neměnit po instalaci
-  # ----------------------
   system.stateVersion = "25.11";
 }
