@@ -2,40 +2,97 @@
 
 {
   environment.systemPackages = with pkgs; [
+
+    # ======================
+    # 📦 SYSTÉM / ZÁKLAD
+    # ======================
     git
     unstable.vscodium
-    mc
     nano
+    mc
+    btop
+    fastfetch
+    usbutils
+    system-config-printer
+
+    # ======================
+    # 📁 SOUBORY / DISK
+    # ======================
     sshfs
     gocryptfs
     krusader
-    crystal-dock
+
+    # ======================
+    # 🖥️ DESKTOP / UI
+    # ======================
     kitty
+    crystal-dock
     gnome-calendar
+
+    # ======================
+    # 🔐 BEZPEČNOST
+    # ======================
     keepassxc
-    system-config-printer
-    usbutils
-    btop
+
+    # ======================
+    # 🌐 INTERNET / PROHLÍŽEČE
+    # ======================
     vivaldi
     librewolf
     brave
+
+    # ======================
+    # 🌐 SÍŤ / REMOTE
+    # ======================
     filezilla
     putty
     remmina
-    nextcloud-client
-    kdePackages.ktorrent
     openconnect
     vpn-slice
+
+    # ======================
+    # ☁️ CLOUD / SYNC
+    # ======================
+    nextcloud-client
+
+    # ======================
+    # 📥 STAHOVÁNÍ
+    # ======================
+    kdePackages.ktorrent
+
+    # ======================
+    # 🎬 MULTIMÉDIA / GRAFIKA
+    # ======================
     vlc
     xnviewmp
     gimp
+
+    # ======================
+    # 📨 KANCELÁŘ
+    # ======================
     libreoffice-fresh
     onlyoffice-desktopeditors
     evolution
     pdfarranger
+
+    # ======================
+    # 🧑‍💻 EDITORY
+    # ======================
     kdePackages.kate
+
+    # ======================
+    # 📄 PROHLÍŽEČE
+    # ======================
     kdePackages.okular
+
+    # ======================
+    # 🗄️ DATABASE
+    # ======================
     dbeaver-bin
+
+    # ======================
+    # 🌍 JAZYKY / DICTIONARIES
+    # ======================
     hunspell
     hunspellDicts.cs_CZ
     aspell

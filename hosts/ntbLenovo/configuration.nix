@@ -30,42 +30,42 @@
   # 🌍 Lokalizace
   # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
-  i18n.supportedLocales = [
-    "cs_CZ.UTF-8/UTF-8"
-    "en_US.UTF-8/UTF-8"
-  ];
-
   time.timeZone = "Europe/Prague";
+
   console.keyMap = "cz";
 
-  services.xserver.xkb = {
-    layout = "cz";
-    variant = "";
-  };
+  services.xserver.xkb.layout = "cz";
 
   # ----------------------
-  # 🐟 Fish + modern UX
+  # 🐟 FISH (ULTIMATE)
   # ----------------------
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      # Starship
       set -gx STARSHIP_CONFIG /etc/starship.toml
-
       ${pkgs.starship}/bin/starship init fish | source
+
+      # Zoxide (smart cd)
       ${pkgs.zoxide}/bin/zoxide init fish | source
+
+      # FZF
       ${pkgs.fzf}/bin/fzf --fish | source
 
+      # Aliases
       alias ll="eza -lah"
       alias cat="bat"
       alias cd="z"
       alias rebuild="sudo nixos-rebuild switch"
+      alias gs="git status"
+      alias gl="git log --oneline --graph"
 
       set -g fish_greeting ""
     '';
   };
 
   # ----------------------
-  # ⭐ Starship (Catppuccin)
+  # ⭐ STARSHIP (CATPPUCCIN)
   # ----------------------
   programs.starship.enable = true;
 
@@ -77,7 +77,6 @@
     [username]
     show_always = true
     style_user = "#a6e3a1"
-    format = "$user"
 
     [hostname]
     ssh_only = false
@@ -106,17 +105,41 @@
   '';
 
   # ----------------------
-  # 📦 CLI tools
+  # 📦 CLI POWER TOOLS
   # ----------------------
   environment.systemPackages = with pkgs; [
     zoxide
     fzf
     eza
     bat
-  ];
+    ripgrep
+    fd
+    tmux
+    lazygit
+    ];
 
   # ----------------------
-  # 🐱 Kitty (Catppuccin feel)
+  # 🧠 TMUX (IDE v terminalu)
+  # ----------------------
+  environment.etc."tmux.conf".text = ''
+    set -g mouse on
+    set -g history-limit 10000
+
+    # splits
+    bind | split-window -h
+    bind - split-window -v
+
+    # reload
+    bind r source-file ~/.tmux.conf \; display "Reloaded!"
+
+    # prefix změna
+    unbind C-b
+    set -g prefix C-a
+    bind C-a send-prefix
+  '';
+
+  # ----------------------
+  # 🐱 KITTY (PRO LOOK)
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
@@ -130,33 +153,15 @@
     copy_on_select yes
     scrollback_lines 10000
 
-    # splits
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
-
-    # navigation
-    map ctrl+alt+h neighboring_window left
-    map ctrl+alt+l neighboring_window right
-    map ctrl+alt+k neighboring_window up
-    map ctrl+alt+j neighboring_window down
   '';
 
   # ----------------------
-  # 🔧 System
+  # 🔧 SYSTEM
   # ----------------------
   boot.kernelParams = [ "pci=nocrs" ];
   services.libinput.enable = true;
-
-  fileSystems."/run/media/gregor/DataLinux" = {
-    device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
-    fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "noatime"
-      "space_cache=v2"
-      "nofail"
-    ];
-  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
