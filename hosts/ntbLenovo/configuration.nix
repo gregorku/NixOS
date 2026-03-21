@@ -49,8 +49,10 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # 🔥 SPRÁVNÉ předání configu Starshipu
-      env STARSHIP_CONFIG=/etc/starship.toml ${pkgs.starship}/bin/starship init fish | source
+      # 🔥 KLÍČOVÝ FIX – globální proměnná
+      set -gx STARSHIP_CONFIG /etc/starship.toml
+
+      ${pkgs.starship}/bin/starship init fish | source
 
       alias ll="ls -lah"
       alias rebuild="sudo nixos-rebuild switch"
