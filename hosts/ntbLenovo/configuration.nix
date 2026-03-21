@@ -132,7 +132,7 @@
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
-    font_size 12
+    font_size 10
 
     background_opacity 0.92
     window_padding_width 10
