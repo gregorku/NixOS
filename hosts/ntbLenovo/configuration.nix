@@ -44,32 +44,28 @@
   };
 
   # ----------------------
-  # 🐟 Fish + UX upgrade
+  # 🐟 Fish + modern UX
   # ----------------------
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # ⭐ Starship
       set -gx STARSHIP_CONFIG /etc/starship.toml
+
       ${pkgs.starship}/bin/starship init fish | source
-
-      # ⚡ zoxide (lepší cd)
       ${pkgs.zoxide}/bin/zoxide init fish | source
-
-      # 🔍 fzf keybindings
       ${pkgs.fzf}/bin/fzf --fish | source
 
-      # Aliasy
-      alias ll="ls -lah"
+      alias ll="eza -lah"
+      alias cat="bat"
+      alias cd="z"
       alias rebuild="sudo nixos-rebuild switch"
-      alias cd="z"   # 🔥 automatické cd
 
       set -g fish_greeting ""
     '';
   };
 
   # ----------------------
-  # ⭐ Starship (hezký theme)
+  # ⭐ Starship (Catppuccin)
   # ----------------------
   programs.starship.enable = true;
 
@@ -80,59 +76,59 @@
 
     [username]
     show_always = true
-    style_user = "bold green"
+    style_user = "#a6e3a1"
+    format = "$user"
 
     [hostname]
     ssh_only = false
     format = "@$hostname"
-    style = "bold cyan"
+    style = "#89b4fa"
 
     [directory]
-    style = "bold blue"
+    style = "#89b4fa"
     truncation_length = 3
 
     [git_branch]
     symbol = "🌱 "
-    style = "bold yellow"
+    style = "#f9e2af"
 
     [git_status]
-    style = "red"
+    style = "#f38ba8"
 
     [cmd_duration]
     min_time = 500
     format = "⏱ $duration "
-    style = "yellow"
+    style = "#fab387"
 
     [character]
-    success_symbol = "[➜](bold green)"
-    error_symbol = "[✗](bold red)"
+    success_symbol = "[➜](#a6e3a1)"
+    error_symbol = "[✗](#f38ba8)"
   '';
 
   # ----------------------
-  # 📦 CLI nástroje
+  # 📦 CLI tools
   # ----------------------
   environment.systemPackages = with pkgs; [
     zoxide
     fzf
-    eza   # lepší ls
-    bat   # lepší cat
+    eza
+    bat
   ];
 
   # ----------------------
-  # 🐱 Kitty
+  # 🐱 Kitty (Catppuccin feel)
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
     font_size 12
+
     background_opacity 0.92
+    window_padding_width 10
 
     confirm_os_window_close 0
     enable_audio_bell no
     copy_on_select yes
     scrollback_lines 10000
-
-    # padding (lepší vzhled)
-    window_padding_width 8
 
     # splits
     map ctrl+alt+enter launch --location=hsplit
@@ -154,7 +150,12 @@
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
     fsType = "btrfs";
-    options = [ "compress=zstd" "noatime" "space_cache=v2" "nofail" ];
+    options = [
+      "compress=zstd"
+      "noatime"
+      "space_cache=v2"
+      "nofail"
+    ];
   };
 
   boot.loader.systemd-boot.enable = true;
