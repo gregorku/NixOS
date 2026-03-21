@@ -30,42 +30,42 @@
   # 🌍 Lokalizace
   # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
-  time.timeZone = "Europe/Prague";
+  i18n.supportedLocales = [
+    "cs_CZ.UTF-8/UTF-8"
+    "en_US.UTF-8/UTF-8"
+  ];
 
+  time.timeZone = "Europe/Prague";
   console.keyMap = "cz";
 
-  services.xserver.xkb.layout = "cz";
+  services.xserver.xkb = {
+    layout = "cz";
+    variant = "";
+  };
 
   # ----------------------
-  # 🐟 FISH (ULTIMATE)
+  # 🐟 FISH + CLI
   # ----------------------
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      # Starship
       set -gx STARSHIP_CONFIG /etc/starship.toml
+
       ${pkgs.starship}/bin/starship init fish | source
-
-      # Zoxide (smart cd)
       ${pkgs.zoxide}/bin/zoxide init fish | source
-
-      # FZF
       ${pkgs.fzf}/bin/fzf --fish | source
 
-      # Aliases
       alias ll="eza -lah"
       alias cat="bat"
       alias cd="z"
       alias rebuild="sudo nixos-rebuild switch"
-      alias gs="git status"
-      alias gl="git log --oneline --graph"
 
       set -g fish_greeting ""
     '';
   };
 
   # ----------------------
-  # ⭐ STARSHIP (CATPPUCCIN)
+  # ⭐ STARSHIP (Catppuccin)
   # ----------------------
   programs.starship.enable = true;
 
@@ -105,9 +105,13 @@
   '';
 
   # ----------------------
-  # 📦 CLI POWER TOOLS
+  # 🎨 CATPPUCCIN (GTK)
   # ----------------------
   environment.systemPackages = with pkgs; [
+    catppuccin-gtk
+    papirus-icon-theme
+
+    # CLI tools
     zoxide
     fzf
     eza
@@ -116,30 +120,28 @@
     fd
     tmux
     lazygit
-    ];
+  ];
+
+  gtk = {
+    enable = true;
+
+    theme = {
+      name = "Catppuccin-Mocha-Standard-Blue-Dark";
+      package = pkgs.catppuccin-gtk;
+    };
+
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
+    };
+  };
+
+  environment.variables = {
+    GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
+  };
 
   # ----------------------
-  # 🧠 TMUX (IDE v terminalu)
-  # ----------------------
-  environment.etc."tmux.conf".text = ''
-    set -g mouse on
-    set -g history-limit 10000
-
-    # splits
-    bind | split-window -h
-    bind - split-window -v
-
-    # reload
-    bind r source-file ~/.tmux.conf \; display "Reloaded!"
-
-    # prefix změna
-    unbind C-b
-    set -g prefix C-a
-    bind C-a send-prefix
-  '';
-
-  # ----------------------
-  # 🐱 KITTY (PRO LOOK)
+  # 🐱 KITTY
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
