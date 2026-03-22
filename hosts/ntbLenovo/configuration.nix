@@ -133,7 +133,7 @@
   };
 
   # ----------------------
-  # 🐱 KITTY
+  # 🐱 KITTY (FIX pro SSH + MC)
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
@@ -146,6 +146,10 @@
     enable_audio_bell no
     copy_on_select yes
     scrollback_lines 10000
+
+    # 🔥 KLÍČOVÝ FIX
+    term xterm-256color
+    enable_kitty_keyboard_protocol no
 
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
