@@ -22,6 +22,7 @@
   environment.systemPackages = with pkgs; [
     networkmanager
     wireguard-tools
+    psmisc
     avahi
     openconnect
     vpn-slice
