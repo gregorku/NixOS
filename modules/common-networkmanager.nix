@@ -28,11 +28,7 @@
   ];
 
   # ----------------------
-  # Bash alias (volitelný)
+  # Uživatel může spravovat síť
   # ----------------------
-  programs.bash.shellAliases = {
-    vpn-work = "sudo openconnect --user=kutik --authgroup=UADFD01-ST-2FA --servercert pin-sha256:Myb+eKrw7BcomYOUYcpUvpfhLaZ84nQDygatExjB44U= --mtu 1200 --script='vpn-slice --no-host-names --no-ns-hosts --nbns 10.0.0.0/8' u.ivpn.cz";
-  };
-
   users.users.gregor.extraGroups = [ "networkmanager" ];
 }
