@@ -55,6 +55,11 @@
       ${pkgs.zoxide}/bin/zoxide init fish | source
       ${pkgs.fzf}/bin/fzf --fish | source
 
+      # 🔥 FIX pro SSH (MC, vim, šipky)
+      if set -q SSH_CONNECTION
+          set -gx TERM xterm-256color
+      end
+
       alias ll="eza -lah"
       alias cat="bat"
       alias cd="z"
@@ -124,6 +129,7 @@
 
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
+    EDITOR = "nano";
   };
 
   # ----------------------
