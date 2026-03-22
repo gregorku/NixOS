@@ -145,6 +145,20 @@
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
   '';
+  
+  # ----------------------
+  # disk DataLinux
+  # ----------------------
+  fileSystems."/run/media/gregor/DataLinux" = {
+    device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
+    fsType = "btrfs";
+    options = [
+      "compress=zstd"
+      "noatime"
+      "space_cache=v2"
+      "nofail"
+    ];
+  };
 
   # ----------------------
   # 🔧 SYSTEM
