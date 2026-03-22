@@ -60,12 +60,16 @@
       alias cd="z"
       alias rebuild="sudo nixos-rebuild switch"
 
+      # 🔥 VPN
+      alias vpn-work="sudo openconnect --user=kutik --authgroup=UADFD01-ST-2FA --servercert pin-sha256:Myb+eKrw7BcomYOUYcpUvpfhLaZ84nQDygatExjB44U= --mtu 1200 --script='vpn-slice --no-host-names --no-ns-hosts --nbns 10.0.0.0/8' u.ivpn.cz"
+      alias vpn-off="sudo killall openconnect"
+
       set -g fish_greeting ""
     '';
   };
 
   # ----------------------
-  # ⭐ STARSHIP (FIX „in“)
+  # ⭐ STARSHIP
   # ----------------------
   programs.starship.enable = true;
 
@@ -76,7 +80,7 @@
 
     [username]
     show_always = true
-    format = "$user"   # 👈 FIX (bez "in")
+    format = "$user"
     style_user = "#a6e3a1"
 
     [hostname]
@@ -106,13 +110,12 @@
   '';
 
   # ----------------------
-  # 🎨 CATPPUCCIN (GTK)
+  # 🎨 CATPPUCCIN
   # ----------------------
   environment.systemPackages = with pkgs; [
     catppuccin-gtk
     papirus-icon-theme
 
-    # CLI tools
     zoxide
     fzf
     eza
