@@ -145,7 +145,7 @@
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
   '';
-  
+
   # ----------------------
   # disk DataLinux
   # ----------------------
@@ -167,6 +167,7 @@
   services.libinput.enable = true;
 
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
 
   system.stateVersion = "25.11";
