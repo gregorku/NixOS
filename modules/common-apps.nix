@@ -11,6 +11,7 @@
     nano
     mc
     btop
+    duf
     fastfetch
     usbutils
     system-config-printer
