@@ -130,6 +130,8 @@
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
     EDITOR = "nano";
+
+    SAL_USE_VCLPLUGIN = "kde";   # 🔥 klíč pro LibreOffice
   };
 
   # ----------------------

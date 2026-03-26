@@ -66,12 +66,14 @@
     # ======================
     vlc
     xnviewmp
+    krita
     gimp
 
     # ======================
-    # 📨 KANCELÁŘ
+    # 📨 KANCELÁŘ (🔥 FIX)
     # ======================
     libreoffice-fresh
+    libreoffice-qt          # 👈 KLÍČOVÉ
     onlyoffice-desktopeditors
     evolution
     pdfarranger
