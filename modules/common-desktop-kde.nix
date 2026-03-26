@@ -20,8 +20,13 @@
   programs.dconf.enable = true;
 
   environment.systemPackages = with pkgs; [
+    # KDE utils
     kdePackages.kdeconnect-kde
     kdePackages.kio-extras
     kdePackages.kio-fuse
+
+    # 🎨 THEME (KLÍČOVÉ)
+    catppuccin-kde
+    papirus-icon-theme
   ];
 }
