@@ -73,7 +73,7 @@
     # 📨 KANCELÁŘ (🔥 FIX)
     # ======================
     libreoffice-fresh
-    libreoffice-qt          # 👈 KLÍČOVÉ
+    libreoffice-qt
     onlyoffice-desktopeditors
     evolution
     pdfarranger
@@ -102,8 +102,26 @@
     aspellDicts.cs
   ];
 
+  # ======================
+  # 🔤 FONTY (🔥 DŮLEŽITÉ)
+  # ======================
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
+
+    # Microsoft kompatibilita
     corefonts
+
+    # 🔥 Calibri / Cambria náhrady
+    carlito
+    caladea
   ];
+
+  # ======================
+  # 🔥 DEFAULT FONTY (SYSTEM)
+  # ======================
+  fonts.fontconfig.defaultFonts = {
+    serif = [ "Times New Roman" "Liberation Serif" ];
+    sansSerif = [ "Arial" "Carlito" "Liberation Sans" ];
+    monospace = [ "FiraCode Nerd Font" ];
+  };
 }
