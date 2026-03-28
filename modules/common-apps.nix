@@ -68,6 +68,7 @@
     xnviewmp
     krita
     gimp
+    puddletag
 
     # ======================
     # 📨 KANCELÁŘ (🔥 FIX)
