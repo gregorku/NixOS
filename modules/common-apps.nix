@@ -69,6 +69,7 @@
     xnviewmp
     krita
     gimp
+    easytag
     puddletag
 
     # ======================
