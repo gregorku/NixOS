@@ -27,6 +27,7 @@
     # 🖥️ DESKTOP / UI
     # ======================
     kitty
+    tilix
     crystal-dock
     gnome-calendar
 
