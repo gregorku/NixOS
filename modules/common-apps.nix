@@ -22,12 +22,12 @@
     sshfs
     gocryptfs
     krusader
+    meld
 
     # ======================
     # 🖥️ DESKTOP / UI
     # ======================
     kitty
-    tilix
     crystal-dock
     gnome-calendar
 
@@ -51,6 +51,8 @@
     remmina
     openconnect
     vpn-slice
+    nmap
+    netdata
 
     # ======================
     # ☁️ CLOUD / SYNC
@@ -100,8 +102,6 @@
     # ======================
     hunspell
     hunspellDicts.cs_CZ
-    aspell
-    aspellDicts.cs
   ];
 
   # ======================
@@ -122,8 +122,8 @@
   # 🔥 DEFAULT FONTY (SYSTEM)
   # ======================
   fonts.fontconfig.defaultFonts = {
-    serif = [ "Times New Roman" "Liberation Serif" ];
-    sansSerif = [ "Arial" "Carlito" "Liberation Sans" ];
+    serif = [ "Liberation Serif" "Carlito" ];
+    sansSerif = [ "Carlito" "Liberation Sans" ];
     monospace = [ "FiraCode Nerd Font" ];
   };
 }
