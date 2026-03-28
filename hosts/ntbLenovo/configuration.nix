@@ -130,8 +130,7 @@
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
     EDITOR = "nano";
-
-    SAL_USE_VCLPLUGIN = "kde";   # 🔥 klíč pro LibreOffice
+    SAL_USE_VCLPLUGIN = "kf6";   # ← bylo "kde", má být "kf6" pro KDE Plasma 6
   };
 
   # ----------------------

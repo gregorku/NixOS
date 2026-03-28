@@ -75,8 +75,7 @@
     # ======================
     # 📨 KANCELÁŘ (🔥 FIX)
     # ======================
-    libreoffice-fresh
-    libreoffice-qt
+    libreoffice-qt6
     onlyoffice-desktopeditors
     evolution
     pdfarranger
