@@ -28,7 +28,6 @@
     # 🖥️ DESKTOP / UI
     # ======================
     kitty
-    crystal-dock
     gnome-calendar
 
     # ======================
