@@ -140,6 +140,9 @@
 
     # 🔥 FIX pro GTK2 aplikace (virt-manager ikony)
     GTK2_RC_FILES = "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
+
+    # 🔥 FIX ikony pro GTK aplikace (virt-manager)
+    XDG_DATA_DIRS = "/run/current-system/sw/share";
   };
 
   # ----------------------
