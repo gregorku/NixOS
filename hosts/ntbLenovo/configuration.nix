@@ -116,6 +116,8 @@
   environment.systemPackages = with pkgs; [
     catppuccin-gtk
     papirus-icon-theme
+    hicolor-icon-theme
+    adwaita-icon-theme
 
     zoxide
     fzf
