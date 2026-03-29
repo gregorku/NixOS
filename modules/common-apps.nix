@@ -74,7 +74,7 @@
     puddletag
 
     # ======================
-    # 📨 KANCELÁŘ (🔥 FIX)
+    # 📨 KANCELÁŘ
     # ======================
     libreoffice-qt6-fresh
     onlyoffice-desktopeditors
@@ -104,7 +104,7 @@
   ];
 
   # ======================
-  # 🔤 FONTY (🔥 DŮLEŽITÉ)
+  # 🔤 FONTY
   # ======================
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code

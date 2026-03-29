@@ -125,12 +125,19 @@
     fd
     tmux
     lazygit
+
+    # 🔥 FIX GTK aplikace v KDE (virt-manager, gimp, atd.)
+    kdePackages.kde-gtk-config
+    gsettings-desktop-schemas
   ];
 
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
     EDITOR = "nano";
-    SAL_USE_VCLPLUGIN = "kf6";   # ← bylo "kde", má být "kf6" pro KDE Plasma 6
+    SAL_USE_VCLPLUGIN = "kf6";
+
+    # 🔥 FIX pro GTK2 aplikace (virt-manager ikony)
+    GTK2_RC_FILES = "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
   };
 
   # ----------------------

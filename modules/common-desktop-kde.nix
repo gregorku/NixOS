@@ -28,5 +28,9 @@
     # 🎨 THEME (KLÍČOVÉ)
     catppuccin-kde
     papirus-icon-theme
+
+    # 🔥 FIX GTK aplikace v KDE (virt-manager, gimp ikony)
+    kdePackages.kde-gtk-config
+    gsettings-desktop-schemas
   ];
 }
