@@ -131,6 +131,10 @@
     # 🔥 FIX GTK aplikace v KDE (virt-manager, gimp, atd.)
     kdePackages.kde-gtk-config
     gsettings-desktop-schemas
+
+    # 🧑‍💻 NIX vývojové nástroje (VSCodium Nix IDE)
+    nixd
+    nixfmt-rfc-style
   ];
 
   environment.variables = {
