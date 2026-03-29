@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -137,6 +137,9 @@
     nixfmt-rfc-style
   ];
 
+  # 🔥 FIX ikony pro GTK aplikace (virt-manager) - správný způsob v NixOS
+  environment.pathsToLink = [ "/share/icons" "/share/themes" ];
+
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
     EDITOR = "nano";
@@ -144,9 +147,6 @@
 
     # 🔥 FIX pro GTK2 aplikace (virt-manager ikony)
     GTK2_RC_FILES = "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
-
-    # 🔥 FIX ikony pro GTK aplikace (virt-manager)
-    XDG_DATA_DIRS = "/run/current-system/sw/share";
   };
 
   # ----------------------
