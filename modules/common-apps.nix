@@ -72,7 +72,7 @@
     gimp
     easytag
     puddletag
-    pkgs.unstable.freecad
+    unstable.freecad
 
     # ======================
     # 📨 KANCELÁŘ
