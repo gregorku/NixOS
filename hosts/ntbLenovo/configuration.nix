@@ -1,7 +1,25 @@
 { config, pkgs, lib, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
+nixpkgs.config.allowUnfree = true;
+
+# 🔥 UNSTABLE CHANNEL NAPOJENÍ
+nixpkgs.overlays = [
+  (final: prev: {
+    unstable = import <nixos-unstable> {
+      system = prev.system;
+      config.allowUnfree = true;
+    };
+  })
+];
+
+# 🔥 PŘEDÁNÍ DO MODULES (common-apps.nix atd.)
+_module.args = {
+  unstable = import <nixos-unstable> {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
+};
 
   imports = [
     ./hardware-configuration.nix
