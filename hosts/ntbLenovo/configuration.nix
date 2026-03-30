@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
-
+{ config, pkgs, lib, unstable, ... }:
 {
-  nixpkgs.config.allowUnfree = true;
+  _module.args = { inherit unstable; };
 
+  nixpkgs.config.allowUnfree = true;
   imports = [
     ./hardware-configuration.nix
 
