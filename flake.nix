@@ -18,7 +18,7 @@
       inherit system;
       config.allowUnfree = true;
       overlays = [
-        (_: _: { freecad = unstable.freecad; })
+        (_: prev: { freecad = unstable.freecad; vscodium = unstable.vscodium; })
       ];
     };
 

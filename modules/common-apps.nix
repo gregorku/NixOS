@@ -7,7 +7,7 @@
     # 📦 SYSTÉM / ZÁKLAD
     # ======================
     git
-    unstable.vscodium
+    vscodium
     nano
     mc
     btop
@@ -72,7 +72,7 @@
     gimp
     easytag
     puddletag
-    unstable.freecad
+    freecad
 
     # ======================
     # 📨 KANCELÁŘ
