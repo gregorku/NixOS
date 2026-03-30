@@ -7,7 +7,7 @@
     # 📦 SYSTÉM / ZÁKLAD
     # ======================
     git
-    vscodium
+    unstable.vscodium
     nano
     mc
     btop
