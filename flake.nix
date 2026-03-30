@@ -17,6 +17,9 @@
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
+      overlays = [
+        (_: _: { freecad = unstable.freecad; })
+      ];
     };
 
     unstable = import nixpkgs-unstable {
