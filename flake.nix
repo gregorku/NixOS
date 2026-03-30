@@ -14,17 +14,17 @@
   let
     system = "x86_64-linux";
 
+    unstable = import nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+    };
+
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
       overlays = [
         (_: prev: { freecad = unstable.freecad; vscodium = unstable.vscodium; })
       ];
-    };
-
-    unstable = import nixpkgs-unstable {
-      inherit system;
-      config.allowUnfree = true;
     };
 
     mkHost = host: nixpkgs.lib.nixosSystem {
