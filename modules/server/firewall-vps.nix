@@ -9,8 +9,8 @@
 
       # Trusted IP adresy (vaše domácí/kancelářská IP)
       set trusted {
-        type ipv4_addr
-        flags interval
+        type ipv4_addr;
+        flags interval;
         elements = {
           # 1.2.3.4/32   # <- doplňte svou IP
         }
@@ -97,10 +97,10 @@
         type nat hook postrouting priority srcnat; policy accept;
 
         # NAT pro Incus kontejnery → internet
-        ip saddr 10.10.10.0/24 oifname "eth0" masquerade
+        ip saddr 10.10.10.0/24 oifname "ens3" masquerade
 
         # NAT pro WireGuard klienty → internet
-        ip saddr 10.100.0.0/24 oifname "eth0" masquerade
+        ip saddr 10.100.0.0/24 oifname "ens3" masquerade
       }
     }
   '';
