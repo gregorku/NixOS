@@ -135,5 +135,5 @@
     Origins = lib.mkForce "https://cockpit.vasdomena.cz https://VPS_IP:9090";
   };
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }
