@@ -125,15 +125,5 @@
   };
   nix.settings.auto-optimise-store = true;
 
-  # boot.enableContainers ODSTRANĚNO – to je pro nspawn, ne Incus
-
-  ##################################################
-  # Cockpit – produkční nastavení
-  ##################################################
-  services.cockpit.settings.WebService = {
-    AllowUnencrypted = false;          # HTTPS vždy na produkci
-    Origins = lib.mkForce "https://cockpit.vasdomena.cz https://VPS_IP:9090";
-  };
-
   system.stateVersion = "25.11";
 }
