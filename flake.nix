@@ -42,6 +42,7 @@
       ntbLenovo    = mkHost "ntbLenovo";
       ntbDell      = mkHost "ntbDell";
       domaPcServer = mkHost "domaPcServer";
+      VPSServer    = mkHost "VPSServer";
       test         = mkHost "test";
       testServer   = mkHost "testServer";
     };
