@@ -48,7 +48,7 @@
   # Název rozhraní zjistíte po instalaci: `ip link`
   # Netcup typicky: eth0 nebo enp1s0
   systemd.network.networks."10-wan" = {
-    matchConfig.Name = "eth0";
+    matchConfig.Name = "ens3";
     networkConfig = {
       DHCP = "yes";
       IPv6AcceptRA = true;
