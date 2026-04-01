@@ -109,8 +109,8 @@
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin         = "no";
-      PasswordAuthentication  = false; # po nastavení SSH klíčů!
+      PermitRootLogin         = "yes";
+      PasswordAuthentication  = true; # po nastavení SSH klíčů!
       X11Forwarding           = false;
     };
   };
