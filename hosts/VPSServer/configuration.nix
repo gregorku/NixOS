@@ -26,7 +26,7 @@
     # VPS-specific – nové moduly (vytvořit)
     ##################################################
     ../../modules/server/incus.nix
-    ../../modules/server/haproxy.nix
+    #../../modules/server/haproxy.nix
     ../../modules/server/firewall-vps.nix
 
     ##################################################
