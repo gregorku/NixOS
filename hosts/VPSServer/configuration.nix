@@ -35,6 +35,12 @@
     ../../modules/common-wireguard.nix
   ];
 
+  # --agenix-------------
+  environment.systemPackages = with pkgs; [
+  agenix
+  age
+  ];
+
   networking.hostName = "VPSServer";
   # Vygenerujte: head -c4 /dev/urandom | od -A none -t x4 | tr -d ' '
   networking.hostId = "ab12cd34";

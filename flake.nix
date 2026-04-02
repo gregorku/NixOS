@@ -4,14 +4,16 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    
+
     # 1. Přidání zdroje pro nix-flatpak
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+    # Přidání zdroje pro agenix
+    inputs.agenix.url = "github:ryantm/agenix";
   };
 
   # 2. Přidání nix-flatpak do argumentů outputs a zachycení @inputs
-  outputs = { self, nixpkgs, nixpkgs-unstable, nix-flatpak, ... }@inputs:
-  let
+  outputs = { self, nixpkgs, nixpkgs-unstable, nix-flatpak, agenix, ... }@inputs:
+    let
     system = "x86_64-linux";
 
     pkgs = import nixpkgs {
@@ -34,6 +36,7 @@
 
       modules = [
         ./hosts/${host}/configuration.nix
+        agenix.nixosModules.default
       ];
     };
 
