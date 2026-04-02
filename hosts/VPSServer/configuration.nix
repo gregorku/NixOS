@@ -41,6 +41,15 @@
   age.identityPaths = [ "/root/.config/age/keys.txt" ];
 
   ##################################################
+  # AGENTIX SECRET (NOVÉ 🔥)
+  ##################################################
+  age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
+
+  # zpřístupnění do systému
+  environment.etc."test-secret".source =
+    config.age.secrets.test-secret.path;
+
+  ##################################################
   # Host
   ##################################################
   networking.hostName = "VPSServer";
@@ -82,7 +91,7 @@
     initialPassword = "zmenit"; # změň ASAP
 
     openssh.authorizedKeys.keys = [
-      # TODO: přesunout pryč z git (agenix nebo runtime)
+      # TODO: přesunout do agenix později
       "ssh-rsa AAAAB3NzaC1yc2E..."
     ];
   };
