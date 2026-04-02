@@ -34,7 +34,7 @@
   ##################################################
   environment.systemPackages = [
     pkgs.age
-    pkgs.agenix
+    inputs.agenix.packages.${pkgs.system}.default
   ];
 
   # kde má agenix hledat private key
