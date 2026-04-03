@@ -1,9 +1,14 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
-  # Změnit na mkDefault true pro server
+  ##################################################
+  # Firewall (default zapnutý)
+  ##################################################
   networking.firewall.enable = lib.mkDefault true;
 
+  ##################################################
+  # SSH (default bezpečné)
+  ##################################################
   services.openssh = {
     enable = lib.mkDefault true;
     settings = {
@@ -13,9 +18,25 @@
     };
   };
 
+  ##################################################
+  # System security služby
+  ##################################################
   services.dbus.enable = true;
   security.polkit.enable = true;
   services.accounts-daemon.enable = true;
   security.rtkit.enable = true;
   security.protectKernelImage = true;
+
+  ##################################################
+  # 🔐 AGE / AGENIX
+  ##################################################
+
+  # nástroje dostupné v systému
+  environment.systemPackages = [
+    pkgs.age
+    inputs.agenix.packages.${pkgs.system}.default
+  ];
+
+  # kde hledat private key (platí jen tam kde existuje)
+  age.identityPaths = lib.mkDefault [ "/root/.config/age/keys.txt" ];
 }
