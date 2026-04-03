@@ -12,4 +12,20 @@ in
   "VPSsecret/ssh-root.age".publicKeys = [
     serverVPStest
   ];
+
+
+  ##################################################
+  # 🔐 WIREGUARD (NOVÉ 🔥)
+  ##################################################
+  "VPSsecret/wireguard/wg1-private.age".publicKeys = [
+    serverVPStest
+  ];
+
+  "VPSsecret/wireguard/wg2-private.age".publicKeys = [
+    serverVPStest
+  ];
+
+  "VPSsecret/wireguard/wg3-private.age".publicKeys = [
+    serverVPStest
+  ];
 }
