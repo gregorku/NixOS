@@ -7,4 +7,9 @@ in
     serverVPStest
     ntbLenovo
   ];
+
+  # 🔐 SSH root key (jen server!)
+  "VPSsecret/ssh-root.age".publicKeys = [
+    serverVPStest
+  ];
 }
