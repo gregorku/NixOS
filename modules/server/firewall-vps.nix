@@ -1,4 +1,5 @@
 { config, pkgs, lib, ... }:
+
 {
   networking.nftables.enable  = true;
   networking.firewall.enable  = false;
@@ -28,12 +29,12 @@
         # Web
         tcp dport { 80, 443 } accept;
 
-        # WireGuard
-        udp dport 51820 accept;
+        # WireGuard (wg1, wg2, wg3)
+        udp dport { 51820, 51821, 51822 } accept;
 
         # Cockpit
         tcp dport 9090 ip saddr @trusted accept;
-        tcp dport 9090 iifname "wg0" accept;
+        tcp dport 9090 iifname "wg1" accept;
 
         # HAProxy stats
         tcp dport 8404 ip saddr @trusted accept;
@@ -55,9 +56,9 @@
         iifname "incusbr0" accept;
         oifname "incusbr0" accept;
 
-        # WireGuard
-        iifname "wg0" accept;
-        oifname "wg0" accept;
+        # WireGuard (všechny)
+        iifname { "wg1", "wg2", "wg3" } accept;
+        oifname { "wg1", "wg2", "wg3" } accept;
 
         # DNAT
         ct status dnat accept;
@@ -83,8 +84,10 @@
         # NAT Incus
         ip saddr 10.10.10.0/24 oifname "ens3" masquerade;
 
-        # NAT WireGuard
-        ip saddr 10.100.0.0/24 oifname "ens3" masquerade;
+        # NAT WireGuard (všechny WG sítě)
+        ip saddr 10.100.100.0/24 oifname "ens3" masquerade;
+        ip saddr 10.110.100.0/24 oifname "ens3" masquerade;
+        ip saddr 10.120.100.0/24 oifname "ens3" masquerade;
       }
     }
   '';
