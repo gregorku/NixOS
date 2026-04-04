@@ -15,17 +15,32 @@ in
 
 
   ##################################################
-  # 🔐 WIREGUARD (NOVÉ 🔥)
+  # 🔐 WIREGUARD (SERVER KEYS)
   ##################################################
   "VPSsecret/wireguard/wg1-private.age".publicKeys = [
-    serverVPStest
+  serverVPStest
   ];
 
   "VPSsecret/wireguard/wg2-private.age".publicKeys = [
-    serverVPStest
+  serverVPStest
   ];
 
   "VPSsecret/wireguard/wg3-private.age".publicKeys = [
-    serverVPStest
+  serverVPStest
+  ];
+
+  ##################################################
+  # 🔐 WIREGUARD (DOMA KEYS)
+  ##################################################
+  "VPSsecret/wireguard/wg1-notebook-private.age".publicKeys = [
+  ntbLenovo
+  ];
+
+  "VPSsecret/wireguard/wg2-notebook-private.age".publicKeys = [
+  ntbLenovo
+  ];
+
+  "VPSsecret/wireguard/wg3-notebook-private.age".publicKeys = [
+  ntbLenovo
   ];
 }
