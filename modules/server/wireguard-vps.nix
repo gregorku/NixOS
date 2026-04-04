@@ -1,13 +1,30 @@
-wg1 = {
-  ips = [ "10.100.100.1/24" ];
-  listenPort = 51820;
-  privateKeyFile = config.age.secrets.wg1_serverVPS-private.path;
+{ config, pkgs, lib, ... }:
 
-  peers = [
-    {
-      # Mikrotik doma wg1
-      publicKey = "hKQn0FYRlpAMedjbfyaQhKcitIiJ+I7wuaHiD1A8CVU=";
-      allowedIPs = [ "10.100.100.100/32" ];
-    }
-  ];
-};
+{
+  ##################################################
+  # AGENIX secrets
+  ##################################################
+  age.secrets.wg1_serverVPS-private.file =
+    ../../VPSsecret/wireguard/wg1_serverVPS-private.age;
+
+  ##################################################
+  # WireGuard
+  ##################################################
+  networking.wireguard.interfaces = {
+
+    wg1 = {
+      ips = [ "10.100.100.1/24" ];
+      listenPort = 51820;
+      privateKeyFile = config.age.secrets.wg1_serverVPS-private.path;
+
+      peers = [
+        {
+          # Mikrotik doma wg1
+          publicKey = "hKQn0FYRlpAMedjbfyaQhKcitIiJ+I7wuaHiD1A8CVU=";
+          allowedIPs = [ "10.100.100.100/32" ];
+        }
+      ];
+    };
+
+  };
+}
