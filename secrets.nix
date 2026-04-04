@@ -58,4 +58,19 @@ in
   "VPSsecret/wireguard/wg3-doma-private.age".publicKeys = [
   ntbLenovo
   ];
+
+  ##################################################
+  # 🔐 WIREGUARD (prace KEYS)
+  ##################################################
+  "VPSsecret/wireguard/wg1-prace-private.age".publicKeys = [
+  ntbLenovo
+  ];
+
+  "VPSsecret/wireguard/wg2-prace-private.age".publicKeys = [
+  ntbLenovo
+  ];
+
+  "VPSsecret/wireguard/wg3-prace-private.age".publicKeys = [
+  ntbLenovo
+  ];
 }
