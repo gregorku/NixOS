@@ -20,7 +20,7 @@
       peers = [
         {
           # Mikrotik doma wg1
-          publicKey = "hKQn0FYRlpAMedjbfyaQhKcitIiJ+I7wuaHiD1A8CVU=";
+          publicKey = "ZRRN9IVqc8atE1Cby4k00YKe0bd74N7/TkKZkIybKyk=";
           allowedIPs = [ "10.100.100.100/32" ];
         }
       ];
