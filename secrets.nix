@@ -32,15 +32,15 @@ in
   ##################################################
   # 🔐 WIREGUARD (DOMA KEYS)
   ##################################################
-  "VPSsecret/wireguard/wg1-notebook-private.age".publicKeys = [
+  "VPSsecret/wireguard/wg1-doma-private.age".publicKeys = [
   ntbLenovo
   ];
 
-  "VPSsecret/wireguard/wg2-notebook-private.age".publicKeys = [
+  "VPSsecret/wireguard/wg2-doma-private.age".publicKeys = [
   ntbLenovo
   ];
 
-  "VPSsecret/wireguard/wg3-notebook-private.age".publicKeys = [
+  "VPSsecret/wireguard/wg3-doma-private.age".publicKeys = [
   ntbLenovo
   ];
 }
