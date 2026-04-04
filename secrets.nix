@@ -30,6 +30,21 @@ in
   ];
 
   ##################################################
+  # 🔐 WIREGUARD (SERVER KEYS)
+  ##################################################
+  "VPSsecret/wireguard/wg1_serverVPS-private.age".publicKeys = [
+  serverVPStest
+  ];
+
+  "VPSsecret/wireguard/wg2_serverVPS-private.age".publicKeys = [
+  serverVPStest
+  ];
+
+  "VPSsecret/wireguard/wg3_serverVPS-private.age".publicKeys = [
+  serverVPStest
+  ];
+
+  ##################################################
   # 🔐 WIREGUARD (DOMA KEYS)
   ##################################################
   "VPSsecret/wireguard/wg1-doma-private.age".publicKeys = [
