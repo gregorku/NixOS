@@ -22,6 +22,7 @@
     ../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
     ../../modules/common-networkmanager.nix
+    ../../modules/common-waydroid.nix
   ];
 
   networking.hostName = "ntbLenovo";
