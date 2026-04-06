@@ -150,8 +150,10 @@
   
   
     # 🔐 AGENIX
-    AGENIX_AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
-  };
+    environment.sessionVariables = {
+      AGENIX_AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
+      AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
+    };
 
   # ----------------------
   # 🐱 KITTY (FIX pro SSH + MC)
