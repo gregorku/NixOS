@@ -87,12 +87,17 @@ in
 "VPSsecret/wireguard/wg3-mikrotik-bratrmach-private.age".publicKeys = [ ntbLenovo ];
 
 ##################################################
-# 🔐 WIREGUARD (mikrotik - ntblenovo)
+# 🔐 WIREGUARD (Notebook - ntblenovo)
 ##################################################
-"VPSsecret/wireguard/wg1-mikrotik-ntblenovo-private.age".publicKeys = [ ntbLenovo ];
+"VPSsecret/wireguard/wg1-ntblenovo-private.age".publicKeys = [ ntbLenovo ];
+
+##################################################
+# 🔐 WIREGUARD (Notebook - ntbpracovni)
+##################################################
+"VPSsecret/wireguard/wg1-ntbpracovni-private.age".publicKeys = [ ntbLenovo ];
 
 ##################################################
 # 🔐 WIREGUARD (mikrotik - ntbpracovni)
 ##################################################
-"VPSsecret/wireguard/wg1-mikrotik-ntbpracovni-private.age".publicKeys = [ ntbLenovo ];
+"VPSsecret/wireguard/wg1-mujmobil-private.age".publicKeys = [ ntbLenovo ];
 }
