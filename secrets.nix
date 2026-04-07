@@ -97,7 +97,7 @@ in
 "VPSsecret/wireguard/wg1-ntbpracovni-private.age".publicKeys = [ ntbLenovo ];
 
 ##################################################
-# 🔐 WIREGUARD (mikrotik - ntbpracovni)
+# 🔐 WIREGUARD (Mobil - mujmobil)
 ##################################################
 "VPSsecret/wireguard/wg1-mujmobil-private.age".publicKeys = [ ntbLenovo ];
 }
