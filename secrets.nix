@@ -59,6 +59,13 @@ in
 "VPSsecret/wireguard/wg3-mikrotik-prace-private.age".publicKeys = [ ntbLenovo ];
 
 ##################################################
+# 🔐 WIREGUARD (mikrotik - test)
+##################################################
+"VPSsecret/wireguard/wg1-mikrotik-test-private.age".publicKeys = [ ntbLenovo ];
+"VPSsecret/wireguard/wg2-mikrotik-test-private.age".publicKeys = [ ntbLenovo ];
+"VPSsecret/wireguard/wg3-mikrotik-test-private.age".publicKeys = [ ntbLenovo ];
+
+##################################################
 # 🔐 WIREGUARD (mikrotik - jirkov)
 ##################################################
 "VPSsecret/wireguard/wg1-mikrotik-jirkov-private.age".publicKeys = [ ntbLenovo ];
