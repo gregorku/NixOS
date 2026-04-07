@@ -43,12 +43,13 @@
 
   in {
     nixosConfigurations = {
-      ntbLenovo    = mkHost "ntbLenovo";
-      ntbDell      = mkHost "ntbDell";
-      domaPcServer = mkHost "domaPcServer";
-      VPSServer    = mkHost "VPSServer";
-      test         = mkHost "test";
-      testServer   = mkHost "testServer";
+      ntbLenovo       = mkHost "ntbLenovo";
+      ntbDell         = mkHost "ntbDell";
+      domaPcServer    = mkHost "domaPcServer";
+      VPSServer       = mkHost "VPSServer";
+      testVPSServer   = mkHost "testVPSServer";
+      test            = mkHost "test";
+      testServer      = mkHost "testServer";
     };
   };
 }
