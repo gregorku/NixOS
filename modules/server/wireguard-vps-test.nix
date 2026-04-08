@@ -20,7 +20,7 @@
 
     wg1 = {
       ips = [ "10.100.100.1/24" ];
-      listenPort = 51820;
+      listenPort = 53820;
       privateKeyFile = config.age.secrets.wg1_serverVPS-private.path;
 
       peers = [
@@ -79,7 +79,7 @@
 
     wg2 = {
       ips = [ "10.110.100.1/24" ];
-      listenPort = 51821;
+      listenPort = 53821;
       privateKeyFile = config.age.secrets.wg2_serverVPS-private.path;
 
       peers = [
@@ -123,7 +123,7 @@
 
     wg3 = {
       ips = [ "10.120.100.1/24" ];
-      listenPort = 51822;
+      listenPort = 53822;
       privateKeyFile = config.age.secrets.wg3_serverVPS-private.path;
 
       peers = [
