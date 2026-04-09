@@ -13,97 +13,118 @@
 
       defaults
           log     global
-          mode    http
-          option  httplog
-          option  dontlognull
-          option  forwardfor
-          option  http-server-close
           timeout connect 5s
-          timeout client  30s
-          timeout server  30s
+          timeout client  50s
+          timeout server  50s
 
       # -------------------------
-      # HTTP → HTTPS + ACME
+      # HTTP (port 80)
       # -------------------------
       frontend http
+          mode http
           bind *:80
-          mode http
-
-          # Let's Encrypt challenge
-          acl letsencrypt path_beg /.well-known/acme-challenge/
-          use_backend letsencrypt if letsencrypt
-
-          # redirect všeho ostatního
-          http-request redirect scheme https code 301
-
-      # -------------------------
-      # HTTPS (hlavní vstup)
-      # -------------------------
-      frontend https
-          bind *:443 ssl crt /etc/haproxy/certs/
-          mode http
           option httplog
 
-          # security headers
-          http-response set-header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
-          http-response set-header X-Frame-Options DENY
-          http-response set-header X-Content-Type-Options nosniff
+          use_backend vaultwarden_http        if { hdr(host) -i vault.serveftp.org }
+          use_backend nextcloud_http          if { hdr(host) -i gregor.serveftp.org }
+          use_backend zabbix_http             if { hdr(host) -i zabbix.serveftp.org }
+          use_backend homeassistant_http      if { hdr(host) -i homeassistant.serveftp.org }
+          use_backend homeassistant_net_http  if { hdr(host) -i homeassistant.serveftp.net }
+          use_backend grafana_http            if { hdr(host) -i grafana.serveftp.org }
 
-          # routing podle domén
-          use_backend vaultwarden if { hdr(host) -i vault.serveftp.org }
-          use_backend nextcloud   if { hdr(host) -i gregor.serveftp.org }
-          use_backend zabbix      if { hdr(host) -i zabbix.serveftp.org }
-          use_backend homeassistant if { hdr(host) -i homeassistant.serveftp.org }
-          use_backend homeassistant_net if { hdr(host) -i homeassistant.serveftp.net }
-          use_backend grafana     if { hdr(host) -i grafana.serveftp.org }
-
-          default_backend nextcloud
+          default_backend nextcloud_http
 
       # -------------------------
-      # Backendy
+      # HTTP backends
       # -------------------------
+      backend vaultwarden_http
+          mode http
+          server vaultwarden 200.1.1.200:80
 
-      backend vaultwarden
-          option httpchk GET /
-          server vaultwarden 200.1.1.200:80 check
+      backend nextcloud_http
+          mode http
+          option forwardfor
+          server nextcloud 10.100.100.12:22280 send-proxy-v2
 
-      backend nextcloud
-          option httpchk GET /status.php
-          server nextcloud 120.100.100.12:22280 check
+      backend zabbix_http
+          mode http
+          server zabbix 200.1.1.200:80
 
-      backend zabbix
-          option httpchk GET /
-          server zabbix 200.1.1.200:80 check
+      backend homeassistant_http
+          mode http
+          server homeassistant 10.100.100.100:22080
 
-      backend homeassistant
-          server homeassistant 120.100.100.100:22080 check
+      backend homeassistant_net_http
+          mode http
+          server homeassistant_net 10.100.100.12:23080
 
-      backend homeassistant_net
-          server homeassistant_net 120.100.100.12:23080 check
-
-      backend grafana
-          server grafana 200.1.1.200:80 check
+      backend grafana_http
+          mode http
+          server grafana 200.1.1.200:80
 
       # -------------------------
-      # ACME backend
+      # HTTPS (TCP passthrough)
       # -------------------------
-      backend letsencrypt
-          server local 127.0.0.1:8080
+      frontend https
+          mode tcp
+          bind *:443
+
+          tcp-request inspect-delay 5s
+          tcp-request content accept if { req_ssl_hello_type 1 }
+
+          use_backend vaultwarden_https        if { req_ssl_sni -i vault.serveftp.org }
+          use_backend nextcloud_https          if { req_ssl_sni -i gregor.serveftp.org }
+          use_backend zabbix_https             if { req_ssl_sni -i zabbix.serveftp.org }
+          use_backend homeassistant_https      if { req_ssl_sni -i homeassistant.serveftp.org }
+          use_backend homeassistant_net_https  if { req_ssl_sni -i homeassistant.serveftp.net }
+          use_backend grafana_https            if { req_ssl_sni -i grafana.serveftp.org }
+
+          default_backend nextcloud_https
+
+      # -------------------------
+      # HTTPS backends (různé porty!)
+      # -------------------------
+      backend vaultwarden_https
+          mode tcp
+          server vaultwarden 200.1.1.200:443
+
+      backend nextcloud_https
+          mode tcp
+          server nextcloud 10.100.100.12:22443 send-proxy-v2
+
+      backend zabbix_https
+          mode tcp
+          server zabbix 200.1.1.200:443
+
+      backend homeassistant_https
+          mode tcp
+          server homeassistant 10.100.100.100:22443
+
+      backend homeassistant_net_https
+          mode tcp
+          server homeassistant_net 10.100.100.12:23443
+
+      backend grafana_https
+          mode tcp
+          server grafana 200.1.1.200:443
+
+      # -------------------------
+      # TCP služby (např. Zabbix agent)
+      # -------------------------
+      frontend tcp_zabbix
+          mode tcp
+          bind *:10051
+
+          default_backend zabbix_tcp
+
+      backend zabbix_tcp
+          mode tcp
+          server zabbix 200.1.1.111:10051
     '';
   };
 
-  # adresář pro certy
-  systemd.tmpfiles.rules = [
-    "d /etc/haproxy/certs 0750 haproxy haproxy -"
-  ];
-
-  # generování PEM pro HAProxy
-  system.activationScripts.haproxy-certs = ''
-    mkdir -p /etc/haproxy/certs
-    for d in /var/lib/acme/*; do
-      name=$(basename $d)
-      cat $d/fullchain.pem $d/key.pem > /etc/haproxy/certs/$name.pem
-    done
-    chown -R haproxy:haproxy /etc/haproxy/certs
-  '';
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 80 443 10051 ];
+  };
 }
