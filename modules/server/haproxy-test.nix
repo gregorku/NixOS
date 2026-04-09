@@ -122,9 +122,4 @@
           server zabbix 200.1.1.111:10051
     '';
   };
-
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 80 443 10051 ];
-  };
 }
