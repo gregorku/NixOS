@@ -20,7 +20,7 @@
     # VPS-specific
     ##################################################
     ../../modules/server/incus.nix
-    # ../../modules/server/haproxy.nix
+    # ../../modules/server/haproxy-test.nix
     ../../modules/server/firewall-vps-test.nix
 
     ##################################################
