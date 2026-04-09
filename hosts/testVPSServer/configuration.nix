@@ -27,6 +27,16 @@
     # WireGuard
     ##################################################
     ../../modules/server/wireguard-vps-test.nix
+
+    ##################################################
+    # Haproxy Acme
+    ##################################################
+       ../../modules/server/haproxy-test.nix
+    ../../modules/server/security.nix
+    ../../modules/server/security-test.nix
+    ../../modules/server/acme.nix
+
+    ../../modules/server/profiles/test.nix
   ];
 
   ##################################################

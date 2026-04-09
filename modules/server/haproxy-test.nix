@@ -1,17 +1,15 @@
 { config, pkgs, lib, ... }:
+
 {
   services.haproxy = {
     enable = true;
+
     config = ''
       global
           log /dev/log local0
           log /dev/log local1 notice
           maxconn 10000
-          user  haproxy
-          group haproxy
           daemon
-          ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
-          ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256
 
       defaults
           log     global
@@ -20,85 +18,92 @@
           option  dontlognull
           option  forwardfor
           option  http-server-close
-          timeout connect  5s
+          timeout connect 5s
           timeout client  30s
           timeout server  30s
-          retries 3
 
-      #------------------------------------------------------------
-      # Statistiky – přístupné na portu 8404 (jen z trusted IP)
-      #------------------------------------------------------------
-      listen stats
-          bind *:8404
-          stats enable
-          stats uri /stats
-          stats refresh 10s
-          stats auth admin:ZMENTE_HESLO
-          stats hide-version
-
-      #------------------------------------------------------------
-      # HTTP – přesměrování na HTTPS + ACME challenge
-      #------------------------------------------------------------
-      frontend http_in
+      # -------------------------
+      # HTTP → HTTPS + ACME
+      # -------------------------
+      frontend http
           bind *:80
           mode http
-          acl letsencrypt path_beg /.well-known/acme-challenge/
-          use_backend letsencrypt_be if letsencrypt
-          http-request redirect scheme https unless { ssl_fc }
 
-      #------------------------------------------------------------
-      # HTTPS – routing podle Host hlavičky
-      #------------------------------------------------------------
-      frontend https_in
+          # Let's Encrypt challenge
+          acl letsencrypt path_beg /.well-known/acme-challenge/
+          use_backend letsencrypt if letsencrypt
+
+          # redirect všeho ostatního
+          http-request redirect scheme https code 301
+
+      # -------------------------
+      # HTTPS (hlavní vstup)
+      # -------------------------
+      frontend https
           bind *:443 ssl crt /etc/haproxy/certs/
           mode http
           option httplog
 
-          use_backend cockpit_be  if { hdr(host) -i cockpit.vasdomena.cz }
-          use_backend app1_be     if { hdr(host) -i app1.vasdomena.cz }
-          default_backend cockpit_be
+          # security headers
+          http-response set-header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+          http-response set-header X-Frame-Options DENY
+          http-response set-header X-Content-Type-Options nosniff
 
-      #------------------------------------------------------------
-      # TCP pass-through (volitelné)
-      #------------------------------------------------------------
-      frontend tcp_8443
-          bind *:8443
-          mode tcp
-          option tcplog
-          default_backend cockpit_tcp_be
+          # routing podle domén
+          use_backend vaultwarden if { hdr(host) -i vault.serveftp.org }
+          use_backend nextcloud   if { hdr(host) -i gregor.serveftp.org }
+          use_backend zabbix      if { hdr(host) -i zabbix.serveftp.org }
+          use_backend homeassistant if { hdr(host) -i homeassistant.serveftp.org }
+          use_backend homeassistant_net if { hdr(host) -i homeassistant.serveftp.net }
+          use_backend grafana     if { hdr(host) -i grafana.serveftp.org }
 
-      #------------------------------------------------------------
+          default_backend nextcloud
+
+      # -------------------------
       # Backendy
-      #------------------------------------------------------------
-      backend cockpit_be
-          mode http
+      # -------------------------
+
+      backend vaultwarden
           option httpchk GET /
-          server cockpit 127.0.0.1:9090 check ssl verify none
+          server vaultwarden 200.1.1.200:80 check
 
-      backend cockpit_tcp_be
-          mode tcp
-          server cockpit 127.0.0.1:9090 check
+      backend nextcloud
+          option httpchk GET /status.php
+          server nextcloud 120.100.100.12:22280 check
 
-      # Incus kontejner – příklad (upravte IP dle `incus list`)
-      backend app1_be
-          mode http
-          option httpchk GET /health
-          server app1 10.10.10.10:80 check inter 5s rise 2 fall 3
+      backend zabbix
+          option httpchk GET /
+          server zabbix 200.1.1.200:80 check
 
-      # Let's Encrypt ACME
-      backend letsencrypt_be
-          mode http
-          server certbot 127.0.0.1:8080
+      backend homeassistant
+          server homeassistant 120.100.100.100:22080 check
+
+      backend homeassistant_net
+          server homeassistant_net 120.100.100.12:23080 check
+
+      backend grafana
+          server grafana 200.1.1.200:80 check
+
+      # -------------------------
+      # ACME backend
+      # -------------------------
+      backend letsencrypt
+          server local 127.0.0.1:8080
     '';
   };
 
-  # Adresář pro SSL certifikáty
+  # adresář pro certy
   systemd.tmpfiles.rules = [
     "d /etc/haproxy/certs 0750 haproxy haproxy -"
   ];
 
-  # Certbot pro Let's Encrypt
-  environment.systemPackages = with pkgs; [
-    certbot
-  ];
+  # generování PEM pro HAProxy
+  system.activationScripts.haproxy-certs = ''
+    mkdir -p /etc/haproxy/certs
+    for d in /var/lib/acme/*; do
+      name=$(basename $d)
+      cat $d/fullchain.pem $d/key.pem > /etc/haproxy/certs/$name.pem
+    done
+    chown -R haproxy:haproxy /etc/haproxy/certs
+  '';
 }
