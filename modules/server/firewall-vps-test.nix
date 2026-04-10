@@ -56,11 +56,11 @@
         iifname "incusbr0" accept;
         oifname "incusbr0" accept;
 
-        # WireGuard (všechny)
+        # WireGuard
         iifname { "wg1", "wg2", "wg3" } accept;
         oifname { "wg1", "wg2", "wg3" } accept;
 
-        # DNAT
+        # DNAT traffic
         ct status dnat accept;
 
         limit rate 5/minute log prefix "FW DROP FWD: ";
@@ -76,6 +76,31 @@
 
       chain prerouting {
         type nat hook prerouting priority dstnat; policy accept;
+
+        # ---- WireGuard wg1 ----
+        iifname "wg1" tcp dport 19443 dnat to 200.1.1.100:9443
+        iifname "wg1" tcp dport 19444 dnat to 200.1.1.110:9443
+        iifname "wg1" tcp dport 19447 dnat to 200.1.1.111:9443
+        iifname "wg1" tcp dport 8887  dnat to 200.1.1.200:8887
+        iifname "wg1" tcp dport 8888  dnat to 200.1.1.200:8888
+        iifname "wg1" tcp dport 8889  dnat to 200.1.1.200:8889
+        iifname "wg1" tcp dport 12022 dnat to 200.1.1.200:22
+        iifname "wg1" tcp dport 19200 dnat to 200.1.1.200:9443
+        iifname "wg1" tcp dport 19446 dnat to 200.1.1.120:9443
+        iifname "wg1" tcp dport 3001  dnat to 200.1.1.110:3001
+        iifname "wg1" tcp dport 8080  dnat to 200.1.1.110:8080
+        iifname "wg1" tcp dport 9090  dnat to 200.1.1.111:9090
+        iifname "wg1" tcp dport 9091  dnat to 200.1.1.171:9090
+
+        # ---- WireGuard wg3 ----
+        iifname "wg3" tcp dport 10051 dnat to 200.1.1.111:10051
+
+        # ---- Public interface (ens3) ----
+        iifname "ens3" tcp dport 8182 dnat to 10.110.100.220:8182
+        iifname "ens3" tcp dport 5541 dnat to 10.110.100.220:5541
+        iifname "ens3" tcp dport 8181 dnat to 10.110.100.210:8181
+        iifname "ens3" tcp dport 5540 dnat to 10.110.100.210:5540
+        iifname "ens3" tcp dport 8000 dnat to 10.110.100.200:8000
       }
 
       chain postrouting {
@@ -84,7 +109,7 @@
         # NAT Incus
         ip saddr 10.10.10.0/24 oifname "ens3" masquerade;
 
-        # NAT WireGuard (všechny WG sítě)
+        # NAT WireGuard
         ip saddr 10.100.100.0/24 oifname "ens3" masquerade;
         ip saddr 10.110.100.0/24 oifname "ens3" masquerade;
         ip saddr 10.120.100.0/24 oifname "ens3" masquerade;
