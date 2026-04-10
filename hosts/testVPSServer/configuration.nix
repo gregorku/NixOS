@@ -21,7 +21,7 @@
     ##################################################
     ../../modules/server/incus.nix
     # ../../modules/server/haproxy-test.nix
-    ../../modules/server/firewall-vps-test.nix
+    ../../modules/server/firewall/firewall-vps-test.nix
 
     ##################################################
     # WireGuard
