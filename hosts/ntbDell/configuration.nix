@@ -15,20 +15,17 @@
     ../../modules/common-snapshots.nix
     ../../modules/gpu-intel.nix
 
-    # Notebook-specific power optimizations
     ../../modules/notebook-power.nix
-
     ../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
 
-    # Modul Wireguard
     #../../modules/common-wireguard.nix
     #../../modules/hosts/ntbDell-wireguard.nix
     ../../modules/common-networkmanager.nix
-
   ];
 
   networking.hostName = "ntbDell";
+  networking.hostId = "94fb7b0f";  # Povinné pro ZFS
 
   # ----------------------
   # Lokalizace / Jazyk
@@ -48,14 +45,31 @@
   };
 
   ##################################################
+  # ZFS
+  ##################################################
+
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.devNodes = "/dev/disk/by-id";
+  services.zfs.autoScrub.enable = true;
+
+  ##################################################
+  # LUKS šifrování
+  ##################################################
+
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-uuid/4893827c-78f1-4841-99ef-5805fbc37b06";
+    preLVM = true;
+  };
+
+  ##################################################
   # BOOTLOADER – DUAL BOOT (Windows 11 + NixOS)
   ##################################################
 
   boot.loader.grub = {
     enable = true;
     efiSupport = true;
-    device = "nodev";          # EFI systém, ne MBR
-    useOSProber = true;        # najde Windows Boot Manager
+    device = "nodev";
+    useOSProber = true;
   };
 
   boot.loader.efi = {
@@ -66,5 +80,5 @@
   # POVINNÉ – NIKDY NEMĚNIT PO INSTALACI
   ##################################################
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.11";
 }
