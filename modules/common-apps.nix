@@ -107,12 +107,11 @@
   # ======================
   # 🌐 LIBREWOLF (DEKLARATIVNĚ)
   # ======================
-  programs.librewolf = {
+  programs.firefox = {
     enable = true;
 
-    settings = {
-      "intl.locale.requested" = "cs";
-      "intl.accept_languages" = "cs,en-US";
+    policies = {
+      RequestedLocales = [ "cs" ];
     };
   };
 
