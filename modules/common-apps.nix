@@ -39,8 +39,8 @@
     # 🌐 INTERNET / PROHLÍŽEČE
     # ======================
     vivaldi
-    librewolf
     brave
+    # ❌ librewolf odsud pryč
 
     # ======================
     # 🌐 SÍŤ / REMOTE
@@ -105,22 +105,27 @@
   ];
 
   # ======================
+  # 🌐 LIBREWOLF (DEKLARATIVNĚ)
+  # ======================
+  programs.librewolf = {
+    enable = true;
+
+    settings = {
+      "intl.locale.requested" = "cs";
+      "intl.accept_languages" = "cs,en-US";
+    };
+  };
+
+  # ======================
   # 🔤 FONTY
   # ======================
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
-
-    # Microsoft kompatibilita
     corefonts
-
-    # 🔥 Calibri / Cambria náhrady
     carlito
     caladea
   ];
 
-  # ======================
-  # 🔥 DEFAULT FONTY (SYSTEM)
-  # ======================
   fonts.fontconfig.defaultFonts = {
     serif = [ "Liberation Serif" "Carlito" ];
     sansSerif = [ "Carlito" "Liberation Sans" ];
