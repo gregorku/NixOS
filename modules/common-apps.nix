@@ -40,7 +40,6 @@
     # ======================
     vivaldi
     brave
-    # ❌ librewolf odsud pryč
 
     # ======================
     # 🌐 SÍŤ / REMOTE
@@ -88,7 +87,7 @@
     kdePackages.kate
 
     # ======================
-    # 📄 PROHLÍŽEČE
+    # 📄 PROHLÍŽEČE DOKUMENTŮ
     # ======================
     kdePackages.okular
 
@@ -102,18 +101,21 @@
     # ======================
     hunspell
     hunspellDicts.cs_CZ
+
   ];
 
   # ======================
-  # 🌐 LIBREWOLF (DEKLARATIVNĚ)
+  # 🌐 LIBREWOLF — deklarativně přes home-manager
   # ======================
-  programs.firefox = {
-    enable = true;
-
-    policies = {
-      RequestedLocales = [ "cs" ];
-    };
-  };
+  # Pozor: tento blok patří do home-manager konfigurace (home.nix nebo podobný soubor),
+  # ne do system-level modulu. Pokud ho máš zde, přesuň do home-manager modulu uživatele.
+  # programs.librewolf = {
+  #   enable = true;
+  #   settings = {
+  #     "intl.locale.requested"                    = "cs";
+  #     "privacy.resistFingerprinting.spoofLocale" = false;
+  #   };
+  # };
 
   # ======================
   # 🔤 FONTY
@@ -126,8 +128,8 @@
   ];
 
   fonts.fontconfig.defaultFonts = {
-    serif = [ "Liberation Serif" "Carlito" ];
-    sansSerif = [ "Carlito" "Liberation Sans" ];
-    monospace = [ "FiraCode Nerd Font" ];
+    serif      = [ "Liberation Serif" "Carlito" ];
+    sansSerif  = [ "Carlito" "Liberation Sans" ];
+    monospace  = [ "FiraCode Nerd Font" ];
   };
 }
