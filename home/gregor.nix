@@ -9,10 +9,11 @@
   # 🌐 LIBREWOLF
   # ======================
   programs.librewolf = {
-    enable = true;
-    settings = {
-      "intl.locale.requested"                    = "cs";
-      "privacy.resistFingerprinting.spoofLocale" = false;
-    };
+  enable = true;
+  settings = {
+    "intl.locale.requested"                    = "cs";
+    "intl.multilingual.enabled"                = false;
+    "privacy.resistFingerprinting.spoofLocale" = false;
   };
+};
 }
