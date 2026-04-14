@@ -134,7 +134,7 @@
 
     # 🧑‍💻 NIX vývojové nástroje (VSCodium Nix IDE)
     nixd
-    nixfmt-rfc-style
+    nixfmt # Původně nixfmt-rfc-style, nyní sjednoceno
   ];
 
   # 🔥 FIX ikony pro GTK aplikace (virt-manager) - správný způsob v NixOS

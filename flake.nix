@@ -2,13 +2,16 @@
   description = "NixOS configuration for multiple devices";
 
   inputs = {
+    # Stabilní větev pro servery
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    
+    # Unstable větev pro notebooky (aktuálně směřuje k 26.05)
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # home-manager
+    # Home Manager - přepnuto na master (unstable), aby seděl k Nixpkgs 26.05
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     # nix-flatpak
@@ -22,13 +25,14 @@
   let
     system = "x86_64-linux";
 
-    # unstable definice pro specialArgs zůstává (pro případ, že ji potřebuješ u serverů)
+    # Definice balíčků pro unstable (využívá se v specialArgs)
     unstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
     };
 
-    # 🔥 ZMĚNA: mkHost teď přijímá i 'pkgsInput' (což bude buď nixpkgs nebo nixpkgs-unstable)
+    # Pomocná funkce pro definici hostitele
+    # pkgsInput určuje, zda bude systém postaven na stable nebo unstable větvi
     mkHost = host: pkgsInput: pkgsInput.lib.nixosSystem {
       inherit system;
 
@@ -55,13 +59,13 @@
 
   in {
     nixosConfigurations = {
-      # 💻 DESKTOPY A NOTEBOOKY (UNSTABLE)
-      # Předáváme nixpkgs-unstable
+      # 💻 DESKTOPY A NOTEBOOKY (UNSTABLE - KDE Plasma 6.6+)
+      # Tyto stroje poletí na nejnovější vlně balíčků
       ntbLenovo       = mkHost "ntbLenovo" nixpkgs-unstable;
       ntbDell         = mkHost "ntbDell" nixpkgs-unstable;
 
-      # 🖥️ SERVERY (STABLE)
-      # Předáváme klasické nixpkgs
+      # 🖥️ SERVERY (STABLE - Konzervativní 25.11)
+      # Zde zůstává maximální stabilita a prověřené verze
       domaPcServer    = mkHost "domaPcServer" nixpkgs;
       VPSServer       = mkHost "VPSServer" nixpkgs;
       testVPSServer   = mkHost "testVPSServer" nixpkgs;
