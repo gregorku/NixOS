@@ -100,7 +100,8 @@
     # 🌍 JAZYKY / DICTIONARIES
     # ======================
     hunspell
-    hunspellDicts.cs_CZ
+    hunspellDicts.cs_CZ  # Kontrola pravopisu
+    hyphenDicts.cs_CZ    # Automatické dělení slov (důležité pro LibreOffice)
 
   ];
 
