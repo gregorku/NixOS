@@ -22,17 +22,14 @@
   let
     system = "x86_64-linux";
 
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
-
+    # unstable definice pro specialArgs zůstává (pro případ, že ji potřebuješ u serverů)
     unstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
     };
 
-    mkHost = host: nixpkgs.lib.nixosSystem {
+    # 🔥 ZMĚNA: mkHost teď přijímá i 'pkgsInput' (což bude buď nixpkgs nebo nixpkgs-unstable)
+    mkHost = host: pkgsInput: pkgsInput.lib.nixosSystem {
       inherit system;
 
       specialArgs = {
@@ -58,13 +55,18 @@
 
   in {
     nixosConfigurations = {
-      ntbLenovo       = mkHost "ntbLenovo";
-      ntbDell         = mkHost "ntbDell";
-      domaPcServer    = mkHost "domaPcServer";
-      VPSServer       = mkHost "VPSServer";
-      testVPSServer   = mkHost "testVPSServer";
-      test            = mkHost "test";
-      testServer      = mkHost "testServer";
+      # 💻 DESKTOPY A NOTEBOOKY (UNSTABLE)
+      # Předáváme nixpkgs-unstable
+      ntbLenovo       = mkHost "ntbLenovo" nixpkgs-unstable;
+      ntbDell         = mkHost "ntbDell" nixpkgs-unstable;
+
+      # 🖥️ SERVERY (STABLE)
+      # Předáváme klasické nixpkgs
+      domaPcServer    = mkHost "domaPcServer" nixpkgs;
+      VPSServer       = mkHost "VPSServer" nixpkgs;
+      testVPSServer   = mkHost "testVPSServer" nixpkgs;
+      test            = mkHost "test" nixpkgs;
+      testServer      = mkHost "testServer" nixpkgs;
     };
   };
 }
