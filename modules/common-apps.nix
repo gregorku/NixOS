@@ -14,6 +14,8 @@
     duf
     fastfetch
     usbutils
+    pciutils      # 👈 lspci (hardware debug)
+    alsa-utils    # 👈 aplay, amixer (audio debug)
     system-config-printer
 
     # ======================
@@ -100,16 +102,14 @@
     # 🌍 JAZYKY / DICTIONARIES
     # ======================
     hunspell
-    hunspellDicts.cs_CZ  # Kontrola pravopisu
-    hyphenDicts.cs_CZ    # Automatické dělení slov (důležité pro LibreOffice)
-
+    hunspellDicts.cs_CZ
+    hyphenDicts.cs_CZ
   ];
 
   # ======================
   # 🌐 LIBREWOLF — deklarativně přes home-manager
   # ======================
-  # Pozor: tento blok patří do home-manager konfigurace (home.nix nebo podobný soubor),
-  # ne do system-level modulu. Pokud ho máš zde, přesuň do home-manager modulu uživatele.
+  # Tento blok patří do home-manager konfigurace (home.nix), ne sem.
   # programs.librewolf = {
   #   enable = true;
   #   settings = {
