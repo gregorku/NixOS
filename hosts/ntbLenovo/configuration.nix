@@ -131,6 +131,8 @@
 
     nixd
     nixfmt
+
+    alsa-utils
   ];
 
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];
@@ -185,14 +187,17 @@
 
   # ----------------------
   # 🔊 AMD Audio fix (Legion 5 ACH6H)
+  # PCI: 1022:15e3 Renoir HD Audio + 1022:15e2 ACP Coprocessor
   # ----------------------
+  hardware.firmware = [ pkgs.sof-firmware ];
+
   boot.blacklistedKernelModules = [
-    "snd_hda_intel"
+    "snd_pci_acp5x"
     "snd_rn_pci_acp3x"
   ];
 
   boot.kernelModules = [
-    "snd_pci_acp5x"
+    "snd_hda_intel"
   ];
 
   boot.kernelParams = [
@@ -216,8 +221,6 @@
   # ----------------------
   # 🔧 SYSTEM
   # ----------------------
-
-  # 🔥 KLÍČOVÝ FIX PRO AMD AUDIO
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.libinput.enable = true;
