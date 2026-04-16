@@ -97,6 +97,7 @@
     # 🗄️ DATABASE
     # ======================
     dbeaver-bin
+    mqtt-exporter
 
     # ======================
     # 🌍 JAZYKY / DICTIONARIES
