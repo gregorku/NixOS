@@ -16,12 +16,12 @@
   # Moderní audio stack: PipeWire
   # ======================
   services.pipewire = {
-    enable = true;
-    audio.enable = true;
-    pulse.enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    jack.enable = true;
+    enable = true;            # PipeWire daemon
+    audio.enable = true;      # ALSA + Pulse kompatibilita
+    pulse.enable = true;      # PulseAudio emulace
+    alsa.enable = true;       # ALSA zařízení
+    alsa.support32Bit = true; # 32-bit aplikace
+    jack.enable = true;       # JACK (pro audio tools)
   };
 
   # ======================
@@ -29,9 +29,15 @@
   # ======================
   security.rtkit.enable = true;
 
-  # ❌ pryč:
-  # boot.kernelModules = [ "snd_hda_intel" ];
+  # ======================
+  # Audio tools (debug)
+  # ======================
+  environment.systemPackages = with pkgs; [
+    alsa-utils   # poskytuje aplay, amixer atd.
+  ];
 
-  # ✅ správné chování driveru
+  # ======================
+  # Intel audio driver (AUTO režim)
+  # ======================
   boot.kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
 }
