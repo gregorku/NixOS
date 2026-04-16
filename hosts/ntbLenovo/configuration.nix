@@ -184,6 +184,22 @@
   };
 
   # ----------------------
+  # 🔊 AMD Audio fix (Legion 5 ACH6H)
+  # ----------------------
+  boot.blacklistedKernelModules = [
+    "snd_hda_intel"
+    "snd_rn_pci_acp3x"
+  ];
+
+  boot.kernelModules = [
+    "snd_pci_acp5x"
+  ];
+
+  boot.kernelParams = [
+    "snd_hda_intel.dmic_detect=0"
+  ];
+
+  # ----------------------
   # 🔧 NIX OPTIMALIZACE
   # ----------------------
   nix.settings = {
@@ -203,8 +219,6 @@
 
   # 🔥 KLÍČOVÝ FIX PRO AMD AUDIO
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  boot.kernelParams = [ "pci=nocrs" ];
 
   services.libinput.enable = true;
 

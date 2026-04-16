@@ -22,24 +22,11 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     jack.enable = true;
+    wireplumber.enable = true;
   };
 
   # ======================
   # Realtime audio permissions
   # ======================
   security.rtkit.enable = true;
-
-  # ======================
-  # Kernel moduly (HDA fallback)
-  # ======================
-  boot.kernelModules = [
-    "snd_hda_intel"
-  ];
-
-  # ======================
-  # AMD fix (vypnutí ACP / DMIC)
-  # ======================
-  boot.kernelParams = [
-    "snd_hda_intel.dmic_detect=0"
-  ];
 }
