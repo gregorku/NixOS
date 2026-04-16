@@ -16,12 +16,12 @@
   # Moderní audio stack: PipeWire
   # ======================
   services.pipewire = {
-    enable = true;            # PipeWire daemon
-    audio.enable = true;      # ALSA + Pulse kompatibilita
-    pulse.enable = true;      # PulseAudio emulace
-    alsa.enable = true;       # ALSA zařízení
-    alsa.support32Bit = true; # 32-bit aplikace
-    jack.enable = true;       # JACK (pro audio tools)
+    enable = true;
+    audio.enable = true;
+    pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    jack.enable = true;
   };
 
   # ======================
@@ -30,17 +30,16 @@
   security.rtkit.enable = true;
 
   # ======================
-  # Kernel moduly pro audio (AMD + fallback)
+  # Kernel moduly (HDA fallback)
   # ======================
   boot.kernelModules = [
-    "snd_hda_intel"   # fallback + HDMI + Intel
-    "snd_acp3x"       # AMD ACP
-    "snd_pci_acp3x"   # AMD ACP PCI
+    "snd_hda_intel"
   ];
 
   # ======================
-  # Kernel parametry
+  # AMD fix (vypnutí ACP / DMIC)
   # ======================
-  # ⚠️ Intel parametr jsme odstranili → byl problém pro AMD
-  # boot.kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
+  boot.kernelParams = [
+    "snd_hda_intel.dmic_detect=0"
+  ];
 }
