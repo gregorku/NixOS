@@ -5,6 +5,7 @@
   # Firmware pro audio zařízení
   # ======================
   hardware.enableRedistributableFirmware = true;
+  hardware.enableAllFirmware = true;
 
   # ======================
   # Vypnout starý PulseAudio
@@ -15,12 +16,12 @@
   # Moderní audio stack: PipeWire
   # ======================
   services.pipewire = {
-    enable = true;            # spustí PipeWire
-    audio.enable = true;      # ALSA + Pulse kompatibilita
-    pulse.enable = true;      # emulace PulseAudio
-    alsa.enable = true;       # ALSA zařízení
-    alsa.support32Bit = true; # 32-bit aplikace
-    jack.enable = true;       # JACK pro profi audio
+    enable = true;
+    audio.enable = true;
+    pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    jack.enable = true;
   };
 
   # ======================
@@ -28,8 +29,9 @@
   # ======================
   security.rtkit.enable = true;
 
-  # ======================
-  # Doporučený kernel modul pro Intel/AMD audio
-  # ======================
-  boot.kernelModules = [ "snd_hda_intel" ];
+  # ❌ pryč:
+  # boot.kernelModules = [ "snd_hda_intel" ];
+
+  # ✅ správné chování driveru
+  boot.kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
 }
