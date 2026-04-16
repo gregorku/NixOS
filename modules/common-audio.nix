@@ -29,9 +29,18 @@
   # ======================
   security.rtkit.enable = true;
 
+  # ======================
+  # Kernel moduly pro audio (AMD + fallback)
+  # ======================
+  boot.kernelModules = [
+    "snd_hda_intel"   # fallback + HDMI + Intel
+    "snd_acp3x"       # AMD ACP
+    "snd_pci_acp3x"   # AMD ACP PCI
+  ];
 
   # ======================
-  # Intel audio driver (AUTO režim)
+  # Kernel parametry
   # ======================
-  boot.kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
+  # ⚠️ Intel parametr jsme odstranili → byl problém pro AMD
+  # boot.kernelParams = [ "snd_intel_dspcfg.dsp_driver=3" ];
 }
