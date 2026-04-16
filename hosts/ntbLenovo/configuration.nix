@@ -55,7 +55,6 @@
       ${pkgs.zoxide}/bin/zoxide init fish | source
       ${pkgs.fzf}/bin/fzf --fish | source
 
-      # 🔥 FIX pro SSH (MC, vim, šipky)
       if set -q SSH_CONNECTION
           set -gx TERM xterm-256color
       end
@@ -76,7 +75,6 @@
 
   environment.etc."starship.toml".text = ''
     add_newline = false
-
     format = "$username$hostname $directory $git_branch $git_status $cmd_duration $character"
 
     [username]
@@ -128,35 +126,29 @@
     tmux
     lazygit
 
-    # 🔥 FIX GTK aplikace v KDE (virt-manager, gimp, atd.)
     kdePackages.kde-gtk-config
     gsettings-desktop-schemas
 
-    # 🧑‍💻 NIX vývojové nástroje (VSCodium Nix IDE)
     nixd
-    nixfmt # Původně nixfmt-rfc-style, nyní sjednoceno
+    nixfmt
   ];
 
-  # 🔥 FIX ikony pro GTK aplikace (virt-manager) - správný způsob v NixOS
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];
 
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
     EDITOR = "nano";
     SAL_USE_VCLPLUGIN = "kf6";
-
-    # 🔥 FIX pro GTK2 aplikace (virt-manager ikony)
     GTK2_RC_FILES = "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
   };
-  
-  # 🔐 AGENIX
+
   environment.sessionVariables = {
     AGENIX_AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
     AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
   };
 
   # ----------------------
-  # 🐱 KITTY (FIX pro SSH + MC)
+  # 🐱 KITTY
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
@@ -170,7 +162,6 @@
     copy_on_select yes
     scrollback_lines 10000
 
-    # 🔥 KLÍČOVÝ FIX
     term xterm-256color
     enable_kitty_keyboard_protocol no
 
@@ -209,7 +200,12 @@
   # ----------------------
   # 🔧 SYSTEM
   # ----------------------
+
+  # 🔥 KLÍČOVÝ FIX PRO AMD AUDIO
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.kernelParams = [ "pci=nocrs" ];
+
   services.libinput.enable = true;
 
   boot.loader.systemd-boot.enable = true;
