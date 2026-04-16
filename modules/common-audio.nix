@@ -29,12 +29,6 @@
   # ======================
   security.rtkit.enable = true;
 
-  # ======================
-  # Audio tools (debug)
-  # ======================
-  environment.systemPackages = with pkgs; [
-    alsa-utils   # poskytuje aplay, amixer atd.
-  ];
 
   # ======================
   # Intel audio driver (AUTO režim)
