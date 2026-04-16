@@ -22,6 +22,8 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     jack.enable = true;
+
+    # 🔥 důležité pro unstable / KDE 6
     wireplumber.enable = true;
   };
 

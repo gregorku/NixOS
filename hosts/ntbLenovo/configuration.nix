@@ -132,7 +132,6 @@
     nixd
     nixfmt
 
-    alsa-utils
   ];
 
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];
