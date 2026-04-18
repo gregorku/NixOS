@@ -221,6 +221,7 @@
   # ----------------------
   # 🔧 SYSTEM
   # ----------------------
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.libinput.enable = true;
@@ -228,6 +229,14 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # 🧠 Lepší odezva při velkém zápisu (řeší lagy při kopírování)
+  boot.kernel.sysctl = {
+    "vm.dirty_background_ratio" = 3;
+    "vm.dirty_ratio" = 6;
+    "vm.dirty_expire_centisecs" = 3000;
+    "vm.dirty_writeback_centisecs" = 500;
+  };
 
   system.stateVersion = "25.11";
 }
