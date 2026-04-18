@@ -172,22 +172,36 @@
   '';
 
   # ----------------------
-  # disk DataLinux
+  # 💾 disk DataLinux (LUKS + Btrfs)
   # ----------------------
+
+  # 🔐 LUKS auto unlock
+  boot.initrd.luks.devices."data_crypt" = {
+    device = "/dev/disk/by-uuid/b56c0b20-f566-44b5-8f81-54bbcd61cf10";
+    keyFile = "/root/keys/data.key";
+    allowDiscards = true;
+  };
+
+  # 🔑 keyfile dostupný v initrd
+  boot.initrd.secrets = {
+    "/root/keys/data.key" = /root/keys/data.key;
+  };
+
+  # 📂 mount DataLinux (stejné místo jako dřív)
   fileSystems."/run/media/gregor/DataLinux" = {
-    device = "/dev/disk/by-uuid/b38e75c9-a885-4713-aa6f-d5ea8a0fde1a";
+    device = "/dev/mapper/data_crypt";
     fsType = "btrfs";
     options = [
       "compress=zstd"
       "noatime"
       "space_cache=v2"
       "nofail"
+      "commit=120"
     ];
   };
 
   # ----------------------
   # 🔊 AMD Audio fix (Legion 5 ACH6H)
-  # PCI: 1022:15e3 Renoir HD Audio + 1022:15e2 ACP Coprocessor
   # ----------------------
   hardware.firmware = [ pkgs.sof-firmware ];
 
@@ -230,7 +244,7 @@
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # 🧠 Lepší odezva při velkém zápisu (řeší lagy při kopírování)
+  # 🧠 Lepší odezva při velkém zápisu
   boot.kernel.sysctl = {
     "vm.dirty_background_ratio" = 3;
     "vm.dirty_ratio" = 6;
