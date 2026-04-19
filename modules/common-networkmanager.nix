@@ -14,6 +14,8 @@
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
+    reflector = true;
+    allowInterfaces = [ "wlp4s0" "incusbr0" ];
   };
 
   # ----------------------
