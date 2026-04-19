@@ -21,6 +21,7 @@
 
     ../../modules/notebook-power.nix
     ../../modules/common-virtualization.nix
+    ../../modules/common-incus.nix  
     ../../modules/common-swap.nix
 
     #../../modules/common-wireguard.nix

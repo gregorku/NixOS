@@ -68,6 +68,7 @@
     # 🎬 MULTIMÉDIA / GRAFIKA
     # ======================
     vlc
+    haruna
     xnviewmp
     krita
     gimp
