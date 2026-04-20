@@ -1,26 +1,22 @@
 { config, pkgs, lib, ... }:
 
+let
+  wifiIfaces =
+    builtins.filter (iface: lib.hasPrefix "wlp" iface)
+    (builtins.attrNames config.networking.interfaces);
+in
 {
-  # ----------------------
-  # NetworkManager
-  # ----------------------
   networking.networkmanager.enable = true;
   networking.useNetworkd = false;
 
-  # ----------------------
-  # mDNS / Service discovery
-  # ----------------------
   services.avahi = {
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
     reflector = true;
-    allowInterfaces = [ "wlp4s0" "incusbr0" ];
+    allowInterfaces = wifiIfaces ++ [ "incusbr0" ];
   };
 
-  # ----------------------
-  # Síťové nástroje a VPN
-  # ----------------------
   environment.systemPackages = with pkgs; [
     networkmanager
     wireguard-tools
@@ -30,8 +26,5 @@
     vpn-slice
   ];
 
-  # ----------------------
-  # Uživatel může spravovat síť
-  # ----------------------
   users.users.gregor.extraGroups = [ "networkmanager" ];
 }
