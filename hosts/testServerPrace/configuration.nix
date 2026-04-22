@@ -69,6 +69,7 @@ fsType = "zfs";
 
 networking.hostName = "nixos-server";
 networking.networkmanager.enable = true;
+networking.hostId = "7a23ccfe";
 
 # ─────────────────────────────────────
 
