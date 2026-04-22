@@ -46,6 +46,7 @@
     curl
     wget
     htop
+    mc
   ];
 
   # Uživatel
