@@ -71,6 +71,7 @@
       testVPSServer   = mkHost "testVPSServer" nixpkgs;
       test            = mkHost "test" nixpkgs;
       testServer      = mkHost "testServer" nixpkgs;
+      testServerPrace = mkHost "testServerPrace" nixpkgs;
     };
   };
 }
