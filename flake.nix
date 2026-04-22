@@ -2,14 +2,20 @@
   description = "NixOS configuration for multiple devices";
 
   inputs = {
-    # Stabilní větev pro servery
+    # 🖥️ Stable větev pro servery
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     
-    # Unstable větev pro notebooky (aktuálně směřuje k 26.05)
+    # 💻 Unstable větev pro notebooky
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Home Manager - přepnuto na master (unstable), aby seděl k Nixpkgs 26.05
-    home-manager = {
+    # ✅ Home Manager - STABLE (pro servery)
+    home-manager-stable = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # ✅ Home Manager - UNSTABLE (pro notebooky)
+    home-manager-unstable = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
@@ -21,57 +27,57 @@
     agenix.url = "github:ryantm/agenix";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nix-flatpak, agenix, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager-stable, home-manager-unstable, nix-flatpak, agenix, ... }@inputs:
   let
     system = "x86_64-linux";
 
-    # Definice balíčků pro unstable (využívá se v specialArgs)
+    # 📦 Unstable balíčky (pro sdílení např. v Home Manageru)
     unstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
     };
 
-    # Pomocná funkce pro definici hostitele
-    # pkgsInput určuje, zda bude systém postaven na stable nebo unstable větvi
-    mkHost = host: pkgsInput: pkgsInput.lib.nixosSystem {
-      inherit system;
+    # 🧠 Funkce pro vytvoření hosta
+    mkHost = host: pkgsInput: hmInput:
+      pkgsInput.lib.nixosSystem {
+        inherit system;
 
-      specialArgs = {
-        inherit inputs unstable;
+        specialArgs = {
+          inherit inputs unstable;
+        };
+
+        modules = [
+          ./hosts/${host}/configuration.nix
+
+          # 🏠 Home Manager
+          hmInput.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit unstable; };
+
+            home-manager.users.gregor = import ./home/gregor.nix;
+          }
+
+          # 🔐 agenix
+          agenix.nixosModules.default
+        ];
       };
-
-      modules = [
-        ./hosts/${host}/configuration.nix
-
-        # home-manager modul
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit unstable; };
-          home-manager.users.gregor = import ./home/gregor.nix;
-        }
-
-        # agenix modul
-        agenix.nixosModules.default
-      ];
-    };
 
   in {
     nixosConfigurations = {
-      # 💻 DESKTOPY A NOTEBOOKY (UNSTABLE - KDE Plasma 6.6+)
-      # Tyto stroje poletí na nejnovější vlně balíčků
-      ntbLenovo       = mkHost "ntbLenovo" nixpkgs-unstable;
-      ntbDell         = mkHost "ntbDell" nixpkgs-unstable;
 
-      # 🖥️ SERVERY (STABLE - Konzervativní 25.11)
-      # Zde zůstává maximální stabilita a prověřené verze
-      domaPcServer    = mkHost "domaPcServer" nixpkgs;
-      VPSServer       = mkHost "VPSServer" nixpkgs;
-      testVPSServer   = mkHost "testVPSServer" nixpkgs;
-      test            = mkHost "test" nixpkgs;
-      testServer      = mkHost "testServer" nixpkgs;
-      testServerPrace = mkHost "testServerPrace" nixpkgs;
+      # 💻 NOTEBOOKY (UNSTABLE)
+      ntbLenovo = mkHost "ntbLenovo" nixpkgs-unstable home-manager-unstable;
+      ntbDell   = mkHost "ntbDell" nixpkgs-unstable home-manager-unstable;
+
+      # 🖥️ SERVERY (STABLE)
+      domaPcServer    = mkHost "domaPcServer" nixpkgs home-manager-stable;
+      VPSServer       = mkHost "VPSServer" nixpkgs home-manager-stable;
+      testVPSServer   = mkHost "testVPSServer" nixpkgs home-manager-stable;
+      test            = mkHost "test" nixpkgs home-manager-stable;
+      testServer      = mkHost "testServer" nixpkgs home-manager-stable;
+      testServerPrace = mkHost "testServerPrace" nixpkgs home-manager-stable;
     };
   };
 }
