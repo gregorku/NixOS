@@ -1,150 +1,61 @@
-{ config, pkgs, lib, inputs, ... }:
-{
+{ config, lib, pkgs, ... }: {
+
   imports = [
     ./hardware-configuration.nix
-
-    ##################################################
-    # Common – sdílené moduly
-    ##################################################
-    ../../modules/common-base.nix
-    ../../modules/common-security.nix
-    ../../modules/common-swap.nix
-
-    ##################################################
-    # Server-only moduly
-    ##################################################
-    ../../modules/server/serverVPS-app.nix
-    ../../modules/server/cockpit.nix
-
-    ##################################################
-    # VPS-specific
-    ##################################################
-    ../../modules/server/incus.nix
-    # ../../modules/server/haproxy-test.nix
-    ../../modules/server/firewall/firewall-vps-test.nix
-
-    ##################################################
-    # WireGuard
-    ##################################################
-    ../../modules/server/wireguard-vps-test.nix
-
-    ##################################################
-    # Haproxy
-    ##################################################
-    ../../modules/server/haproxy-test.nix
-    #../../modules/server/security.nix
-    #../../modules/server/security-test.nix
-    #../../modules/server/acme.nix
-
-    #../../modules/server/profiles/test.nix
   ];
 
-  ##################################################
-  # agenix + age
-  ##################################################
-  environment.systemPackages = [
-    pkgs.age
-    inputs.agenix.packages.${pkgs.system}.default
-  ];
-
-  # kde má agenix hledat private key
-  age.identityPaths = [ "/root/.config/age/keys.txt" ];
-
-  ##################################################
-  # AGENTIX SECRET (NOVÉ 🔥)
-  ##################################################
-  age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
-
-  # zpřístupnění do systému
-  environment.etc."test-secret".source =
-    config.age.secrets.test-secret.path;
-
-  ##################################################
-  # Host
-  ##################################################
-  networking.hostName = "VPSServer";
-  networking.hostId = "ab12cd34";
-
-  ##################################################
-  # Síť
-  ##################################################
-  networking.useDHCP = false;
-  systemd.network.enable = true;
-
-  systemd.network.networks."10-wan" = {
-    matchConfig.Name = "ens3";
-    networkConfig = {
-      DHCP = "yes";
-      IPv6AcceptRA = true;
-    };
-    dhcpV4Config.RouteMetric = 100;
+  # Bootloader
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev";
+    efiSupport = true;
+    enableCryptodisk = true;
+  };
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot/efi";
   };
 
-  ##################################################
-  # Kernel
-  ##################################################
-  boot.kernelModules = [
-    "br_netfilter"
-    "overlay"
-    "nf_conntrack"
-  ];
-
-  ##################################################
-  # Uživatelé
-  ##################################################
-  users.users.gregor = {
-    isNormalUser = true;
-    description  = "Server administrator";
-    extraGroups  = [ "wheel" "incus-admin" ];
-    shell        = pkgs.bashInteractive;
-    linger       = true;
-    initialPassword = "zmenit"; # změň ASAP
-
-    openssh.authorizedKeys.keys = [
-      # TODO: přesunout do agenix později
-      "ssh-rsa AAAAB3NzaC1yc2E..."
-    ];
+  # LUKS
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-uuid/bdf93ac1-e5a0-4099-8f49-00a884378a43";
+    preLVM = true;
+    keyFile = "/crypto_keyfile.bin";
   };
 
-  ##################################################
-  # Lokalizace
-  ##################################################
-  time.timeZone = "Europe/Prague";
-  console.keyMap = "cz";
-  i18n.defaultLocale = "cs_CZ.UTF-8";
+  boot.initrd.secrets = {
+    "/crypto_keyfile.bin" = "/boot/crypto_keyfile.bin";
+  };
+  # Hostname
+  networking.hostName = "nixos-server";
+  networking.networkmanager.enable = true;
 
-  ##################################################
-  # Bootloader (UEFI)
-  ##################################################
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
-
-  ##################################################
-  # SSH (dočasně otevřené)
-  ##################################################
+  # SSH
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "yes";
+      PermitRootLogin = "no";
       PasswordAuthentication = true;
-      X11Forwarding = false;
     };
   };
 
-  ##################################################
-  # Nix
-  ##################################################
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+  # Základní balíčky
+  environment.systemPackages = with pkgs; [
+    git
+    nano
+    curl
+    wget
+    htop
+  ];
+
+  # Uživatel
+  users.users.admin = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ];
+    initialPassword = "gregorku";
   };
 
-  nix.settings.auto-optimise-store = true;
+  security.sudo.wheelNeedsPassword = true;
 
-  ##################################################
-  # Version
-  ##################################################
   system.stateVersion = "25.11";
 }
