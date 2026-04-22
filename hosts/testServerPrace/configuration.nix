@@ -55,6 +55,12 @@
     extraGroups = [ "wheel" "networkmanager" ];
     initialPassword = "gregorku";
   };
+  # uživatel gregor
+  users.users.gregor = {
+    isNormalUser = true;
+    description = "Gregor";
+    extraGroups = [ "wheel" "networkmanager" ];
+  };
 
   security.sudo.wheelNeedsPassword = true;
 
