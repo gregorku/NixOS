@@ -7,6 +7,7 @@
     # 📦 SYSTÉM / ZÁKLAD
     # ======================
     git
+    nvd
     unstable.vscodium
     nano
     mc
