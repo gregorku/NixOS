@@ -12,6 +12,7 @@
     ../../modules/server/server-apps.nix
     ../../modules/server/server-locale.nix
     ../../modules/server/server-zfs.nix
+    ../../modules/server/incus.nix
   ];
 
   # ─────────────────────────────────────
@@ -46,7 +47,7 @@
   # 🧠 ZFS (pool "tank")
   # ─────────────────────────────────────
   # POZOR: základ řeší server-zfs.nix
-  boot.zfs.extraPools = [ "tank" ];
+  boot.zfs.extraPools = [ "zfs-pool-incus" ];
 
   # ─────────────────────────────────────
   # 🌐 SÍŤ
