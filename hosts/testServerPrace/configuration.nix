@@ -51,15 +51,20 @@ boot.initrd.secrets = {
 # ─────────────────────────────────────
 
 boot.supportedFilesystems = [ "zfs" ];
-
 boot.zfs.package = pkgs.zfs;
+
 
 boot.zfs.extraPools = [ "tank" ];
 
-fileSystems."/data" = {
-device = "tank/data";
-fsType = "zfs";
-};
+# mount zatím NEDEFINUJEME
+
+# fileSystems."/data" = {
+
+# device = "tank/data";
+
+# fsType = "zfs";
+
+# };
 
 # ─────────────────────────────────────
 
@@ -121,7 +126,7 @@ extraGroups = [ "wheel" "networkmanager" ];
 
 # ─────────────────────────────────────
 
-# 🛡️ SUDO
+# 🛡 SUDO
 
 # ─────────────────────────────────────
 
