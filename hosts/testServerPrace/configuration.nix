@@ -8,6 +8,10 @@
 
 imports = [
 ./hardware-configuration.nix
+##################################################
+# Server-only moduly
+##################################################
+../../modules/server/base.nix
 ];
 
 # ─────────────────────────────────────
@@ -89,22 +93,6 @@ PermitRootLogin = "prohibit-password";
 PasswordAuthentication = true;
 };
 };
-
-# ─────────────────────────────────────
-
-# 📦 BALÍČKY
-
-# ─────────────────────────────────────
-
-environment.systemPackages = with pkgs; [
-git
-nano
-curl
-wget
-htop
-mc
-zfs
-];
 
 # ─────────────────────────────────────
 
