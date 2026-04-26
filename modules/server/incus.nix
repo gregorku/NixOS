@@ -31,27 +31,29 @@
     after = [ "incus.service" ];
     wantedBy = [ "multi-user.target" ];
 
+    serviceConfig = {
+      Type = "oneshot";
+    };
+
     script = ''
       set -e
 
+      INCUS=${pkgs.incus}/bin/incus
+
       echo "Checking Incus network..."
-      if ! incus network list | grep -q incusbr0; then
+      if ! $INCUS network list | grep -q incusbr0; then
         echo "Creating incusbr0..."
-        incus network create incusbr0 \
+        $INCUS network create incusbr0 \
           ipv4.address=10.10.10.1/24 \
           ipv4.nat=true \
           ipv6.address=none
       fi
 
       echo "Checking Incus storage..."
-      if ! incus storage list | grep -q default; then
+      if ! $INCUS storage list | grep -q default; then
         echo "Creating ZFS storage pool..."
-        incus storage create default zfs source=zfs-pool-incus/incus
+        $INCUS storage create default zfs source=zfs-pool-incus/incus
       fi
     '';
-
-    serviceConfig = {
-      Type = "oneshot";
-    };
   };
 }
