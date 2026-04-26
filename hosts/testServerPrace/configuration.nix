@@ -14,6 +14,7 @@
     ../../modules/server/server-zfs.nix
     ../../modules/server/incus.nix
     ../../modules/server/firewall.nix
+    ../../modules/server/server-br0.nix
   ];
 
   # ─────────────────────────────────────
@@ -45,9 +46,8 @@
   };
 
   # ─────────────────────────────────────
-  # 🧠 ZFS (pool "tank")
+  # 🧠 ZFS
   # ─────────────────────────────────────
-  # POZOR: základ řeší server-zfs.nix
   boot.zfs.extraPools = [ "zfs-pool-incus" ];
 
   # ─────────────────────────────────────
@@ -55,10 +55,20 @@
   # ─────────────────────────────────────
   networking = {
     hostName = "nixos-server";
-    networkmanager.enable = true;
 
-    # unikátní pro každý server (SPRÁVNĚ tady)
+    # ❗ vypnout NetworkManager (nutné pro bridge)
+    networkmanager.enable = false;
+
+    # unikátní pro každý server
     hostId = "7a23ccfe";
+  };
+
+  # ----------------------
+  # Bridge br0 (LAN)
+  # ----------------------
+  server.br0 = {
+    enable = true;
+    interface = "enp1s0";  # uprav podle serveru
   };
 
   # ─────────────────────────────────────
@@ -68,7 +78,7 @@
     enable = true;
     settings = {
       PermitRootLogin = "prohibit-password";
-      PasswordAuthentication = true; # zvážit vypnutí později
+      PasswordAuthentication = true; # později vypnout
     };
   };
 
@@ -78,14 +88,14 @@
   users.users = {
     admin = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" ];
-      initialPassword = "gregorku"; # ⚠️ jen pro setup
+      extraGroups = [ "wheel" ];
+      initialPassword = "gregorku"; # ⚠️ jen dočasně
     };
 
     gregor = {
       isNormalUser = true;
       description = "Gregor";
-      extraGroups = [ "wheel" "networkmanager" ];
+      extraGroups = [ "wheel" ];
     };
   };
 
