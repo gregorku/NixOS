@@ -13,6 +13,7 @@
     ../../modules/server/server-locale.nix
     ../../modules/server/server-zfs.nix
     ../../modules/server/incus.nix
+    ../../modules/server/firewall.nix
   ];
 
   # ─────────────────────────────────────
