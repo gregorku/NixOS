@@ -9,7 +9,7 @@
     table inet filter {
 
       #--------------------------------------------------
-      # INPUT – příchozí provoz
+      # INPUT – příchozí provoz na host
       #--------------------------------------------------
       chain input {
         type filter hook input priority filter; policy drop;
@@ -24,7 +24,11 @@
         ip protocol icmp accept
         ip6 nexthdr icmpv6 accept
 
-        # Incus kontejnery → host
+        # DHCP klient (host → router)
+        udp sport 68 udp dport 67 accept
+        udp sport 67 udp dport 68 accept
+
+        # Incus NAT síť → host
         iifname "incusbr0" accept
 
         # SSH
@@ -51,26 +55,44 @@
       }
 
       #--------------------------------------------------
-      # FORWARD – provoz přes server (Incus)
+      # FORWARD – provoz přes server (bridge + Incus)
       #--------------------------------------------------
       chain forward {
         type filter hook forward priority filter; policy drop;
 
+        # Navázaná spojení
         ct state established,related accept
 
-        # Incus → ven
-        iifname "incusbr0" oifname != "incusbr0" accept
+        # ===============================
+        # 🔥 DHCP přes bridge (KLÍČOVÉ)
+        # ===============================
+        udp sport 67 udp dport 68 accept
+        udp sport 68 udp dport 67 accept
 
-        # ven → Incus (odpovědi)
+        # ===============================
+        # 🌉 LAN bridge (br0)
+        # ===============================
+        iifname "br0" accept
+        oifname "br0" accept
+
+        # ===============================
+        # 🐳 Incus NAT síť
+        # ===============================
+        iifname "incusbr0" oifname != "incusbr0" accept
         iifname != "incusbr0" oifname "incusbr0" ct state established,related accept
 
-        # WireGuard
+        # ===============================
+        # 🔐 WireGuard
+        # ===============================
         iifname "wg0" accept
         oifname "wg0" accept
 
-        # DNAT
+        # ===============================
+        # 🔁 DNAT (port forwarding)
+        # ===============================
         ct status dnat accept
 
+        # Log + drop
         log prefix "DROPPED FORWARD: " flags all limit rate 5/minute
         drop
       }
@@ -107,6 +129,7 @@
     }
   '';
 
+  # CLI nástroje
   environment.systemPackages = with pkgs; [
     nftables
   ];
