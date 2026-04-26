@@ -1,46 +1,34 @@
 { config, pkgs, ... }:
 
 {
-  # ----------------------
-  # Incus
-  # ----------------------
   virtualisation.incus = {
     enable = true;
     ui.enable = true;
   };
 
-  # ----------------------
-  # Přístup (bez roota)
-  # ----------------------
   users.groups.incus-admin = {};
-
   users.users.gregor.extraGroups = [ "incus-admin" ];
 
-  # ----------------------
-  # CLI nástroje
-  # ----------------------
   environment.systemPackages = with pkgs; [
     incus
   ];
 
-  # ----------------------
-  # Inicializace Incus (network + storage)
-  # ----------------------
   systemd.services.incus-init = {
     description = "Incus initial setup (network + storage)";
     after = [ "incus.service" ];
     wantedBy = [ "multi-user.target" ];
 
-    serviceConfig = {
-      Type = "oneshot";
-    };
+    serviceConfig.Type = "oneshot";
 
     script = ''
       set -e
-
       INCUS=${pkgs.incus}/bin/incus
 
-      echo "Checking Incus network..."
+      echo "=== Incus init ==="
+
+      # ----------------------
+      # NAT network (incusbr0)
+      # ----------------------
       if ! $INCUS network list | grep -q incusbr0; then
         echo "Creating incusbr0..."
         $INCUS network create incusbr0 \
@@ -49,11 +37,28 @@
           ipv6.address=none
       fi
 
-      echo "Checking Incus storage..."
+      # ----------------------
+      # LAN bridge (br0)
+      # ----------------------
+      if ! $INCUS network list | grep -q '^| br0 '; then
+        echo "Creating br0 network..."
+        $INCUS network create br0 \
+          bridge.external_interfaces=br0
+      fi
+
+      # ----------------------
+      # Storage (ZFS)
+      # ----------------------
       if ! $INCUS storage list | grep -q default; then
-        echo "Creating ZFS storage pool..."
+        echo "Creating ZFS storage..."
         $INCUS storage create default zfs source=zfs-pool-incus/incus
       fi
+
+      # ----------------------
+      # Default profile → br0
+      # ----------------------
+      echo "Setting default profile to br0..."
+      $INCUS profile device set default eth0 network=br0 || true
     '';
   };
 }
