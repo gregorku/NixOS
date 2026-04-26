@@ -2,29 +2,22 @@
 
 {
   environment.systemPackages = with pkgs; [
-    # základ
-    git
+    # komfort / práce
     vim
-    nano
-    htop
     btop
     tmux
-    curl
-    wget
-    rsync
-    mc
 
     # síť / debug
-    iproute2
-    iputils
     tcpdump
     nmap
 
-    # monitoring / utils
+    # systémové nástroje
     lsof
     strace
     file
     tree
+
+    # hardware / monitoring
     smartmontools
     lm_sensors
     usbutils
