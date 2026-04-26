@@ -38,12 +38,14 @@
       fi
 
       # ----------------------
-      # LAN bridge (br0)
+      # LAN bridge (br0) — existující systémový bridge
       # ----------------------
       if ! $INCUS network list | grep -q '^| br0 '; then
         echo "Creating br0 network..."
-        $INCUS network create br0 \
-          bridge.external_interfaces=br0
+        $INCUS network create br0 --type=physical \
+          parent=br0 \
+          ipv4.address=none \
+          ipv6.address=none
       fi
 
       # ----------------------
