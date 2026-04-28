@@ -1,6 +1,14 @@
 { config, pkgs, lib, ... }:
 
 {
+  # 1. POVOLENÍ PCP
+  services.pcp = {
+    enable = true;
+    # režim "standalone" = pmcd + pmlogger + pmie + pmproxy [citation:1]
+    presets = "standalone"; 
+  };
+
+  # 2. KONFIGURACE COCKPITU
   services.cockpit = {
     enable = true;
     port = 9090;
