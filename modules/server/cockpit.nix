@@ -14,7 +14,7 @@
     };
   };
 
-  # Vynucení poslouchání pouze na IPv4
+  # IPv4 only
   systemd.sockets.cockpit.socketConfig = {
     ListenStream = lib.mkForce [ "0.0.0.0:9090" ];
   };
@@ -22,46 +22,48 @@
   security.polkit.enable = true;
 
   ############################################################
-  # 📊 Performance Co-Pilot (PCP) – historie metrik
+  # 📊 PCP – instalace + služby ručně
   ############################################################
-  services.pcp = {
-    enable = true;
+  environment.systemPackages = with pkgs; [
+    pcp
+  ];
 
-    # Zapnutí archivace (nutné pro historické grafy v Cockpitu)
-    archive = {
-      enable = true;
+  # PCP daemon (sběr metrik)
+  systemd.services.pmcd = {
+    description = "Performance Co-Pilot Collector Daemon";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.pcp}/bin/pmcd -f";
+      Restart = "always";
+    };
+  };
 
-      # Interval sběru metrik
-      # 10s = dobrý kompromis mezi přesností a velikostí dat
-      interval = "10s";
+  # Logger (historie metrik)
+  systemd.services.pmlogger = {
+    description = "Performance Co-Pilot Logger";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.pcp}/bin/pmlogger -f /var/log/pcp/pmlogger/$(hostname)";
+      Restart = "always";
     };
   };
 
   ############################################################
-  # 🧹 Retence a rotace logů PCP (aby ti to nesežralo disk)
+  # 🧹 Cleanup (rotace + retence)
   ############################################################
-  systemd.services.pcp-archive-cleanup = {
+  systemd.services.pcp-cleanup = {
     description = "PCP archive cleanup";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = ''
-        ${pkgs.pcp}/bin/pmlogger_daily -K -E
-      '';
+      ExecStart = "${pkgs.pcp}/bin/pmlogger_daily";
     };
   };
 
-  systemd.timers.pcp-archive-cleanup = {
+  systemd.timers.pcp-cleanup = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "daily";
       Persistent = true;
     };
   };
-
-  ############################################################
-  # 📦 Užitečné nástroje pro debug / ruční kontrolu
-  ############################################################
-  environment.systemPackages = with pkgs; [
-    pcp   # pminfo, pmstat, pmrep...
-  ];
 }
