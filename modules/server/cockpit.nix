@@ -14,7 +14,6 @@
     };
   };
 
-  # IPv4 only
   systemd.sockets.cockpit.socketConfig = {
     ListenStream = lib.mkForce [ "0.0.0.0:9090" ];
   };
@@ -22,48 +21,15 @@
   security.polkit.enable = true;
 
   ############################################################
-  # 📊 PCP – instalace + služby ručně
+  # 📦 Pluginy a nástroje pro lepší přehled
   ############################################################
   environment.systemPackages = with pkgs; [
-    pcp
+    # základní nástroje, které Cockpit využívá
+    htop
+    iotop
+    lm_sensors
   ];
 
-  # PCP daemon (sběr metrik)
-  systemd.services.pmcd = {
-    description = "Performance Co-Pilot Collector Daemon";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.pcp}/bin/pmcd -f";
-      Restart = "always";
-    };
-  };
-
-  # Logger (historie metrik)
-  systemd.services.pmlogger = {
-    description = "Performance Co-Pilot Logger";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.pcp}/bin/pmlogger -f /var/log/pcp/pmlogger/$(hostname)";
-      Restart = "always";
-    };
-  };
-
-  ############################################################
-  # 🧹 Cleanup (rotace + retence)
-  ############################################################
-  systemd.services.pcp-cleanup = {
-    description = "PCP archive cleanup";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.pcp}/bin/pmlogger_daily";
-    };
-  };
-
-  systemd.timers.pcp-cleanup = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "daily";
-      Persistent = true;
-    };
-  };
+  # senzory (teploty atd.)
+  hardware.sensor.iio.enable = true;
 }
