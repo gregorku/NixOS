@@ -12,6 +12,7 @@
     ../../modules/server/server-apps.nix
     ../../modules/server/server-locale.nix
     ../../modules/server/server-zfs.nix
+    ../../modules/server/cockpit.nix
     ../../modules/server/incus.nix
     ../../modules/server/firewall.nix
     ../../modules/server/server-br0.nix
