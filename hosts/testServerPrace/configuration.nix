@@ -105,14 +105,6 @@
   # ─────────────────────────────────────
   security.sudo.wheelNeedsPassword = true;
 
-  ##################################################
-  # Cockpit settings - přepsat výchozí
-  ##################################################
-  services.cockpit.settings.WebService = {
-    AllowUnencrypted = true;
-    Origins = lib.mkForce "*";
-  };
-
   # ─────────────────────────────────────
   # 🧾 VERZE SYSTÉMU
   # ─────────────────────────────────────
