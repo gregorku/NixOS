@@ -84,6 +84,7 @@
     onlyoffice-desktopeditors
     evolution
     pdfarranger
+    portfolio
 
     # ======================
     # 🧑‍💻 EDITORY
