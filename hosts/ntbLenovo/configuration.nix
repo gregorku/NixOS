@@ -138,6 +138,11 @@
     nixd
     nixfmt
 
+   # ----------------------  
+   # media player Jellyfin
+   # ---------------------- 
+    jellyfin-media-player
+
   ];
 
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];
@@ -204,11 +209,6 @@
       "commit=120"
     ];
   };
-  
-  #media Jellyfin
-    environment.systemPackages = [
-    pkgs.jellyfin
-  ];
 
   # ----------------------
   # 🔊 AMD Audio fix (Legion 5 ACH6H)
