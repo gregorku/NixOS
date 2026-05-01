@@ -204,6 +204,11 @@
       "commit=120"
     ];
   };
+  
+  #media Jellyfin
+    environment.systemPackages = [
+    pkgs.jellyfin
+  ];
 
   # ----------------------
   # 🔊 AMD Audio fix (Legion 5 ACH6H)
