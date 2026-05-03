@@ -146,8 +146,9 @@
    # ----------------------  
    # Python
    # ---------------------- 
-   python3
-   python3Packages.pandas
+   (python3.withPackages (ps: with ps; [
+    pandas
+   ]))
 
   ];
 
