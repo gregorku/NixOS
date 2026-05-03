@@ -143,6 +143,12 @@
    # ---------------------- 
     jellyfin-media-player
 
+   # ----------------------  
+   # Python
+   # ---------------------- 
+   python3
+   python3Packages.pandas
+
   ];
 
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];
