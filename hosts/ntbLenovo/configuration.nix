@@ -148,6 +148,7 @@
    # ---------------------- 
    (python3.withPackages (ps: with ps; [
     pandas
+    openpyxl
    ]))
 
   ];
