@@ -25,6 +25,7 @@
     sshfs
     gocryptfs
     krusader
+    kdiff3
     meld
 
     # ======================
