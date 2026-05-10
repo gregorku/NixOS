@@ -27,6 +27,16 @@
     krusader
     kdiff3
     meld
+    
+    # ======================
+    # 📁 SOUBORY / decompression
+    # 
+    unzip
+    zip
+    p7zip
+    unrar
+    xz
+    gzip
 
     # ======================
     # 🖥️ DESKTOP / UI
