@@ -3,7 +3,6 @@
   _module.args = { inherit unstable; };
 
   nixpkgs.config.allowUnfree = true;
-
   imports = [
     ./hardware-configuration.nix
 
@@ -21,7 +20,7 @@
 
     ../../modules/notebook-power.nix
     ../../modules/common-virtualization.nix
-    ../../modules/common-incus.nix  
+    ../../modules/common-incus.nix
     ../../modules/common-swap.nix
 
     #../../modules/common-wireguard.nix
@@ -85,7 +84,6 @@
 
   environment.etc."starship.toml".text = ''
     add_newline = false
-
     format = "$username$hostname $directory $git_branch $git_status $cmd_duration $character"
 
     [username]
@@ -141,7 +139,8 @@
     gsettings-desktop-schemas
 
     nixd
-    nixfmt-rfc-style
+    nixfmt
+
   ];
 
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];

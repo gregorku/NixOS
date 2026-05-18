@@ -33,15 +33,15 @@
   ];
 
   # ----------------------
-  # 🌍 Lokalizace
+  # Lokalizace / Jazyk
   # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
   i18n.supportedLocales = [
     "cs_CZ.UTF-8/UTF-8"
     "en_US.UTF-8/UTF-8"
   ];
-
   time.timeZone = "Europe/Prague";
+
   console.keyMap = "cz";
 
   services.xserver.xkb = {
@@ -75,7 +75,7 @@
   };
 
   # ----------------------
-  # ⭐ STARSHIP
+  # STARSHIP
   # ----------------------
   programs.starship.enable = true;
 
@@ -115,7 +115,7 @@
   '';
 
   # ----------------------
-  # 🎨 CATPPUCCIN
+  # CATPPUCCIN + nástroje
   # ----------------------
   environment.systemPackages = with pkgs; [
     catppuccin-gtk
@@ -168,7 +168,7 @@
   };
 
   # ----------------------
-  # 🐱 KITTY
+  # KITTY
   # ----------------------
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
