@@ -4,7 +4,7 @@
   inputs = {
     # 🖥️ Stable větev pro servery
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    
+
     # 💻 Unstable větev pro notebooky
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -24,22 +24,39 @@
     agenix.url = "github:ryantm/agenix";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager-stable, home-manager-unstable, nix-flatpak, agenix, ... }@inputs:
+  outputs = {
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    home-manager-stable,
+    home-manager-unstable,
+    nix-flatpak,
+    agenix,
+    ...
+  }@inputs:
+
   let
     system = "x86_64-linux";
 
+    # 🖥️ Stable balíky
+    stable = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
+
+    # 💻 Unstable balíky
     unstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
     };
 
-    # 🧠 mkHost TEĎ bere i home config
+    # 🧠 mkHost
     mkHost = host: pkgsInput: hmInput: homeFile:
       pkgsInput.lib.nixosSystem {
         inherit system;
 
         specialArgs = {
-          inherit inputs unstable;
+          inherit inputs unstable stable;
         };
 
         modules = [
@@ -50,9 +67,11 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit unstable; };
 
-            # 👇 TADY JE HLAVNÍ ZMĚNA
+            home-manager.extraSpecialArgs = {
+              inherit unstable stable;
+            };
+
             home-manager.users.gregor = import homeFile;
           }
 
@@ -65,16 +84,54 @@
     nixosConfigurations = {
 
       # 💻 NOTEBOOKY (UNSTABLE + desktop config)
-      ntbLenovo = mkHost "ntbLenovo" nixpkgs-unstable home-manager-unstable ./home/desktop.nix;
-      ntbDell   = mkHost "ntbDell"   nixpkgs-unstable home-manager-unstable ./home/desktop.nix;
+      ntbLenovo =
+        mkHost "ntbLenovo"
+        nixpkgs-unstable
+        home-manager-unstable
+        ./home/desktop.nix;
+
+      ntbDell =
+        mkHost "ntbDell"
+        nixpkgs-unstable
+        home-manager-unstable
+        ./home/desktop.nix;
 
       # 🖥️ SERVERY (STABLE + server config)
-      domaPcServer    = mkHost "domaPcServer"    nixpkgs home-manager-stable ./home/server.nix;
-      VPSServer       = mkHost "VPSServer"       nixpkgs home-manager-stable ./home/server.nix;
-      testVPSServer   = mkHost "testVPSServer"   nixpkgs home-manager-stable ./home/server.nix;
-      test            = mkHost "test"            nixpkgs home-manager-stable ./home/server.nix;
-      testServer      = mkHost "testServer"      nixpkgs home-manager-stable ./home/server.nix;
-      testServerPrace = mkHost "testServerPrace" nixpkgs home-manager-stable ./home/server.nix;
+      domaPcServer =
+        mkHost "domaPcServer"
+        nixpkgs
+        home-manager-stable
+        ./home/server.nix;
+
+      VPSServer =
+        mkHost "VPSServer"
+        nixpkgs
+        home-manager-stable
+        ./home/server.nix;
+
+      testVPSServer =
+        mkHost "testVPSServer"
+        nixpkgs
+        home-manager-stable
+        ./home/server.nix;
+
+      test =
+        mkHost "test"
+        nixpkgs
+        home-manager-stable
+        ./home/server.nix;
+
+      testServer =
+        mkHost "testServer"
+        nixpkgs
+        home-manager-stable
+        ./home/server.nix;
+
+      testServerPrace =
+        mkHost "testServerPrace"
+        nixpkgs
+        home-manager-stable
+        ./home/server.nix;
     };
   };
 }
