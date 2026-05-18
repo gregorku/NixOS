@@ -80,7 +80,7 @@
     # 🎬 MULTIMÉDIA / GRAFIKA
     # ======================
     vlc
-    pkgs2511.haruna
+    stable.haruna
     xnviewmp
     krita
     gimp
