@@ -19,7 +19,14 @@
   systemd.services.incus-init = {
     description = "Incus initial setup (network + storage)";
 
-    after = [ "incus.service" ];
+    after = [
+      "incus.service"
+      "network-online.target"
+    ];
+
+    wants = [
+      "network-online.target"
+    ];
 
     wantedBy = [ "multi-user.target" ];
 
@@ -47,18 +54,6 @@
       fi
 
       # ----------------------
-      # LAN bridge (br0)
-      # Existing host bridge
-      # ----------------------
-      if ! $INCUS network list | grep -q '^| br0 '; then
-        echo "Creating br0 network..."
-
-        $INCUS network create br0 \
-          --type=physical \
-          parent=br0
-      fi
-
-      # ----------------------
       # Storage (ZFS)
       # ----------------------
       if ! $INCUS storage list | grep -q '^| default '; then
@@ -69,11 +64,12 @@
       fi
 
       # ----------------------
-      # Default profile → br0
+      # Default profile
+      # Use NAT bridge on VPS
       # ----------------------
-      echo "Setting default profile to br0..."
+      echo "Setting default profile to incusbr0..."
 
-      $INCUS profile device set default eth0 network=br0 || true
+      $INCUS profile device set default eth0 network=incusbr0 || true
     '';
   };
 }
