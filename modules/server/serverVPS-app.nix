@@ -16,6 +16,7 @@
     strace
     file
     tree
+    nvd
 
     # hardware / monitoring
     smartmontools
