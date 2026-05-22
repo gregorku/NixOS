@@ -13,6 +13,7 @@
     nano
     rsync
     tmux
+    mc
   ];
 
   # Nix tooling (flake workflow)
