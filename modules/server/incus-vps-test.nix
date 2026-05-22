@@ -17,7 +17,7 @@
   ];
 
   systemd.services.incus-init = {
-    description = "Incus initial setup (network + storage)";
+    description = "Incus initial setup";
 
     after = [
       "incus.service"
@@ -54,18 +54,16 @@
       fi
 
       # ----------------------
-      # Storage (ZFS)
+      # Default storage (dir)
       # ----------------------
       if ! $INCUS storage list | grep -q '^| default '; then
-        echo "Creating ZFS storage..."
+        echo "Creating default dir storage..."
 
-        $INCUS storage create default zfs \
-          source=zfs-pool-incus/incus
+        $INCUS storage create default dir
       fi
 
       # ----------------------
       # Default profile
-      # Use NAT bridge on VPS
       # ----------------------
       echo "Setting default profile to incusbr0..."
 
