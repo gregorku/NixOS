@@ -5,7 +5,7 @@ let
 
   # generátor jednoho DNAT pravidla
   genRule = iface: r:
-    ''iifname "${iface}" tcp dport ${toString r.port} dnat to ${r.target}'';
+    ''iifname "${iface}" tcp dport ${toString r.port} dnat ip to ${r.target}'';
 
   # WireGuard pravidla
   genWG =
