@@ -30,9 +30,7 @@
 
     wantedBy = [ "multi-user.target" ];
 
-    serviceConfig = {
-      Type = "oneshot";
-    };
+    serviceConfig.Type = "oneshot";
 
     script = ''
       set -e
@@ -65,9 +63,20 @@
       # ----------------------
       # Default profile
       # ----------------------
-      echo "Setting default profile to incusbr0..."
+      echo "Configuring default profile..."
 
-      $INCUS profile device set default eth0 network=incusbr0 || true
+      if ! $INCUS profile device show default | grep -q '^eth0:'; then
+        echo "Creating eth0 device..."
+
+        $INCUS profile device add default eth0 nic \
+          network=incusbr0 \
+          name=eth0
+      else
+        echo "Updating eth0 device..."
+
+        $INCUS profile device set default eth0 \
+          network=incusbr0
+      fi
     '';
   };
 }

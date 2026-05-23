@@ -24,11 +24,6 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/var/lib/lxcfs" =
-    { device = "lxcfs";
-      fsType = "fuse.lxcfs";
-    };
-
   fileSystems."/var/lib/incus/devices" =
     { device = "tmpfs";
       fsType = "tmpfs";
