@@ -11,10 +11,16 @@
   ##################################################
   services.openssh = {
     enable = lib.mkDefault true;
+
     settings = {
-      PasswordAuthentication = lib.mkDefault true;
-      KbdInteractiveAuthentication = lib.mkDefault true;
-      PermitRootLogin = lib.mkDefault "no";
+      PasswordAuthentication =
+        lib.mkDefault true;
+
+      KbdInteractiveAuthentication =
+        lib.mkDefault true;
+
+      PermitRootLogin =
+        lib.mkDefault "no";
     };
   };
 
@@ -34,9 +40,12 @@
   # nástroje dostupné v systému
   environment.systemPackages = [
     pkgs.age
-    inputs.agenix.packages.${pkgs.system}.default
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
-  # kde hledat private key (platí jen tam kde existuje)
-  age.identityPaths = lib.mkDefault [ "/root/.config/age/keys.txt" ];
+  # kde hledat private key
+  # (host může přepsat vlastním nastavením)
+  age.identityPaths = lib.mkDefault [
+    "/root/.config/age/keys.txt"
+  ];
 }

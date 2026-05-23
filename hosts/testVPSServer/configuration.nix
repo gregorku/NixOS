@@ -40,18 +40,6 @@
   ];
 
   ##################################################
-  # agenix + age
-  ##################################################
-
-  environment.systemPackages = [
-    pkgs.age
-    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
-  
-  # kde má agenix hledat private key
-  age.identityPaths = [ "/root/.config/age/keys.txt" ];
-
-  ##################################################
   # AGENTIX SECRET (NOVÉ 🔥)
   ##################################################
   age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
