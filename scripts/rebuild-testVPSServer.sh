@@ -26,10 +26,8 @@ echo ""
 cd "$FLAKE_DIR"
 
 # =========================================
-# GIT PULL
+# GIT STATUS CHECK
 # =========================================
-
-echo "=== Git pull ==="
 
 if ! git diff --quiet; then
     echo ""
@@ -39,8 +37,6 @@ if ! git diff --quiet; then
     git status --short
     exit 1
 fi
-
-git pull --ff-only
 
 # =========================================
 # CURRENT SYSTEM
@@ -119,9 +115,11 @@ fi
 echo ""
 echo "=== Failed services ==="
 
-FAILED_UNITS=$(systemctl list-units \
+FAILED_UNITS=$(
+    systemctl list-units \
     --failed \
-    --no-legend || true)
+    --no-legend || true
+)
 
 if [[ -z "$FAILED_UNITS" ]]; then
     echo "No failed services"
