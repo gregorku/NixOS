@@ -2,11 +2,6 @@
 
 {
   ##################################################
-  # Firewall (default zapnutý)
-  ##################################################
-  networking.firewall.enable = lib.mkDefault true;
-
-  ##################################################
   # SSH (default bezpečné)
   ##################################################
   services.openssh = {
@@ -36,15 +31,11 @@
   ##################################################
   # 🔐 AGE / AGENIX
   ##################################################
-
-  # nástroje dostupné v systému
   environment.systemPackages = [
     pkgs.age
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
-  # kde hledat private key
-  # (host může přepsat vlastním nastavením)
   age.identityPaths = lib.mkDefault [
     "/root/.config/age/keys.txt"
   ];

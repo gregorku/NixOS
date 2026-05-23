@@ -62,8 +62,8 @@ in
         # HAProxy stats
         tcp dport 8404 ip saddr @trusted accept;
 
-        # HAProxy TCP
-        tcp dport 8443 accept;
+        # # Incus UI/API pouze přes WG1
+        iifname "wg1" tcp dport 8443 accept;
 
         # Logging
         limit rate 5/minute log prefix "FW DROP IN: ";
