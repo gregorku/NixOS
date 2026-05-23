@@ -10,7 +10,7 @@ set -Eeuo pipefail
 HOST="testVPSServer"
 FLAKE_DIR="$HOME/NixOS"
 
-TMP_LINK="/tmp/nixos-new-system"
+TMP_LINK="/tmp/.nixos-new-system"
 
 # =========================================
 # START
@@ -32,13 +32,12 @@ cd "$FLAKE_DIR"
 echo "=== Git pull ==="
 
 if ! git diff --quiet; then
-  echo ""
-  echo "ERROR: Git repository contains local changes"
-  echo ""
+    echo ""
+    echo "ERROR: Git repository contains local changes"
+    echo ""
 
-  git status --short
-
-  exit 1
+    git status --short
+    exit 1
 fi
 
 git pull --ff-only
@@ -65,7 +64,7 @@ echo "=== Building new system ==="
 rm -f "$TMP_LINK"
 
 nix build ".#nixosConfigurations.${HOST}.config.system.build.toplevel" \
-  --out-link "$TMP_LINK"
+    --out-link "$TMP_LINK"
 
 NEW_SYSTEM=$(readlink -f "$TMP_LINK")
 
@@ -77,9 +76,13 @@ echo ""
 echo "=== Package changes (nvd) ==="
 
 if [[ "$OLD_SYSTEM" == "$NEW_SYSTEM" ]]; then
-  echo "No package changes"
+    echo "No package changes"
 else
-  nvd diff "$OLD_SYSTEM" "$NEW_SYSTEM" || true
+    if command -v nvd >/dev/null; then
+        nvd diff "$OLD_SYSTEM" "$NEW_SYSTEM" || true
+    else
+        echo "nvd not installed, skipping"
+    fi
 fi
 
 echo ""
@@ -97,16 +100,16 @@ echo "=== Activating configuration ==="
 REBOOT_REQUIRED=0
 
 if sudo nixos-rebuild switch --flake ".#${HOST}"; then
-  echo ""
-  echo "SUCCESS: switch completed"
+    echo ""
+    echo "SUCCESS: switch completed"
 else
-  echo ""
-  echo "WARNING: switch failed"
-  echo "Falling back to boot mode..."
+    echo ""
+    echo "WARNING: switch failed"
+    echo "Falling back to boot mode..."
 
-  sudo nixos-rebuild boot --flake ".#${HOST}"
+    sudo nixos-rebuild boot --flake ".#${HOST}"
 
-  REBOOT_REQUIRED=1
+    REBOOT_REQUIRED=1
 fi
 
 # =========================================
@@ -116,12 +119,14 @@ fi
 echo ""
 echo "=== Failed services ==="
 
-FAILED_UNITS=$(systemctl list-units --failed --no-legend || true)
+FAILED_UNITS=$(systemctl list-units \
+    --failed \
+    --no-legend || true)
 
 if [[ -z "$FAILED_UNITS" ]]; then
-  echo "No failed services"
+    echo "No failed services"
 else
-  echo "$FAILED_UNITS"
+    echo "$FAILED_UNITS"
 fi
 
 # =========================================
@@ -131,16 +136,20 @@ fi
 echo ""
 echo "=== Kernel check ==="
 
-NEW_KERNEL=$(nix eval --raw ".#nixosConfigurations.${HOST}.config.boot.kernelPackages.kernel.version")
+NEW_KERNEL=$(
+    nix eval --raw \
+    ".#nixosConfigurations.${HOST}.config.boot.kernelPackages.kernel.version"
+)
 
 if [[ "$OLD_KERNEL" != "$NEW_KERNEL" ]]; then
-  echo "Kernel changed:"
-  echo "  OLD: $OLD_KERNEL"
-  echo "  NEW: $NEW_KERNEL"
 
-  REBOOT_REQUIRED=1
+    echo "Kernel changed:"
+    echo "  OLD: $OLD_KERNEL"
+    echo "  NEW: $NEW_KERNEL"
+
+    REBOOT_REQUIRED=1
 else
-  echo "Kernel unchanged"
+    echo "Kernel unchanged"
 fi
 
 # =========================================
@@ -149,20 +158,18 @@ fi
 
 rm -f "$TMP_LINK"
 
-# refresh nix metadata
-sudo nix store gc --debug >/dev/null 2>&1 || true
-
 # =========================================
 # REBOOT INFO
 # =========================================
 
 if [[ "$REBOOT_REQUIRED" -eq 1 ]]; then
-  echo ""
-  echo "========================================="
-  echo "Reboot recommended"
-  echo "Run:"
-  echo "sudo reboot"
-  echo "========================================="
+
+    echo ""
+    echo "========================================="
+    echo "Reboot recommended"
+    echo "Run:"
+    echo "sudo reboot"
+    echo "========================================="
 fi
 
 # =========================================
