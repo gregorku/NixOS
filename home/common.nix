@@ -3,5 +3,5 @@
 {
   home.username = "gregor";
   home.homeDirectory = "/home/gregor";
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 }
