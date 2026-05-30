@@ -28,9 +28,9 @@
   networking.hostName = "ntbLenovo";
 
   #incus vypnutí minio, jinak nefunguje rebuild
-  nixpkgs.config.permittedInsecurePackages = [
-    "minio-2025-10-15T17-29-55Z"
-  ];
+  #nixpkgs.config.permittedInsecurePackages = [
+  #  "minio-2025-10-15T17-29-55Z"
+  #];
 
   # ----------------------
   # Lokalizace / Jazyk
