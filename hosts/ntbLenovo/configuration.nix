@@ -68,7 +68,8 @@
       alias ll="eza -lah"
       alias cat="bat"
       alias cd="z"
-      alias rebuild="sudo nixos-rebuild switch"
+      # 🔨 Rebuild tohoto notebooku
+      alias rebuild="sudo nixos-rebuild switch --flake /etc/nixos#ntbLenovo"
 
       set -g fish_greeting ""
     '';
@@ -131,9 +132,6 @@
     fd
     tmux
     lazygit
-
-    kdePackages.kde-gtk-config
-    gsettings-desktop-schemas
 
     nixd
     nixfmt
@@ -210,12 +208,18 @@
     device = "/dev/mapper/data_crypt";
     fsType = "btrfs";
     options = [
-      "compress=zstd"
-      "noatime"
-      "space_cache=v2"
-      "nofail"
-      "commit=120"
-    ];
+    # 📦 Komprese
+    "compress=zstd"
+
+    # 🚀 Menší počet zápisů na SSD
+    "noatime"
+
+    # 📂 Nezablokuje boot při chybě disku
+    "nofail"
+
+    # 💾 Delší interval zápisu
+    "commit=120"
+  ];
   };
 
   # ----------------------
@@ -254,6 +258,8 @@
   # 🔧 SYSTEM
   # ----------------------
 
+  # 🐧 Nechávám latest kernel
+  # Legion 5 + AMD + NVIDIA funguje bez problémů
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.libinput.enable = true;
@@ -265,10 +271,10 @@
   # 🧠 Lepší odezva při velkém zápisu
   boot.kernel.sysctl = {
     "vm.dirty_background_ratio" = 3;
-    "vm.dirty_ratio" = 6;
+      "vm.dirty_ratio" = 6;
     "vm.dirty_expire_centisecs" = 3000;
     "vm.dirty_writeback_centisecs" = 500;
   };
 
   system.stateVersion = "26.05";
-}
+}  
