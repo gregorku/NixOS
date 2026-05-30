@@ -2,25 +2,22 @@
   description = "NixOS configuration for multiple devices";
 
   inputs = {
-    # 🖥️ Stable větev pro servery
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    # 🖥️ Stable větev pro všechny stroje
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
-    # 💻 Unstable větev pro notebooky
+    # 📦 Unstable pouze pro vybrané aplikace
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # ✅ Home Manager - STABLE
-    home-manager-stable = {
-      url = "github:nix-community/home-manager/release-25.11";
+    # 🏠 Home Manager - STABLE
+    home-manager = {
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # ✅ Home Manager - UNSTABLE
-    home-manager-unstable = {
-      url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
+    # 📦 Flatpak modul
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+
+    # 🔐 Správa tajemství
     agenix.url = "github:ryantm/agenix";
   };
 
@@ -28,8 +25,7 @@
     self,
     nixpkgs,
     nixpkgs-unstable,
-    home-manager-stable,
-    home-manager-unstable,
+    home-manager,
     nix-flatpak,
     agenix,
     ...
@@ -38,44 +34,44 @@
   let
     system = "x86_64-linux";
 
-    # 🖥️ Stable balíky
+    # 🖥️ Stable balíčky (NixOS 26.05)
     stable = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
     };
 
-    # 💻 Unstable balíky
+    # 📦 Unstable balíčky pouze pro jednotlivé aplikace
     unstable = import nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
     };
 
-    # 🧠 mkHost
-    mkHost = host: pkgsInput: hmInput: homeFile:
-      pkgsInput.lib.nixosSystem {
+    # 🧠 Vytvoření hosta
+    mkHost = host: homeFile:
+      nixpkgs.lib.nixosSystem {
         inherit system;
 
         specialArgs = {
-          inherit inputs unstable stable;
+          inherit inputs stable unstable;
         };
 
         modules = [
           ./hosts/${host}/configuration.nix
 
           # 🏠 Home Manager
-          hmInput.nixosModules.home-manager
+          home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
             home-manager.extraSpecialArgs = {
-              inherit unstable stable;
+              inherit stable unstable;
             };
 
             home-manager.users.gregor = import homeFile;
           }
 
-          # 🔐 agenix
+          # 🔐 Agenix
           agenix.nixosModules.default
         ];
       };
@@ -83,54 +79,38 @@
   in {
     nixosConfigurations = {
 
-      # 💻 NOTEBOOKY (UNSTABLE + desktop config)
+      # 💻 Notebooky (stable základ + možnost unstable balíčků)
       ntbLenovo =
         mkHost "ntbLenovo"
-        nixpkgs-unstable
-        home-manager-unstable
         ./home/desktop.nix;
 
       ntbDell =
         mkHost "ntbDell"
-        nixpkgs-unstable
-        home-manager-unstable
         ./home/desktop.nix;
 
-      # 🖥️ SERVERY (STABLE + server config)
+      # 🖥️ Servery
       domaPcServer =
         mkHost "domaPcServer"
-        nixpkgs
-        home-manager-stable
         ./home/server.nix;
 
       VPSServer =
         mkHost "VPSServer"
-        nixpkgs
-        home-manager-stable
         ./home/server.nix;
 
       testVPSServer =
         mkHost "testVPSServer"
-        nixpkgs
-        home-manager-stable
         ./home/server.nix;
 
       test =
         mkHost "test"
-        nixpkgs
-        home-manager-stable
         ./home/server.nix;
 
       testServer =
         mkHost "testServer"
-        nixpkgs
-        home-manager-stable
         ./home/server.nix;
 
       testServerPrace =
         mkHost "testServerPrace"
-        nixpkgs
-        home-manager-stable
         ./home/server.nix;
     };
   };
