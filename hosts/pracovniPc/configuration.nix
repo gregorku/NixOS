@@ -11,7 +11,7 @@
     ../../modules/common-filesystems.nix
     ../../modules/common-snapshots.nix
     ../../modules/gpu-amd.nix
-    ../../modules/common-virtualization.nix
+    #../../modules/common-virtualization.nix
     ../../modules/common-swap.nix
     # Modul Wireguard
     #../../modules/common-wireguard.nix
@@ -48,5 +48,5 @@
   # ----------------------
   # Povinné – NIKDY neměnit po instalaci
   # ----------------------
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 }
