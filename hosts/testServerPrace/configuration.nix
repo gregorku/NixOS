@@ -14,7 +14,7 @@
     #../../modules/server/server-zfs.nix
     ../../modules/server/cockpit.nix
     ../../modules/server/incus.nix
-    ../../modules/server/firewall.nix
+    ../../modules/server/firewall/firewall-testServerPrace.nix
     ../../modules/server/server-br0.nix
   ];
 
