@@ -55,8 +55,8 @@ in
         # HAProxy stats pouze z trusted IP
         tcp dport 8404 ip saddr @trusted accept;
 
-        # Incus API
-        tcp dport 8443 ip saddr @trusted accept;
+        # Incus API pouze z LAN
+        iifname "br0" ip saddr 192.168.220.0/24 tcp dport 8443 accept;
 
         # logování zahazovaných paketů
         limit rate 5/minute log prefix "FW DROP IN: ";
