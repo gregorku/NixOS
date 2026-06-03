@@ -46,10 +46,14 @@
     "/crypto_keyfile.bin" = "/boot/crypto_keyfile.bin";
   };
 
-  # ─────────────────────────────────────
-  # 🧠 ZFS
-  # ─────────────────────────────────────
-  #boot.zfs.extraPools = [ "zfs-pool-incus" ];
+  ## =========================
+  ## ZFS – import datapool po bootu
+  ## =========================
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.extraPools = [ "zfs-pool-incus" ]; # Explicitní import
+
+  services.zfs.autoScrub.enable = false;
+  services.zfs.autoSnapshot.enable = false;
 
   # ─────────────────────────────────────
   # 🌐 SÍŤ
