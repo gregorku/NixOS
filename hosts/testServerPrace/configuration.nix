@@ -51,6 +51,7 @@
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.extraPools = [ "zfs-pool-incus" ]; # Explicitní import
+  boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
 
   services.zfs.autoScrub.enable = false;
   services.zfs.autoSnapshot.enable = false;
