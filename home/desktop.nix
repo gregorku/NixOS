@@ -1,3 +1,8 @@
+{ config, pkgs, ... }:
+
+{
+  imports = [ ./common.nix ];
+
 programs.librewolf = {
   enable = true;
   languagePacks = [ "cs" ];
