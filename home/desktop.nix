@@ -1,15 +1,13 @@
-{ config, pkgs, ... }:
+programs.librewolf = {
+  enable = true;
+  languagePacks = [ "cs" ];
 
-{
-  imports = [ ./common.nix ];
+  settings = {
+    "intl.locale.requested" = "cs";
+    "intl.multilingual.enabled" = false;
+    "privacy.resistFingerprinting.spoofLocale" = false;
 
-  programs.librewolf = {
-    enable = true;
-    languagePacks = [ "cs" ];
-    settings = {
-      "intl.locale.requested" = "cs";
-      "intl.multilingual.enabled" = false;
-      "privacy.resistFingerprinting.spoofLocale" = false;
-    };
+    # Firefox Standard místo Strict
+    "browser.contentblocking.category" = "standard";
   };
-}
+};
