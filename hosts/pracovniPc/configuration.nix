@@ -26,8 +26,10 @@
   ];
 
   networking.hostName = "pracovniPc";
+  # unikátní pro každý server
+  hostId = "608ebdb2";
 
-   # ----------------------
+  # ----------------------
   # Lokalizace / Jazyk
   # ----------------------
   i18n.defaultLocale = "cs_CZ.UTF-8";
@@ -181,6 +183,17 @@
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
   '';
+  ## =========================
+  ## ZFS – import datapool po bootu
+  ## =========================
+  boot.supportedFilesystems = [ "zfs" ];
+#  boot.zfs.extraPools = [ "zfs-pool-incus" ]; # Explicitní import
+#  boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
+
+  services.zfs.autoScrub.enable = false;
+  services.zfs.autoSnapshot.enable = false;
+
+  
   # Kernel latest
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # ----------------------
