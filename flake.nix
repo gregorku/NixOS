@@ -88,6 +88,10 @@
         mkHost "ntbDell"
         ./home/desktop.nix;
 
+      pracovniPc =
+        mkHost "pracovniPc"
+        ./home/desktop.nix;        
+
       # 🖥️ Servery
       domaPcServer =
         mkHost "domaPcServer"
