@@ -181,7 +181,8 @@
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
   '';
-
+  # Kernel latest
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   # ----------------------
   # Bootloader (UEFI)
   # ----------------------
