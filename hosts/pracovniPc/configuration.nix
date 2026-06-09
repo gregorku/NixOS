@@ -1,6 +1,11 @@
+{ config, pkgs, lib, unstable, ... }:
 {
+  _module.args = { inherit unstable; };
+
+  nixpkgs.config.allowUnfree = true;
   imports = [
     ./hardware-configuration.nix
+    
     ../../modules/common-users.nix
     ../../modules/common-desktop-kde.nix
     ../../modules/common-security.nix
