@@ -192,19 +192,20 @@
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
   '';
-  ## =========================
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
-#  boot.zfs.extraPools = [ "zfs-pool-incus" ]; # Explicitní import
   boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
-
+  boot.zfs.extraPools = [
+  "DataDisk"
+  "FastPool"
+  ];
   services.zfs.autoScrub.enable = false;
   services.zfs.autoSnapshot.enable = false;
 
   
-  # Kernel latest
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Kernel latest nefunkční zfs
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
   # ----------------------
   # Bootloader (UEFI)
   # ----------------------
