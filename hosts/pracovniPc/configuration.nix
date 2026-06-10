@@ -25,9 +25,18 @@
 
   ];
 
-  networking.hostName = "pracovniPc";
-  # unikátní pro každý server
-  hostId = "608ebdb2";
+  # ─────────────────────────────────────
+  # 🌐 SÍŤ
+  # ─────────────────────────────────────
+  networking = {
+    hostName = "pracovniPc";
+
+    # ❗ vypnout NetworkManager (nutné pro bridge)
+    #networkmanager.enable = false;
+
+    # unikátní pro každý server
+    hostId = "608ebdb2";
+  };
 
   # ----------------------
   # Lokalizace / Jazyk
