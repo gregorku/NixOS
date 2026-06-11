@@ -38,6 +38,17 @@
     hostId = "608ebdb2";
   };
 
+  # ─────────────────────────────────────
+  # 🔐 SSH
+  # ─────────────────────────────────────
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "prohibit-password";
+      PasswordAuthentication = true; # později vypnout
+    };
+  };
+
   # ----------------------
   # Lokalizace / Jazyk
   # ----------------------
