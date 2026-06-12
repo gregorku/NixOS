@@ -86,7 +86,7 @@
       alias cat="bat"
       alias cd="z"
       # 🔨 Rebuild tohoto notebooku
-      alias rebuild="sudo nixos-rebuild switch --flake /etc/nixos#ntbLenovo"
+      alias rebuild="sudo nixos-rebuild switch --flake /etc/nixos#pracovniPc"
 
       set -g fish_greeting ""
     '';
