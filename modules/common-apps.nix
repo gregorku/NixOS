@@ -82,7 +82,7 @@
     # ======================
     vlc
     stable.haruna
-    xnviewmp
+    #xnviewmp
     krita
     gimp
     easytag
