@@ -203,6 +203,20 @@
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
   '';
+  # ----------------------
+  # 🔧 NIX OPTIMALIZACE
+  # ----------------------
+  nix.settings = {
+    auto-optimise-store = true;
+    experimental-features = [ "nix-command" "flakes" ];
+  };
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 15d";
+  };
+  
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
