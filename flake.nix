@@ -88,13 +88,11 @@
         mkHost "ntbDell"
         ./home/desktop.nix;
 
-      pracovniPc = mkHost "pracovniPc" {
-        imports = [
-          ./home/desktop.nix
-          ./home/vzdalena-plocha.nix
-        ];
-      };      
-
+      # 🖥️ vzdálená plocha
+      pracovniPc =
+        mkHost "pracovniPc"
+        ./home/desktop-plocha.nix;
+ 
       # 🖥️ Servery
       domaPcServer =
         mkHost "domaPcServer"
