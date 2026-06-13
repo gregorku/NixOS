@@ -90,7 +90,8 @@
 
       pracovniPc =
         mkHost "pracovniPc"
-        ./home/desktop.nix;        
+        ./home/desktop.nix;
+        ./home/vzdalena-plocha.nix;        
 
       # 🖥️ Servery
       domaPcServer =
