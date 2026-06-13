@@ -1,12 +1,12 @@
 { config, pkgs, ... }:
 
 {
-  # 1. Balíček pro VNC server na Waylandu
+  # 1. Balíček pro nativní VNC server v KDE Plasma 6
   environment.systemPackages = with pkgs; [
-    wayvnc
+    kdePackages.krfb
   ];
 
-  # 2. Nastavení firewallu pro vaši Mikrotik VPN (120.100.100.0/24)
+  # 2. Nastavení firewallu pro vaši Mikrotik VPN
   networking.firewall = {
     enable = true;
 
@@ -14,7 +14,7 @@
       # Povolit SSH (port 22) z VPN
       ip saddr 120.100.100.0/24 tcp dport 22 accept
 
-      # Povolit VNC (port 5900) z VPN pro přenos plochy Waylandu
+      # Povolit VNC (port 5900) z VPN pro krfb
       ip saddr 120.100.100.0/24 tcp dport 5900 accept
     '';
   };
