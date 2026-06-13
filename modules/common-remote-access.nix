@@ -1,22 +1,21 @@
 { config, pkgs, ... }:
 
 {
-  # 1. Přidání KRDP klienta/serveru do systémových balíčků
+  # 1. Balíček pro VNC server na Waylandu
   environment.systemPackages = with pkgs; [
-    kdePackages.krdp
+    wayvnc
   ];
 
-  # 2. Nastavení firewallu (nftables) – povolení portů pouze z VPN rozsahu
+  # 2. Nastavení firewallu pro vaši Mikrotik VPN (120.100.100.0/24)
   networking.firewall = {
     enable = true;
 
     extraInputRules = ''
-      # Povolit RDP (TCP i UDP) pouze z VPN rozsahu pro KDE Plasma
-      ip saddr 120.100.100.0/24 tcp dport 3389 accept
-      ip saddr 120.100.100.0/24 udp dport 3389 accept
-
-      # Povolit SSH (TCP 22) pouze z VPN rozsahu
+      # Povolit SSH (port 22) z VPN
       ip saddr 120.100.100.0/24 tcp dport 22 accept
+
+      # Povolit VNC (port 5900) z VPN pro přenos plochy Waylandu
+      ip saddr 120.100.100.0/24 tcp dport 5900 accept
     '';
   };
 }
