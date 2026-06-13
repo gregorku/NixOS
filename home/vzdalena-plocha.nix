@@ -6,14 +6,15 @@
     Enabled=true
     Port=3389
     RequireApprove=false
+    # Tady krdp serveru řekneme, kde ty certifikáty přesně najde:
+    CertificatePath=/home/gregor/.local/share/krdp/tls.crt
+    PrivateKeyPath=/home/gregor/.local/share/krdp/tls.key
   '';
-  # Vynutíme přepsání krdprc, pokud by už existoval
   xdg.configFile."krdprc".force = true;
 
   xdg.configFile."kwinrc".text = ''
     [Wayland]
     VirtualOutputs=1
   '';
-  # Vynutíme přepsání kwinrc, což vyřeší naši chybu
   xdg.configFile."kwinrc".force = true;
 }
