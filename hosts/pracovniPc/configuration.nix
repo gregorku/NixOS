@@ -23,7 +23,7 @@
     #../../modules/hosts/pracovniPc-wireguard.nix
     ../../modules/common-networkmanager.nix
     # Vzdálený přístup
-    ../../modules/common-remote-access.nix 
+    #../../modules/common-remote-access.nix 
 
   ];
 
