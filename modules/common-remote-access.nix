@@ -1,27 +1,30 @@
 # common-remote-access.nix
-# Modul pro vzdálený přístup přes VNC (wayvnc) s Wayland/KDE Plasma
+# Modul pro vzdálený přístup přes RDP přes VPN (MikroTik port forwarding)
 # Použití: imports = [ ./common-remote-access.nix ];
 
 { config, lib, pkgs, ... }:
 
 {
   # ────────────────────────────────────────────
-  # wayvnc – nativní Wayland VNC server
+  # xrdp – vzdálená plocha
   # ────────────────────────────────────────────
-  services.wayvnc = {
+  services.xrdp = {
     enable = true;
-    address = "0.0.0.0";
-    port = 5900;
+    defaultWindowManager = "startplasma-x11";
+    openFirewall = false;
   };
 
+  # Vynutit X11 session pro xrdp
+  services.displayManager.defaultSession = "plasmax11";
+
   # ────────────────────────────────────────────
-  # Firewall – VNC pouze z VPN rozsahu
+  # Firewall – RDP pouze z VPN rozsahu
   # ────────────────────────────────────────────
   networking.firewall.extraCommands = ''
-    iptables -A INPUT -s 120.100.100.0/24 -p tcp --dport 5900 -j ACCEPT
+    iptables -A INPUT -s 120.100.100.0/24 -p tcp --dport 3389 -j ACCEPT
   '';
 
   networking.firewall.extraStopCommands = ''
-    iptables -D INPUT -s 120.100.100.0/24 -p tcp --dport 5900 -j ACCEPT || true
+    iptables -D INPUT -s 120.100.100.0/24 -p tcp --dport 3389 -j ACCEPT || true
   '';
 }
