@@ -1,35 +1,28 @@
-# common-remote-access.nix
-# Modul pro vzdálený přístup přes RDP přes VPN (MikroTik port forwarding)
-# Použití: imports = [ ./common-remote-access.nix ];
-
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
-  services.xrdp = {
+  # 1. Aktivace vestavěné podpory RDP v KDE Plasma 6 (Wayland)
+  services.krdp = {
     enable = true;
-    defaultWindowManager = "startplasma-x11";
-    openFirewall = false;
+    openFirewall = false; # Pravidla firewallu si definujeme bezpečně sami níže
   };
 
-  # Test: spustit icewm místo KDE pro ověření funkčnosti xrdp
-  # Po úspěšném testu přepnout zpět na startplasma-x11
-  environment.etc."xrdp/startwm.sh" = {
-    mode = "0755";
-    text = ''
-      #!/bin/sh
-      . /etc/profile
-      exec ${pkgs.icewm}/bin/icewm-session
+  # 2. Nastavení firewallu s restrikcí na rozsah vaší VPN (120.100.100.0/24)
+  networking.firewall = {
+    enable = true;
+
+    # Otevřeme porty pro RDP (3389) a SSH (22), ale POUZE z VPN rozsahu přes nftables
+    extraRulesAfterHooks = ''
+      table inet filter {
+        chain input {
+          # Povolit RDP (TCP i UDP) pouze z VPN rozsahu
+          ip saddr 120.100.100.0/24 tcp dport 3389 accept
+          ip saddr 120.100.100.0/24 udp dport 3389 accept
+
+          # Povolit SSH (TCP 22) pouze z VPN rozsahu
+          ip saddr 120.100.100.0/24 tcp dport 22 accept
+        }
+      }
     '';
   };
-
-  environment.systemPackages = [ pkgs.icewm ];
-
-  # Firewall – RDP pouze z VPN rozsahu
-  networking.firewall.extraCommands = ''
-    iptables -A INPUT -s 120.100.100.0/24 -p tcp --dport 3389 -j ACCEPT
-  '';
-
-  networking.firewall.extraStopCommands = ''
-    iptables -D INPUT -s 120.100.100.0/24 -p tcp --dport 3389 -j ACCEPT || true
-  '';
 }
