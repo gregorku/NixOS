@@ -1,21 +1,19 @@
-{ config, pkgs, ... }:
+# common-remote-access.nix
+# Modul pro vzdálený přístup přes KRDP (nativní KDE Wayland RDP)
+# Použití: imports = [ ./common-remote-access.nix ];
+
+{ config, lib, pkgs, ... }:
 
 {
-  # 1. Balíček pro nativní VNC server v KDE Plasma 6
-  environment.systemPackages = with pkgs; [
-    kdePackages.krfb
-  ];
+  # KRDP binárka dostupná v systému
+  environment.systemPackages = [ pkgs.kdePackages.krdp ];
 
-  # 2. Nastavení firewallu pro vaši Mikrotik VPN
-  networking.firewall = {
-    enable = true;
+  # Firewall – RDP pouze z VPN rozsahu
+  networking.firewall.extraCommands = ''
+    iptables -A INPUT -s 120.100.100.0/24 -p tcp --dport 3389 -j ACCEPT
+  '';
 
-    extraInputRules = ''
-      # Povolit SSH (port 22) z VPN
-      ip saddr 120.100.100.0/24 tcp dport 22 accept
-
-      # Povolit VNC (port 5900) z VPN pro krfb
-      ip saddr 120.100.100.0/24 tcp dport 5900 accept
-    '';
-  };
+  networking.firewall.extraStopCommands = ''
+    iptables -D INPUT -s 120.100.100.0/24 -p tcp --dport 3389 -j ACCEPT || true
+  '';
 }
