@@ -39,7 +39,7 @@
       PartOf = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver -u ${config.home.username} -p tvoje-heslo --plasma --monitor 0 --certificate ${config.home.homeDirectory}/.local/share/krdp/tls.crt --certificate-key ${config.home.homeDirectory}/.local/share/krdp/tls.key";
+      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver -u ${config.home.username} -p tvoje-heslo --certificate ${config.home.homeDirectory}/.local/share/krdp/tls.crt --certificate-key ${config.home.homeDirectory}/.local/share/krdp/tls.key";
       Restart = "on-failure";
       RestartSec = 3;
     };
