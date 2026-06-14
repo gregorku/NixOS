@@ -19,12 +19,15 @@
     '';
   };
 
-  # KWin – povolit virtuální výstup pro RDP session
+  # KWin – povolit virtuální výstup a KRDP plugin pro RDP session
   xdg.configFile."kwinrc" = {
     force = true;
     text = ''
       [Wayland]
       VirtualOutputs=1
+
+      [Plugins]
+      krdpEnabled=true
     '';
   };
 
@@ -36,7 +39,7 @@
       PartOf = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver -u ${config.home.username} -p tvoje-heslo --plasma --virtual-monitor 1920x1080@1 --certificate ${config.home.homeDirectory}/.local/share/krdp/tls.crt --certificate-key ${config.home.homeDirectory}/.local/share/krdp/tls.key";
+      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver -u ${config.home.username} -p tvoje-heslo --plasma --monitor 0 --certificate ${config.home.homeDirectory}/.local/share/krdp/tls.crt --certificate-key ${config.home.homeDirectory}/.local/share/krdp/tls.key";
       Restart = "on-failure";
       RestartSec = 3;
     };
