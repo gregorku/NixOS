@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 {
-  # KRDP konfigurace – bez hesla, port 3389
+  # KRDP konfigurace
   xdg.configFile."krdprc" = {
     force = true;
     text = ''
@@ -36,7 +36,7 @@
       PartOf = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver";
+      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver --user ${config.home.username} --password dummy";
       Restart = "on-failure";
       RestartSec = 3;
     };
