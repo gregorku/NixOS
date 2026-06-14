@@ -36,7 +36,7 @@
       PartOf = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver --user ${config.home.username} --password dummy";
+      ExecStart = "${pkgs.kdePackages.krdp}/bin/krdpserver -u ${config.home.username} -p tvoje-heslo --plasma --virtual-monitor 1920x1080@1 --certificate ${config.home.homeDirectory}/.local/share/krdp/tls.crt --certificate-key ${config.home.homeDirectory}/.local/share/krdp/tls.key";
       Restart = "on-failure";
       RestartSec = 3;
     };
