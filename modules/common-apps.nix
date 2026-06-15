@@ -62,6 +62,7 @@
     filezilla
     putty
     remmina
+    kdePackages.krdc
     openconnect
     vpn-slice
     nmap
