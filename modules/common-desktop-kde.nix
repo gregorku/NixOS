@@ -47,7 +47,7 @@
 
     # KDE Connect
     kdePackages.kdeconnect-kde
-    # KDE Manager Pass
+    # KDE Správa hesel
     kdePackages.kwalletmanager
 
     # Samba, MTP, archivy...

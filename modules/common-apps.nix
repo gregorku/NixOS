@@ -43,6 +43,7 @@
     # ======================
     kitty
     gnome-calendar
+    crystal-dock
 
     # ======================
     # 🔐 BEZPEČNOST
