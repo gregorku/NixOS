@@ -63,7 +63,7 @@
     putty
     remmina
     kdePackages.krdc
-    freerdp3
+    freerdp
     openconnect
     vpn-slice
     nmap
