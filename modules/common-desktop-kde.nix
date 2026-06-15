@@ -47,6 +47,8 @@
 
     # KDE Connect
     kdePackages.kdeconnect-kde
+    # KDE Manager Pass
+    kdePackages.kwalletmanager
 
     # Samba, MTP, archivy...
     kdePackages.kio-extras
