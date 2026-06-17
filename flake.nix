@@ -82,7 +82,7 @@
       # 💻 Notebooky (stable základ + možnost unstable balíčků)
       ntbLenovo =
         mkHost "ntbLenovo"
-        ./home/desktop.nix;
+        ./home/desktop-plocha.nix;
 
       ntbDell =
         mkHost "ntbDell"

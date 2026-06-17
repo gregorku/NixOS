@@ -3,6 +3,6 @@
 {
   imports = [
     ./desktop.nix
-    #./vzdalena-plocha.nix
+    ./nabidka-kde.nix
   ];
 }
