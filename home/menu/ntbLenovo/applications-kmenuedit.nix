@@ -50,6 +50,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
 
       <Include>
         <Filename>ssh-server-doma.desktop</Filename>
+        <Filename>ssh-server-doma-root.desktop</Filename>
         <Filename>ssh-serverPc-prace.desktop</Filename>
         <Filename>ssh-virtPc-prace.desktop</Filename>
         <Filename>ssh-testPc.desktop</Filename>
@@ -64,6 +65,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
 
       <Layout>
         <Filename>ssh-server-doma.desktop</Filename>
+        <Filename>ssh-server-doma-root.desktop</Filename>
         <Filename>ssh-serverPc-prace.desktop</Filename>
         <Filename>ssh-virtPc-prace.desktop</Filename>
         <Filename>ssh-testPc.desktop</Filename>

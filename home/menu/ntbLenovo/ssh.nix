@@ -54,6 +54,17 @@ Terminal=false
 StartupNotify=true
 '';
 
+home.file.".local/share/applications/ssh-server-doma-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Server Doma Root
+Exec=/home/gregor/.ssh/ssh/ssh-server-doma-root.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
 home.file.".local/share/applications/ssh-serverPc-prace.desktop".text = ''
 [Desktop Entry]
 Version=1.0
