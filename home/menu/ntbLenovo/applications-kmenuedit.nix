@@ -1,10 +1,10 @@
 { ... }:
 
 {
-home.file.".config/menus/applications-kmenuedit.menu".text = '' <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
-   "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+home.file.".config/menus/applications-kmenuedit.menu".text = ''
 
-```
+
+
 <Menu>
   <Name>Applications</Name>
 
@@ -91,7 +91,6 @@ home.file.".config/menus/applications-kmenuedit.menu".text = '' <!DOCTYPE Menu P
   </Layout>
 
 </Menu>
-```
 
 '';
 }
