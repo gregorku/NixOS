@@ -65,7 +65,7 @@ Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/ssh-virtpc-prace.desktop".text = ''
+home.file.".local/share/applications/ssh-virtPc-prace.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -76,7 +76,7 @@ Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/ssh-testpc.desktop".text = ''
+home.file.".local/share/applications/ssh-testPc.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
