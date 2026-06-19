@@ -39,9 +39,86 @@ Icon=utilities-terminal
 
 # =========================
 
-# Servery
+# Servery Pc
 
 # =========================
+
+home.file.".local/share/applications/ssh-server-doma.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Server Doma
+Exec=/home/gregor/.ssh/ssh/ssh-server-doma.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-serverPc-prace.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=ServerPC Práce Root
+Exec=/home/gregor/.ssh/ssh/ssh-serverPc-prace.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-virtpc-prace.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=VirtPC Práce
+Exec=/home/gregor/.ssh/ssh/ssh-virtpc-prace.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-testpc.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=TestPC
+Exec=/home/gregor/.ssh/ssh/ssh-testpc.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-pracovniPc-prace.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Pracovní PC
+Exec=/home/gregor/.ssh/ssh/ssh-pracovniPc-prace.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-pracovniPc-prace-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Pracovní PC Root
+Exec=/home/gregor/.ssh/ssh/ssh-pracovniPc-prace-root.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-raspberry-5b-prace.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Raspberry 5B Práce
+Exec=/home/gregor/.ssh/ssh/ssh-raspberry-5b-prace.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
 
 home.file.".local/share/applications/ssh-lenovo.desktop".text = ''
 [Desktop Entry]
@@ -49,28 +126,6 @@ Version=1.0
 Type=Application
 Name=Lenovo
 Exec=/home/gregor/.ssh/ssh/ssh-lenovo.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-home.file.".local/share/applications/ssh-netcup-serverpc.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Netcup ServerPC
-Exec=/home/gregor/.ssh/ssh/ssh-netcup-serverpc.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-home.file.".local/share/applications/ssh-netcup-test-serverpc.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Netcup Test ServerPC
-Exec=/home/gregor/.ssh/ssh/ssh-netcup-test-serverpc.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true
@@ -98,45 +153,41 @@ Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/ssh-server-doma.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Server Doma
-Exec=/home/gregor/.ssh/ssh/ssh-server-doma.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-home.file.".local/share/applications/ssh-testpc.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=TestPC
-Exec=/home/gregor/.ssh/ssh/ssh-testpc.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-home.file.".local/share/applications/ssh-virtpc-prace.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=VirtPC Práce
-Exec=/home/gregor/.ssh/ssh/ssh-virtpc-prace.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
 home.file.".local/share/applications/ssh-virtpc-webmin.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=VirtPC Webmin
 Exec=/home/gregor/.ssh/ssh/ssh-virtpc-webmin.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+
+# =========================
+
+# VPS
+
+# =========================
+
+home.file.".local/share/applications/ssh-netcup-serverpc.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Netcup ServerPC
+Exec=/home/gregor/.ssh/ssh/ssh-netcup-serverpc.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-netcup-test-serverpc.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Netcup Test ServerPC
+Exec=/home/gregor/.ssh/ssh/ssh-netcup-test-serverpc.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true
@@ -166,7 +217,7 @@ StartupNotify=true
 
 # =========================
 
-# Routery
+# Routery Switche
 
 # =========================
 
@@ -187,56 +238,6 @@ Version=1.0
 Type=Application
 Name=Cisco Jirkov
 Exec=/home/gregor/.ssh/ssh/ssh-cisco-jirkov.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-# =========================
-
-# Pracovní
-
-# =========================
-
-home.file.".local/share/applications/ssh-pracovniPc-prace.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Pracovní PC
-Exec=/home/gregor/.ssh/ssh/ssh-pracovniPc-prace.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-home.file.".local/share/applications/ssh-pracovniPc-prace-root.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Pracovní PC Root
-Exec=/home/gregor/.ssh/ssh/ssh-pracovniPc-prace-root.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-home.file.".local/share/applications/ssh-serverPc-prace.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=ServerPC Práce Root
-Exec=/home/gregor/.ssh/ssh/ssh-serverPc-prace.sh
-Icon=utilities-terminal
-Terminal=false
-StartupNotify=true
-'';
-
-home.file.".local/share/applications/ssh-raspberry-5b-prace.desktop".text = ''
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Raspberry 5B Práce
-Exec=/home/gregor/.ssh/ssh/ssh-raspberry-5b-prace.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true

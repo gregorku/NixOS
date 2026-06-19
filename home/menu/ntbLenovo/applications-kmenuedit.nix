@@ -3,13 +3,14 @@
 {
 home.file.".config/menus/applications-kmenuedit.menu".text = ''
 
-
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+  "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
 
 <Menu>
   <Name>Applications</Name>
 
   <!-- ========================= -->
-  <!-- Vzdálená plocha            -->
+  <!-- Vzdálená plocha           -->
   <!-- ========================= -->
 
   <Menu>
@@ -32,12 +33,16 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   </Menu>
 
   <!-- ========================= -->
-  <!-- SSH                        -->
+  <!-- SSH                       -->
   <!-- ========================= -->
 
   <Menu>
     <Name>SSH</Name>
     <Directory>ssh.directory</Directory>
+
+    <!-- ========================= -->
+    <!-- Servery Pc                -->
+    <!-- ========================= -->
 
     <Menu>
       <Name>Servery Pc</Name>
@@ -58,6 +63,10 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       </Include>
     </Menu>
 
+    <!-- ========================= -->
+    <!-- VPS                       -->
+    <!-- ========================= -->
+
     <Menu>
       <Name>VPS</Name>
       <Directory>ssh-vps.directory</Directory>
@@ -70,6 +79,10 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       </Include>
     </Menu>
 
+    <!-- ========================= -->
+    <!-- Routery Switche           -->
+    <!-- ========================= -->
+
     <Menu>
       <Name>Routery Switche</Name>
       <Directory>ssh-routery.directory</Directory>
@@ -80,10 +93,20 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       </Include>
     </Menu>
 
+    <!-- ========================= -->
+    <!-- Pořadí podmenu SSH        -->
+    <!-- ========================= -->
+
+    <Layout>
+      <Menuname>Servery Pc</Menuname>
+      <Menuname>VPS</Menuname>
+      <Menuname>Routery Switche</Menuname>
+    </Layout>
+
   </Menu>
 
   <!-- ========================= -->
-  <!-- Pořadí v menu              -->
+  <!-- Pořadí hlavního menu      -->
   <!-- ========================= -->
 
   <Layout>
