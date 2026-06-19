@@ -61,6 +61,20 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
         <Filename>ssh-virtpc-webmin.desktop</Filename>
       </Include>
+
+      <Layout>
+        <Filename>ssh-server-doma.desktop</Filename>
+        <Filename>ssh-serverPc-prace.desktop</Filename>
+        <Filename>ssh-virtPc-prace.desktop</Filename>
+        <Filename>ssh-testPc.desktop</Filename>
+        <Filename>ssh-pracovniPc-prace.desktop</Filename>
+        <Filename>ssh-pracovniPc-prace-root.desktop</Filename>
+        <Filename>ssh-raspberry-5b-prace.desktop</Filename>        
+        <Filename>ssh-lenovo.desktop</Filename>
+        <Filename>ssh-nikola.desktop</Filename>
+        <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
+        <Filename>ssh-virtpc-webmin.desktop</Filename>
+      </Layout>
     </Menu>
 
     <!-- ========================= -->
@@ -78,6 +92,13 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-netcup-lxc-aplikace.desktop</Filename>
         <Filename>ssh-alwyzon-serverpc.desktop</Filename>
       </Include>
+
+      <Layout>
+        <Filename>ssh-netcup-serverpc.desktop</Filename>
+        <Filename>ssh-netcup-test-serverpc.desktop</Filename>
+        <Filename>ssh-netcup-lxc-aplikace.desktop</Filename>
+        <Filename>ssh-alwyzon-serverpc.desktop</Filename>
+      </Layout>
     </Menu>
 
     <!-- ========================= -->
@@ -92,6 +113,11 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-mikrotik-test.desktop</Filename>
         <Filename>ssh-cisco-jirkov.desktop</Filename>
       </Include>
+
+      <Layout>
+        <Filename>ssh-mikrotik-test.desktop</Filename>
+        <Filename>ssh-cisco-jirkov.desktop</Filename>
+      </Layout>
     </Menu>
 
     <!-- ========================= -->
