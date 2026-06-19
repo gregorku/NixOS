@@ -40,8 +40,8 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     <Directory>ssh.directory</Directory>
 
     <Menu>
-      <Name>Servery</Name>
-      <Directory>ssh-servery.directory</Directory>
+      <Name>Servery Pc</Name>
+      <Directory>ssh-serveryPc.directory</Directory>
 
       <Include>
         <Filename>ssh-lenovo.desktop</Filename>
@@ -59,18 +59,8 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     </Menu>
 
     <Menu>
-      <Name>Routery</Name>
-      <Directory>ssh-routery.directory</Directory>
-
-      <Include>
-        <Filename>ssh-mikrotik-test.desktop</Filename>
-        <Filename>ssh-cisco-jirkov.desktop</Filename>
-      </Include>
-    </Menu>
-
-    <Menu>
-      <Name>Pracovní</Name>
-      <Directory>ssh-pracovni.directory</Directory>
+      <Name>VPS</Name>
+      <Directory>ssh-vps.directory</Directory>
 
       <Include>
         <Filename>ssh-pracovniPc-prace.desktop</Filename>
@@ -79,6 +69,17 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-raspberry-5b-prace.desktop</Filename>
       </Include>
     </Menu>
+
+    <Menu>
+      <Name>Routery Switche</Name>
+      <Directory>ssh-routery.directory</Directory>
+
+      <Include>
+        <Filename>ssh-mikrotik-test.desktop</Filename>
+        <Filename>ssh-cisco-jirkov.desktop</Filename>
+      </Include>
+    </Menu>
+
   </Menu>
 
   <!-- ========================= -->
