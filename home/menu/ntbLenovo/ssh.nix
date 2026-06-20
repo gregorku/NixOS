@@ -69,8 +69,19 @@ home.file.".local/share/applications/ssh-serverPc-prace.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=ServerPC Práce Root
+Name=ServerPC Práce
 Exec=/home/gregor/.ssh/ssh/ssh-serverPc-prace.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-serverPc-prace-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=ServerPC Práce Root
+Exec=/home/gregor/.ssh/ssh/ssh-serverPc-prace-root.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true
@@ -82,6 +93,17 @@ Version=1.0
 Type=Application
 Name=VirtPC Práce
 Exec=/home/gregor/.ssh/ssh/ssh-virtpc-prace.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-virtPc-prace-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=VirtPC Práce
+Exec=/home/gregor/.ssh/ssh/ssh-virtpc-prace-root.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true
