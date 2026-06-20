@@ -54,8 +54,9 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-serverPc-prace.desktop</Filename>
         <Filename>ssh-serverPc-prace-root.desktop</Filename>        
         <Filename>ssh-virtPc-prace.desktop</Filename>
-        <Filename>ssh-testPc.desktop</Filename>
         <Filename>ssh-virtPc-prace-root.desktop</Filename>
+        <Filename>ssh-testPc.desktop</Filename>
+        <Filename>ssh-testPc-root.desktop</Filename>
         <Filename>ssh-pracovniPc-prace.desktop</Filename>
         <Filename>ssh-pracovniPc-prace-root.desktop</Filename>
         <Filename>ssh-raspberry-5b-prace.desktop</Filename>        
@@ -73,6 +74,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-virtPc-prace.desktop</Filename>
         <Filename>ssh-virtPc-prace-root.desktop</Filename>
         <Filename>ssh-testPc.desktop</Filename>
+        <Filename>ssh-testPc-root.desktop</Filename>
         <Filename>ssh-pracovniPc-prace.desktop</Filename>
         <Filename>ssh-pracovniPc-prace-root.desktop</Filename>
         <Filename>ssh-raspberry-5b-prace.desktop</Filename>        

@@ -102,7 +102,7 @@ home.file.".local/share/applications/ssh-virtPc-prace-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=VirtPC Práce
+Name=VirtPC Práce Root
 Exec=/home/gregor/.ssh/ssh/ssh-virtpc-prace-root.sh
 Icon=utilities-terminal
 Terminal=false
@@ -115,6 +115,17 @@ Version=1.0
 Type=Application
 Name=TestPC
 Exec=/home/gregor/.ssh/ssh/ssh-testpc.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-testPc-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=TestPC Root
+Exec=/home/gregor/.ssh/ssh/ssh-testpc-root.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true
