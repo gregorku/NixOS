@@ -14,6 +14,25 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   <!-- ========================= -->
 
   <Menu>
+    <Name>Gocryptfs</Name>
+    <Directory>gocryptfs-desktop.directory</Directory>
+
+    <Include>
+      <Filename>gocryptfs-dokumenty.directory</Filename>
+      <Filename>gocryptfs-dokumenty-odpojeni.directory</Filename>
+      <Filename>gocryptfs-data-odpojeni.directory</Filename>
+      <Filename>gocryptfs-data-odpojeni.directory</Filename>
+    </Include>
+
+    <Layout>
+      <Filename>gocryptfs-dokumenty.directory</Filename>
+      <Filename>gocryptfs-dokumenty-odpojeni.directory</Filename>
+      <Filename>gocryptfs-data-odpojeni.directory</Filename>
+      <Filename>gocryptfs-data-odpojeni.directory</Filename>
+    </Layout>
+  </Menu>
+
+  <Menu>
     <Name>Vzdálená plocha</Name>
     <Directory>remote-desktop.directory</Directory>
 
@@ -172,6 +191,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   <!-- ========================= -->
 
   <Layout>
+    <Menuname>Gocryptfs</Menuname>
     <Menuname>Vzdálená plocha</Menuname>
     <Menuname>SSH</Menuname>
     <Menuname>Kamery</Menuname>
