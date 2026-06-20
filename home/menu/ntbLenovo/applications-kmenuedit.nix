@@ -147,12 +147,34 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   </Menu>
 
   <!-- ========================= -->
+  <!-- Kamery           -->
+  <!-- ========================= -->
+
+  <Menu>
+    <Name>Kamery</Name>
+    <Directory>kamery-desktop.directory</Directory>
+
+    <Include>
+      <Filename>kamera-loznice.desktop</Filename>
+      <Filename>kamera-obyvak.desktop</Filename>
+      <Filename>kamera-3dprint.desktop</Filename>
+    </Include>
+
+    <Layout>
+      <Filename>kamera-loznice.desktop</Filename>
+      <Filename>kamera-obyvak.desktop</Filename>
+      <Filename>kamera-3dprint.desktop</Filename>
+    </Layout>
+  </Menu>
+
+  <!-- ========================= -->
   <!-- Pořadí hlavního menu      -->
   <!-- ========================= -->
 
   <Layout>
     <Menuname>Vzdálená plocha</Menuname>
     <Menuname>SSH</Menuname>
+    <Menuname>Kamery</Menuname>
   </Layout>
 
 </Menu>
