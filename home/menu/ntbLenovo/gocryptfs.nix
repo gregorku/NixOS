@@ -20,11 +20,11 @@ Icon=cr-key
 # Gocryptfs Dokumenty
 # =========================
 
-home.file.".local/share/applications/gocryptfs-dokumenty.directory.desktop".text = ''
+home.file.".local/share/applications/gocryptfs-dokumenty.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=kamera ložnice
+Name=Gocryptfs dokumenty
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-dokumenty.sh
 Icon=cr-key
 Terminal=false
@@ -37,11 +37,11 @@ StartupNotify=true
 
 # =========================
 
-home.file.".local/share/applications/gocryptfs-dokumenty-odpojeni.directory.desktop".text = ''
+home.file.".local/share/applications/gocryptfs-dokumenty-odpojeni.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=kamera obývák
+Name=Gocryptfs dokumenty odpojení
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-dokumenty-odpojeni.sh
 Icon=cr-key
 Terminal=false
@@ -58,7 +58,7 @@ home.file.".local/share/applications/gocryptfs-data.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=kamera 3D print
+Name=Gocryptfs data
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-data.sh
 Icon=cr-key
 Terminal=false
@@ -75,7 +75,7 @@ home.file.".local/share/applications/gocryptfs-data-odpojeni.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Práce PC dílna
+Name=Gocryptfs data odpojení
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-data-ospojeni.sh
 Icon=cr-key
 Terminal=false
