@@ -7,6 +7,7 @@
     ./menu/ntbLenovo/vzdalena-plocha.nix
     ./menu/ntbLenovo/applications-kmenuedit.nix
     ./menu/ntbLenovo/ssh.nix
+    ./menu/ntbLenovo/hdd.nix
     ./menu/ntbLenovo/kamery.nix
   ];
 }

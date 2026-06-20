@@ -174,6 +174,100 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   </Menu>
 
   <!-- ========================= -->
+  <!-- HDD                       -->
+  <!-- ========================= -->
+
+  <Menu>
+    <Name>HDD</Name>
+    <Directory>hdd.directory</Directory>
+
+    <!-- ========================= -->
+    <!-- Servery Pc HDD            -->
+    <!-- ========================= -->
+
+    <Menu>
+      <Name>Servery Pc HDD</Name>
+      <Directory>hdd-serveryPc.directory</Directory>
+
+      <Include>
+        <Filename>hdd-server-doma.desktop</Filename>
+        <Filename>hdd-server-doma-root.desktop</Filename>
+        <Filename>hdd-serverPc-prace.desktop</Filename>
+        <Filename>hdd-serverPc-prace-root.desktop</Filename>        
+        <Filename>hdd-virtPc-prace.desktop</Filename>
+        <Filename>hdd-virtPc-prace-root.desktop</Filename>
+        <Filename>hdd-testPc.desktop</Filename>
+        <Filename>hdd-testPc-root.desktop</Filename>
+        <Filename>hdd-pracovniPc-prace.desktop</Filename>
+        <Filename>hdd-pracovniPc-prace-root.desktop</Filename>
+        <Filename>hdd-raspberry-5b-prace.desktop</Filename>
+        <Filename>hdd-raspberry-5b-prace-root.desktop</Filename>        
+        <Filename>hdd-lenovo.desktop</Filename>
+        <Filename>hdd-nikola.desktop</Filename>
+        <Filename>hdd-nikola-root.desktop</Filename>
+        <Filename>hdd-raspberry-3b-nikola.desktop</Filename>
+        <Filename>hdd-raspberry-3b-nikola-root.desktop</Filename>
+        <Filename>hdd-virtpc-webmin.desktop</Filename>
+      </Include>
+
+      <Layout>
+        <Filename>hdd-server-doma.desktop</Filename>
+        <Filename>hdd-server-doma-root.desktop</Filename>
+        <Filename>hdd-serverPc-prace.desktop</Filename>
+        <Filename>hdd-serverPc-prace-root.desktop</Filename>        
+        <Filename>hdd-virtPc-prace.desktop</Filename>
+        <Filename>hdd-virtPc-prace-root.desktop</Filename>
+        <Filename>hdd-testPc.desktop</Filename>
+        <Filename>hdd-testPc-root.desktop</Filename>
+        <Filename>hdd-pracovniPc-prace.desktop</Filename>
+        <Filename>hdd-pracovniPc-prace-root.desktop</Filename>
+        <Filename>hdd-raspberry-5b-prace.desktop</Filename>
+        <Filename>hdd-raspberry-5b-prace-root.desktop</Filename>        
+        <Filename>hdd-lenovo.desktop</Filename>
+        <Filename>hdd-nikola.desktop</Filename>
+        <Filename>hdd-nikola-root.desktop</Filename>
+        <Filename>hdd-raspberry-3b-nikola.desktop</Filename>
+        <Filename>hdd-raspberry-3b-nikola-root.desktop</Filename>
+        <Filename>hdd-virtpc-webmin.desktop</Filename>
+      </Layout>
+    </Menu>
+
+    <!-- ========================= -->
+    <!-- VPS HDD                   -->
+    <!-- ========================= -->
+
+    <Menu>
+      <Name>VPS HDD</Name>
+      <Directory>hdd-vps.directory</Directory>
+
+      <Include>
+
+        <Filename>hdd-netcup-serverpc.desktop</Filename>
+        <Filename>hdd-netcup-test-serverpc.desktop</Filename>
+        <Filename>hdd-netcup-lxc-aplikace.desktop</Filename>
+        <Filename>hdd-alwyzon-serverpc.desktop</Filename>
+      </Include>
+
+      <Layout>
+        <Filename>hdd-netcup-serverpc.desktop</Filename>
+        <Filename>hdd-netcup-test-serverpc.desktop</Filename>
+        <Filename>hdd-netcup-lxc-aplikace.desktop</Filename>
+        <Filename>hdd-alwyzon-serverpc.desktop</Filename>
+      </Layout>
+    </Menu>
+
+    <!-- ========================= -->
+    <!-- Pořadí podmenu SSH        -->
+    <!-- ========================= -->
+
+    <Layout>
+      <Menuname>Servery Pc HDD</Menuname>
+      <Menuname>VPS HDD</Menuname>
+    </Layout>
+
+  </Menu>
+
+  <!-- ========================= -->
   <!-- Kamery           -->
   <!-- ========================= -->
 
@@ -202,6 +296,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     <Menuname>Gocryptfs</Menuname>
     <Menuname>Vzdálená plocha</Menuname>
     <Menuname>SSH</Menuname>
+    <Menuname>HDD</Menuname>    
     <Menuname>Kamery</Menuname>
   </Layout>
 
