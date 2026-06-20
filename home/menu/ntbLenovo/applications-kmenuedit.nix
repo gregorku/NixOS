@@ -10,7 +10,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   <Name>Applications</Name>
 
   <!-- ========================= -->
-  <!-- Vzdálená plocha           -->
+  <!-- Gocryptfs data           -->
   <!-- ========================= -->
 
   <Menu>
@@ -18,19 +18,23 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     <Directory>gocryptfs-desktop.directory</Directory>
 
     <Include>
-      <Filename>gocryptfs-dokumenty.directory</Filename>
-      <Filename>gocryptfs-dokumenty-odpojeni.directory</Filename>
-      <Filename>gocryptfs-data-odpojeni.directory</Filename>
-      <Filename>gocryptfs-data-odpojeni.directory</Filename>
+      <Filename>gocryptfs-dokumenty.desktop</Filename>
+      <Filename>gocryptfs-dokumenty-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-data-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-data-odpojeni.desktop</Filename>
     </Include>
 
     <Layout>
-      <Filename>gocryptfs-dokumenty.directory</Filename>
-      <Filename>gocryptfs-dokumenty-odpojeni.directory</Filename>
-      <Filename>gocryptfs-data-odpojeni.directory</Filename>
-      <Filename>gocryptfs-data-odpojeni.directory</Filename>
+      <Filename>gocryptfs-dokumenty.desktop</Filename>
+      <Filename>gocryptfs-dokumenty-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-data-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-data-odpojeni.ddesktop</Filename>
     </Layout>
   </Menu>
+
+  <!-- ========================= -->
+  <!-- Vzdálená plocha           -->
+  <!-- ========================= -->
 
   <Menu>
     <Name>Vzdálená plocha</Name>
