@@ -12,12 +12,13 @@ home.file.".local/share/desktop-directories/gocryptfs-desktop.directory".text = 
 [Desktop Entry]
 Type=Directory
 Name=Gocryptfs
-Icon=cr-key
+Icon=gcr-key
 '';
 
 # =========================
 
 # Gocryptfs Dokumenty
+
 # =========================
 
 home.file.".local/share/applications/gocryptfs-dokumenty.desktop".text = ''
@@ -26,7 +27,7 @@ Version=1.0
 Type=Application
 Name=Gocryptfs dokumenty
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-dokumenty.sh
-Icon=cr-key
+Icon=gcr-key
 Terminal=false
 StartupNotify=true
 '';
@@ -43,7 +44,7 @@ Version=1.0
 Type=Application
 Name=Gocryptfs dokumenty odpojení
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-dokumenty-odpojeni.sh
-Icon=cr-key
+Icon=gcr-key
 Terminal=false
 StartupNotify=true
 '';
@@ -60,7 +61,7 @@ Version=1.0
 Type=Application
 Name=Gocryptfs data
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-data.sh
-Icon=cr-key
+Icon=gcr-key
 Terminal=false
 StartupNotify=true
 '';
@@ -76,8 +77,8 @@ home.file.".local/share/applications/gocryptfs-data-odpojeni.desktop".text = ''
 Version=1.0
 Type=Application
 Name=Gocryptfs data odpojení
-Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-data-ospojeni.sh
-Icon=cr-key
+Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-data-odpojeni.sh
+Icon=gcr-key
 Terminal=false
 StartupNotify=true
 '';
