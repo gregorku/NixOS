@@ -197,12 +197,34 @@ Terminal=false
 StartupNotify=true
 '';
 
+home.file.".local/share/applications/ssh-nikola-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Nikola Root
+Exec=/home/gregor/.ssh/ssh/ssh-nikola-root.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
 home.file.".local/share/applications/ssh-raspberry-3b-nikola.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=Raspberry 3B Nikola
 Exec=/home/gregor/.ssh/ssh/ssh-raspberry-3b-nikola.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/ssh-raspberry-3b-nikola-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Raspberry 3B Nikola Root
+Exec=/home/gregor/.ssh/ssh/ssh-raspberry-3b-nikola-root.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true

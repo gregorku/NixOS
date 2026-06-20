@@ -63,7 +63,9 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-raspberry-5b-prace-root.desktop</Filename>        
         <Filename>ssh-lenovo.desktop</Filename>
         <Filename>ssh-nikola.desktop</Filename>
+        <Filename>ssh-nikola-root.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
+        <Filename>ssh-raspberry-3b-nikola-root.desktop</Filename>
         <Filename>ssh-virtpc-webmin.desktop</Filename>
       </Include>
 
@@ -82,7 +84,9 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-raspberry-5b-prace-root.desktop</Filename>         
         <Filename>ssh-lenovo.desktop</Filename>
         <Filename>ssh-nikola.desktop</Filename>
+        <Filename>ssh-nikola-root.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
+        <Filename>ssh-raspberry-3b-nikola-root.desktop</Filename>
         <Filename>ssh-virtpc-webmin.desktop</Filename>
       </Layout>
     </Menu>
