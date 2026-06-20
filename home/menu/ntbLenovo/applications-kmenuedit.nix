@@ -22,6 +22,8 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       <Filename>gocryptfs-dokumenty-odpojeni.desktop</Filename>
       <Filename>gocryptfs-data.desktop</Filename>
       <Filename>gocryptfs-data-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-zalohantb.desktop</Filename>
+      <Filename>gocryptfs-zalohantb-odpojeni.desktop</Filename>
     </Include>
 
     <Layout>
@@ -29,6 +31,8 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       <Filename>gocryptfs-dokumenty-odpojeni.desktop</Filename>
       <Filename>gocryptfs-data.desktop</Filename>
       <Filename>gocryptfs-data-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-zalohantb.desktop</Filename>
+      <Filename>gocryptfs-zalohantb-odpojeni.desktop</Filename>
     </Layout>
   </Menu>
 
