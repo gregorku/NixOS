@@ -93,7 +93,7 @@ home.file.".local/share/applications/gocryptfs-zalohantb.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Gocryptfs data
+Name=Gocryptfs zalohaNTB
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-zalohantb.sh
 Icon=gcr-key
 Terminal=false
@@ -110,7 +110,7 @@ home.file.".local/share/applications/gocryptfs-zalohantb-odpojeni.desktop".text 
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Gocryptfs data odpojení
+Name=Gocryptfs zalohaNTB odpojení
 Exec=/home/gregor/.ssh/gocryptfs/gocryptfs-zalohantb-odpojeni.sh
 Icon=gcr-key
 Terminal=false
