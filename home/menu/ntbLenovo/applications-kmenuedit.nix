@@ -59,7 +59,8 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-testPc-root.desktop</Filename>
         <Filename>ssh-pracovniPc-prace.desktop</Filename>
         <Filename>ssh-pracovniPc-prace-root.desktop</Filename>
-        <Filename>ssh-raspberry-5b-prace.desktop</Filename>        
+        <Filename>ssh-raspberry-5b-prace.desktop</Filename>
+        <Filename>ssh-raspberry-5b-prace-root.desktop</Filename>        
         <Filename>ssh-lenovo.desktop</Filename>
         <Filename>ssh-nikola.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
@@ -77,7 +78,8 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-testPc-root.desktop</Filename>
         <Filename>ssh-pracovniPc-prace.desktop</Filename>
         <Filename>ssh-pracovniPc-prace-root.desktop</Filename>
-        <Filename>ssh-raspberry-5b-prace.desktop</Filename>        
+        <Filename>ssh-raspberry-5b-prace.desktop</Filename>
+        <Filename>ssh-raspberry-5b-prace-root.desktop</Filename>         
         <Filename>ssh-lenovo.desktop</Filename>
         <Filename>ssh-nikola.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>

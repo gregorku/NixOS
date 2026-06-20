@@ -164,6 +164,17 @@ Terminal=false
 StartupNotify=true
 '';
 
+home.file.".local/share/applications/ssh-raspberry-5b-prace-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Raspberry 5B Práce Root
+Exec=/home/gregor/.ssh/ssh/ssh-raspberry-5b-prace-root.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
 home.file.".local/share/applications/ssh-lenovo.desktop".text = ''
 [Desktop Entry]
 Version=1.0
