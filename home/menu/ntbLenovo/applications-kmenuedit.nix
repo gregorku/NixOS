@@ -20,15 +20,15 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     <Include>
       <Filename>gocryptfs-dokumenty.desktop</Filename>
       <Filename>gocryptfs-dokumenty-odpojeni.desktop</Filename>
-      <Filename>gocryptfs-data-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-data.desktop</Filename>
       <Filename>gocryptfs-data-odpojeni.desktop</Filename>
     </Include>
 
     <Layout>
       <Filename>gocryptfs-dokumenty.desktop</Filename>
       <Filename>gocryptfs-dokumenty-odpojeni.desktop</Filename>
+      <Filename>gocryptfs-data.desktop</Filename>
       <Filename>gocryptfs-data-odpojeni.desktop</Filename>
-      <Filename>gocryptfs-data-odpojeni.ddesktop</Filename>
     </Layout>
   </Menu>
 
