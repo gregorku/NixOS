@@ -67,8 +67,8 @@
   users = [ "gregor" ];
     commands = [
       {
-        command = "${pkgs.openconnect}/bin/openconnect";
-        options = [ "NOPASSWD" ];
+       command = "/run/current-system/sw/bin/openconnect";
+       options = [ "NOPASSWD" ];
       }
     ];
   }
