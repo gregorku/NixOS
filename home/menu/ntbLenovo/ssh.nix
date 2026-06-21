@@ -270,23 +270,23 @@ Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/ssh-netcup-test-serverpc.desktop".text = ''
+home.file.".local/share/applications/ssh-netcup-test-servervps.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Netcup Test ServerPC
-Exec=/home/gregor/.ssh/ssh/ssh-netcup-test-serverpc.sh
+Name=Netcup Test Server VPS
+Exec=/home/gregor/.ssh/ssh/ssh-netcup-test-servervps.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/ssh-alwyzon-serverpc.desktop".text = ''
+home.file.".local/share/applications/ssh-netcup-test-servervps-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Alwyzon ServerPC
-Exec=/home/gregor/.ssh/ssh/ssh-alwyzon-serverpc.sh
+Name=Netcup Test Server VPS Root
+Exec=/home/gregor/.ssh/ssh/ssh-netcup-test-servervps-root.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true

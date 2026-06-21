@@ -153,15 +153,15 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
 
         <Filename>ssh-netcup-servervps.desktop</Filename>
         <Filename>ssh-netcup-servervps-root.desktop</Filename>
-        <Filename>ssh-netcup-lxc-aplikace.desktop</Filename>
-        <Filename>ssh-alwyzon-serverpc.desktop</Filename>
+        <Filename>ssh-netcup-servervps.desktop</Filename>
+        <Filename>ssh-netcup-servervps-root.desktop</Filename>
       </Include>
 
       <Layout>
         <Filename>ssh-netcup-servervps.desktop</Filename>
         <Filename>ssh-netcup-servervps-root.desktop</Filename>
-        <Filename>ssh-netcup-lxc-aplikace.desktop</Filename>
-        <Filename>ssh-alwyzon-serverpc.desktop</Filename>
+        <Filename>ssh-netcup-servervps.desktop</Filename>
+        <Filename>ssh-netcup-servervps-root.desktop</Filename>
       </Layout>
     </Menu>
 

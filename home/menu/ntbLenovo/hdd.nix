@@ -247,7 +247,7 @@ Version=1.0
 Type=Application
 Name=Netcup Server VPS
 Exec=/home/gregor/.ssh/hdd/hdd-netcup-servervps.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
@@ -258,29 +258,29 @@ Version=1.0
 Type=Application
 Name=Netcup Server VPS Root
 Exec=/home/gregor/.ssh/hdd/hdd-netcup-servervps-root.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-netcup-test-serverpc.desktop".text = ''
+home.file.".local/share/applications/hdd-netcup-test-servervps.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Netcup Test ServerPC
-Exec=/home/gregor/.ssh/hdd/hdd-netcup-test-serverpc.sh
-Icon=utilities-terminal
+Name=Netcup Test Server VPS
+Exec=/home/gregor/.ssh/hdd/hdd-netcup-test-servervps.sh
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-alwyzon-serverpc.desktop".text = ''
+home.file.".local/share/applications/hdd-netcup-test-servervps-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Alwyzon ServerPC
-Exec=/home/gregor/.ssh/hdd/hdd-alwyzon-serverpc.sh
-Icon=utilities-terminal
+Name=Netcup Test Server VPS Root
+Exec=/home/gregor/.ssh/hdd/hdd-netcup-test-servervps-root.sh
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
