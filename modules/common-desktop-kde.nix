@@ -58,4 +58,23 @@
     catppuccin-kde
     papirus-icon-theme
   ];
+
+  # ----------------------
+  # 🔐 Sudo
+  # ----------------------
+  security.sudo.extraRules = [
+  {
+  users = [ "gregor" ];
+  
+  ```
+    commands = [
+      {
+        command = "${pkgs.openconnect}/bin/openconnect";
+        options = [ "NOPASSWD" ];
+      }
+    ];
+  }
+    ```
+
+  ];
 }
