@@ -241,12 +241,23 @@ StartupNotify=true
 
 # =========================
 
-home.file.".local/share/applications/hdd-netcup-serverpc.desktop".text = ''
+home.file.".local/share/applications/hdd-netcup-servervps.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Netcup ServerPC
-Exec=/home/gregor/.ssh/hdd/hdd-netcup-serverpc.sh
+Name=Netcup Server VPS
+Exec=/home/gregor/.ssh/hdd/hdd-netcup-servervps.sh
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=true
+'';
+
+home.file.".local/share/applications/hdd-netcup-servervps-root.desktop".text = ''
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Netcup Server VPS Root
+Exec=/home/gregor/.ssh/hdd/hdd-netcup-servervps-root.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true

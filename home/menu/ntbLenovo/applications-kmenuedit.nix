@@ -265,15 +265,15 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
 
       <Include>
 
-        <Filename>hdd-netcup-serverpc.desktop</Filename>
-        <Filename>hdd-netcup-test-serverpc.desktop</Filename>
+        <Filename>hdd-netcup-servervps.desktop</Filename>
+        <Filename>hdd-netcup-servervps-root.desktop</Filename>
         <Filename>hdd-netcup-lxc-aplikace.desktop</Filename>
         <Filename>hdd-alwyzon-serverpc.desktop</Filename>
       </Include>
 
       <Layout>
-        <Filename>hdd-netcup-serverpc.desktop</Filename>
-        <Filename>hdd-netcup-test-serverpc.desktop</Filename>
+        <Filename>hdd-netcup-servervps.desktop</Filename>
+        <Filename>hdd-netcup-servervps-root.desktop</Filename>
         <Filename>hdd-netcup-lxc-aplikace.desktop</Filename>
         <Filename>hdd-alwyzon-serverpc.desktop</Filename>
       </Layout>
