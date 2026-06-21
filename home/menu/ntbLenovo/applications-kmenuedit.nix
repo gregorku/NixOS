@@ -60,6 +60,29 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   </Menu>
 
   <!-- ========================= -->
+  <!-- VPN sítě           -->
+  <!-- ========================= -->
+
+  <Menu>
+    <Name>VPN</Name>
+    <Directory>vpn-desktop.directory</Directory>
+
+    <Include>
+      <Filename>vpn-pracovni.desktop</Filename>
+      <Filename>vpn-pracovni-odpojeni.desktop</Filename>
+      <Filename>serverPc-sync.desktop</Filename>
+      <Filename>pracePc.desktop</Filename>
+    </Include>
+
+    <Layout>
+      <Filename>vpn-pracovni.desktop</Filename>
+      <Filename>vpn-pracovni-odpojeni.desktop</Filename>
+      <Filename>serverPc-sync.desktop</Filename>
+      <Filename>pracePc.desktop</Filename>
+    </Layout>
+  </Menu>
+
+  <!-- ========================= -->
   <!-- SSH                       -->
   <!-- ========================= -->
 
@@ -295,6 +318,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   <Layout>
     <Menuname>Gocryptfs</Menuname>
     <Menuname>Vzdálená plocha</Menuname>
+    <Menuname>VPN</Menuname>
     <Menuname>SSH</Menuname>
     <Menuname>HDD</Menuname>    
     <Menuname>Kamery</Menuname>
