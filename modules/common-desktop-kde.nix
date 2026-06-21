@@ -65,8 +65,6 @@
   security.sudo.extraRules = [
   {
   users = [ "gregor" ];
-  
-  ```
     commands = [
       {
         command = "${pkgs.openconnect}/bin/openconnect";
@@ -74,7 +72,5 @@
       }
     ];
   }
-    ```
-
   ];
 }
