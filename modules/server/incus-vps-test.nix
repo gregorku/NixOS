@@ -4,6 +4,7 @@
   virtualisation.incus = {
     enable = true;
     ui.enable = true;
+    package = pkgs.incus;
   };
 
   users.groups.incus-admin = {};
