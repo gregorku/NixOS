@@ -36,23 +36,23 @@ Icon=drive-harddisk-symbolic
 
 # =========================
 
-home.file.".local/share/applications/hdd-server-doma.desktop".text = ''
+home.file.".local/share/applications/hdd-server-domaPc.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Server Doma HDD
-Exec=/home/gregor/.ssh/hdd/hdd-server-doma.sh
+Name=Server Doma Pc HDD
+Exec=/home/gregor/.ssh/hdd/hdd-server-domaPc.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-server-doma-root.desktop".text = ''
+home.file.".local/share/applications/hdd-server-domaPc-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Server Doma Root HDD
-Exec=/home/gregor/.ssh/hdd/hdd-server-doma-root.sh
+Name=Server Doma Pc Root HDD
+Exec=/home/gregor/.ssh/hdd/hdd-server-domaPc-root.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
@@ -62,85 +62,85 @@ home.file.".local/share/applications/hdd-serverPc-prace.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=ServerPC Práce HDD
-Exec=/home/gregor/.ssh/hdd/hdd-serverPc-prace.sh
+Name=Server Práce Pc HDD
+Exec=/home/gregor/.ssh/hdd/hdd-server-pracePc.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-serverPc-prace-root.desktop".text = ''
+home.file.".local/share/applications/hdd-server-pracePc-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=ServerPC Práce Root HDD
-Exec=/home/gregor/.ssh/hdd/hdd-serverPc-prace-root.sh
+Name=Server Práce Pc Root HDD
+Exec=/home/gregor/.ssh/hdd/hdd-server-pracePc-root.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-virtPc-prace.desktop".text = ''
+home.file.".local/share/applications/hdd-virt-pracePc.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=VirtPC Práce HDD
-Exec=/home/gregor/.ssh/hdd/hdd-virtpc-prace.sh
+Name=Virt Práce Pc HDD
+Exec=/home/gregor/.ssh/hdd/hdd-virt-pracePc.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-virtPc-prace-root.desktop".text = ''
+home.file.".local/share/applications/hdd-virt-pracePc-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=VirtPC Práce Root HDD
-Exec=/home/gregor/.ssh/hdd/hdd-virtpc-prace-root.sh
+Name=Virt Práce Pc Root HDD
+Exec=/home/gregor/.ssh/hdd/hdd-virt-pracePc-root.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-testPc.desktop".text = ''
+home.file.".local/share/applications/hdd-test-pracePc.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=TestPC HDD
-Exec=/home/gregor/.ssh/hdd/hdd-testpc.sh
+Name=Test Práce Pc HDD
+Exec=/home/gregor/.ssh/hdd/hdd-test-pracePc.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-testPc-root.desktop".text = ''
+home.file.".local/share/applications/hdd-test-pracePc-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=TestPC Root HDD
-Exec=/home/gregor/.ssh/hdd/hdd-testpc-root.sh
+Name=Test Práce PcRoot HDD
+Exec=/home/gregor/.ssh/hdd/hdd-test-pracePc-root.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-pracovniPc-prace.desktop".text = ''
+home.file.".local/share/applications/hdd-pracovni-pracePc.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Pracovní PC HDD
-Exec=/home/gregor/.ssh/hdd/hdd-pracovniPc-prace.sh
+Name=Pracovní Práca PC HDD
+Exec=/home/gregor/.ssh/hdd/hdd-pracovni-pracePc.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-pracovniPc-prace-root.desktop".text = ''
+home.file.".local/share/applications/hdd-pracovni-pracePc-root.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Pracovní PC Root HDD
-Exec=/home/gregor/.ssh/hdd/hdd-pracovniPc-prace-root.sh
+Name=Pracovní Práce PC Root HDD
+Exec=/home/gregor/.ssh/hdd/hdd-pracovni-pracePc-root.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true

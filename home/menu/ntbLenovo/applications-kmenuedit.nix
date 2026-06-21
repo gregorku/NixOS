@@ -190,16 +190,16 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       <Directory>hdd-serveryPc.directory</Directory>
 
       <Include>
-        <Filename>hdd-server-doma.desktop</Filename>
-        <Filename>hdd-server-doma-root.desktop</Filename>
-        <Filename>hdd-serverPc-prace.desktop</Filename>
-        <Filename>hdd-serverPc-prace-root.desktop</Filename>        
-        <Filename>hdd-virtPc-prace.desktop</Filename>
-        <Filename>hdd-virtPc-prace-root.desktop</Filename>
-        <Filename>hdd-testPc.desktop</Filename>
-        <Filename>hdd-testPc-root.desktop</Filename>
-        <Filename>hdd-pracovniPc-prace.desktop</Filename>
-        <Filename>hdd-pracovniPc-prace-root.desktop</Filename>
+        <Filename>hdd-server-domaPc.desktop</Filename>
+        <Filename>hdd-server-domaPc-root.desktop</Filename>
+        <Filename>hdd-server-pracePc.desktop</Filename>
+        <Filename>hdd-server-pracePc-root.desktop</Filename>        
+        <Filename>hdd-virt-pracePc.desktop</Filename>
+        <Filename>hdd-virt-pracePc-root.desktop</Filename>
+        <Filename>hdd-test-pracePc.desktop</Filename>
+        <Filename>hdd-test-pracePc-root.desktop</Filename>
+        <Filename>hdd-pracovni-pracePc.desktop</Filename>
+        <Filename>hdd-pracovni-pracePc-root.desktop</Filename>
         <Filename>hdd-raspberry-5b-prace.desktop</Filename>
         <Filename>hdd-raspberry-5b-prace-root.desktop</Filename>        
         <Filename>hdd-lenovo.desktop</Filename>
@@ -211,16 +211,16 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       </Include>
 
       <Layout>
-        <Filename>hdd-server-doma.desktop</Filename>
-        <Filename>hdd-server-doma-root.desktop</Filename>
-        <Filename>hdd-serverPc-prace.desktop</Filename>
-        <Filename>hdd-serverPc-prace-root.desktop</Filename>        
-        <Filename>hdd-virtPc-prace.desktop</Filename>
-        <Filename>hdd-virtPc-prace-root.desktop</Filename>
-        <Filename>hdd-testPc.desktop</Filename>
-        <Filename>hdd-testPc-root.desktop</Filename>
-        <Filename>hdd-pracovniPc-prace.desktop</Filename>
-        <Filename>hdd-pracovniPc-prace-root.desktop</Filename>
+        <Filename>hdd-server-domaPc.desktop</Filename>
+        <Filename>hdd-server-domaPc-root.desktop</Filename>
+        <Filename>hdd-server-pracePc.desktop</Filename>
+        <Filename>hdd-server-pracePc-root.desktop</Filename>        
+        <Filename>hdd-virt-pracePc.desktop</Filename>
+        <Filename>hdd-virt-pracePc-root.desktop</Filename>
+        <Filename>hdd-test-pracePc.desktop</Filename>
+        <Filename>hdd-test-pracePc-root.desktop</Filename>
+        <Filename>hdd-pracovni-pracePc.desktop</Filename>
+        <Filename>hdd-pracovni-pracePc-root.desktop</Filename>
         <Filename>hdd-raspberry-5b-prace.desktop</Filename>
         <Filename>hdd-raspberry-5b-prace-root.desktop</Filename>        
         <Filename>hdd-lenovo.desktop</Filename>
