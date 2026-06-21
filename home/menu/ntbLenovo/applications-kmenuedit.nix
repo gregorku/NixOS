@@ -70,15 +70,15 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     <Include>
       <Filename>vpn-pracovni.desktop</Filename>
       <Filename>vpn-pracovni-odpojeni.desktop</Filename>
-      <Filename>serverPc-sync.desktop</Filename>
-      <Filename>pracePc.desktop</Filename>
+      <Filename>vpn-wg1-netcup.desktop</Filename>
+      <Filename>vpn-wg1-netcup-odpojeni.desktop</Filename>
     </Include>
 
     <Layout>
       <Filename>vpn-pracovni.desktop</Filename>
       <Filename>vpn-pracovni-odpojeni.desktop</Filename>
-      <Filename>serverPc-sync.desktop</Filename>
-      <Filename>pracePc.desktop</Filename>
+      <Filename>vpn-wg1-netcup.desktop</Filename>
+      <Filename>vpn-wg1-netcup-odpojeni.desktop</Filename>
     </Layout>
   </Menu>
 
