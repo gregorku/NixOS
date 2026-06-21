@@ -47,7 +47,7 @@ StartupNotify=true
 
 # =========================
 
-# ServerPC-sync
+# VPN wg1-Netcup
 
 # =========================
 
@@ -55,7 +55,7 @@ home.file.".local/share/applications/vpn-wg1-netcup.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=ServerPC-sync dílna
+Name=VPN wg1 Netcup
 Exec=/home/gregor/.ssh/vpn/vpn-wg1-netcup.sh
 Icon=network-vpn
 Terminal=false
@@ -66,8 +66,8 @@ home.file.".local/share/applications/vpn-wg1-netcup-odpojeni.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Práce PC dílna
-Exec=/home/gregor/.ssh/vpn/vpn-wg1-netcup.sh
+Name=VPN wg1 Netcup odpojení
+Exec=/home/gregor/.ssh/vpn/vpn-wg1-netcup-odpojeni.sh
 Icon=network-vpn
 Terminal=false
 StartupNotify=true
