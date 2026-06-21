@@ -9,6 +9,8 @@
     ../../modules/common-base.nix
     ../../modules/common-security.nix
     ../../modules/common-swap.nix
+    ../../modules/server/server-users.nix
+
 
     ##################################################
     # Server-only moduly
@@ -79,23 +81,6 @@
   ];
 
   ##################################################
-  # Uživatelé
-  ##################################################
-  users.users.gregor = {
-    isNormalUser = true;
-    description  = "Server administrator";
-    extraGroups  = [ "wheel" "incus-admin" ];
-    shell        = pkgs.bashInteractive;
-    linger       = true;
-    initialPassword = "zmenit"; # změň ASAP
-
-    openssh.authorizedKeys.keys = [
-      # TODO: přesunout do agenix později
-      "ssh-rsa AAAAB3NzaC1yc2E..."
-    ];
-  };
-
-  ##################################################
   # Lokalizace
   ##################################################
   time.timeZone = "Europe/Prague";
@@ -135,5 +120,5 @@
   ##################################################
   # Version
   ##################################################
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 }
