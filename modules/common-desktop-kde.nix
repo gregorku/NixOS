@@ -70,6 +70,9 @@
        command = "/run/current-system/sw/bin/openconnect";
        options = [ "NOPASSWD" ];
       }
+      { command = "/run/current-system/sw/bin/pkill";
+        options = [ "NOPASSWD" ];
+      }
     ];
   }
   ];
