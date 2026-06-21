@@ -174,7 +174,7 @@ Version=1.0
 Type=Application
 Name=Lenovo HDD
 Exec=/home/gregor/.ssh/hdd/hdd-lenovo.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
@@ -185,7 +185,7 @@ Version=1.0
 Type=Application
 Name=Nikola HDD
 Exec=/home/gregor/.ssh/hdd/hdd-nikola.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
@@ -196,7 +196,7 @@ Version=1.0
 Type=Application
 Name=Nikola Root HDD
 Exec=/home/gregor/.ssh/hdd/hdd-nikola-root.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
@@ -207,7 +207,7 @@ Version=1.0
 Type=Application
 Name=Raspberry 3B Nikola HDD
 Exec=/home/gregor/.ssh/hdd/hdd-raspberry-3b-nikola.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
@@ -218,7 +218,7 @@ Version=1.0
 Type=Application
 Name=Raspberry 3B Nikola Root HDD
 Exec=/home/gregor/.ssh/hdd/hdd-raspberry-3b-nikola-root.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
@@ -229,7 +229,7 @@ Version=1.0
 Type=Application
 Name=VirtPC Webmin HDD
 Exec=/home/gregor/.ssh/hdd/hdd-virtpc-webmin.sh
-Icon=utilities-terminal
+Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
 '';
