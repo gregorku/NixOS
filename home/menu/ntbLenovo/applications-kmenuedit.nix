@@ -153,15 +153,15 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
 
         <Filename>ssh-netcup-servervps.desktop</Filename>
         <Filename>ssh-netcup-servervps-root.desktop</Filename>
-        <Filename>ssh-netcup-servervps.desktop</Filename>
-        <Filename>ssh-netcup-servervps-root.desktop</Filename>
+        <Filename>ssh-netcup-test-servervps.desktop</Filename>
+        <Filename>ssh-netcup-test-servervps-root.desktop</Filename>
       </Include>
 
       <Layout>
         <Filename>ssh-netcup-servervps.desktop</Filename>
         <Filename>ssh-netcup-servervps-root.desktop</Filename>
-        <Filename>ssh-netcup-servervps.desktop</Filename>
-        <Filename>ssh-netcup-servervps-root.desktop</Filename>
+        <Filename>ssh-netcup-test-servervps.desktop</Filename>
+        <Filename>ssh-netcup-test-servervps-root.desktop</Filename>
       </Layout>
     </Menu>
 
