@@ -51,30 +51,24 @@ StartupNotify=true
 
 # =========================
 
-home.file.".local/share/applications/serverPc-sync.desktop".text = ''
+home.file.".local/share/applications/vpn-wg1-netcup.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=ServerPC-sync dílna
-Exec=/home/gregor/.ssh/vzdalena-plocha/prace-serverPc-sync-rdp.sh
-Icon=krdc
+Exec=/home/gregor/.ssh/vpn/vpn-wg1-netcup.sh
+Icon=network-vpn
 Terminal=false
 StartupNotify=true
 '';
 
-# =========================
-
-# Práce PC dílna
-
-# =========================
-
-home.file.".local/share/applications/pracePc.desktop".text = ''
+home.file.".local/share/applications/vpn-wg1-netcup-odpojeni.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=Práce PC dílna
-Exec=/home/gregor/.ssh/vzdalena-plocha/prace-pracePc-win11-rdp.sh
-Icon=krdc
+Exec=/home/gregor/.ssh/vpn/vpn-wg1-netcup.sh
+Icon=network-vpn
 Terminal=false
 StartupNotify=true
 '';
