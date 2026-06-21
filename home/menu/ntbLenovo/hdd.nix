@@ -58,7 +58,7 @@ Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-serverPc-prace.desktop".text = ''
+home.file.".local/share/applications/hdd-server-pracePc.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
