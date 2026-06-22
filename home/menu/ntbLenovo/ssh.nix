@@ -234,7 +234,7 @@ home.file.".local/share/applications/ssh-vu-satelit.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=VirtPC Webmin
+Name=VU Satelit
 Exec=/home/gregor/.ssh/ssh/ssh-vu-satelit.sh
 Icon=utilities-terminal
 Terminal=false
