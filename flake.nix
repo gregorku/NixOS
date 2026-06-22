@@ -91,7 +91,7 @@
       # 🖥️ vzdálená plocha
       pracovniPc =
         mkHost "pracovniPc"
-        ./home/desktop-plocha.nix;
+        ./home/pracovniPc.nix;
  
       # 🖥️ Servery
       domaPcServer =
