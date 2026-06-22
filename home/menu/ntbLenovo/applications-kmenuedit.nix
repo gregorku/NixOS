@@ -116,7 +116,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-nikola-root.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>ssh-virtpc-webmin.desktop</Filename>
+        <Filename>ssh-vu-satelit.desktop</Filename>
       </Include>
 
       <Layout>
@@ -137,7 +137,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-nikola-root.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>ssh-virtpc-webmin.desktop</Filename>
+        <Filename>ssh-vu-satelit.desktop</Filename>
       </Layout>
     </Menu>
 
