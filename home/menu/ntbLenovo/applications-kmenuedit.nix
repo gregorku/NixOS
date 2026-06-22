@@ -230,7 +230,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>hdd-nikola-root.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>hdd-virtpc-webmin.desktop</Filename>
+        <Filename>hdd-satelit-vu.desktop</Filename>
       </Include>
 
       <Layout>
@@ -251,7 +251,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>hdd-nikola-root.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>hdd-virtpc-webmin.desktop</Filename>
+        <Filename>hdd-satelit-vu.desktop</Filename>
       </Layout>
     </Menu>
 
