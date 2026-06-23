@@ -302,12 +302,14 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       <Filename>kamera-loznice.desktop</Filename>
       <Filename>kamera-obyvak.desktop</Filename>
       <Filename>kamera-3dprint.desktop</Filename>
+      <Filename>kamera-online-ps.desktop</Filename>
     </Include>
 
     <Layout>
       <Filename>kamera-loznice.desktop</Filename>
       <Filename>kamera-obyvak.desktop</Filename>
       <Filename>kamera-3dprint.desktop</Filename>
+      <Filename>kamera-online-ps.desktop</Filename>
     </Layout>
   </Menu>
 

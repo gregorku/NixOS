@@ -67,18 +67,21 @@ StartupNotify=true
 
 # =========================
 
-# Práce PC dílna
+# Poslanecká sněmovna online
 
 # =========================
 
-home.file.".local/share/applications/pracePc.desktop".text = ''
+home.file.".local/share/applications/kamera-online-ps.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Práce PC dílna
-Exec=/home/gregor/.ssh/vzdalena-plocha/prace-pracePc-win11-rdp.sh
-Icon=krdc
+Name=Poslanecká sněmovna
+Exec=/home/gregor/.ssh/kamery/online-ps.sh
+Icon=camera-video
 Terminal=false
 StartupNotify=true
 '';
+
+
+
 }
