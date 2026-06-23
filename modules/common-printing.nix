@@ -4,7 +4,13 @@
   # ----------------------
   # TISK (CUPS)
   # ----------------------
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+
+    drivers = with pkgs; [
+      gutenprint
+    ];
+  };
 
   # ----------------------
   # SKENER (SANE)
