@@ -13,6 +13,15 @@
   };
 
   # ----------------------
+  # SÍŤOVÉ OBJEVOVÁNÍ (Klíčové pro Wi-Fi tisk a sken)
+  # ----------------------
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;      # Umožní systému najít adresy typu tiskarna.local
+    openFirewall = true;  # Automaticky otevře port 5353 UDP pro mDNS
+  };
+
+  # ----------------------
   # SKENER (SANE)
   # ----------------------
   hardware.sane = {
