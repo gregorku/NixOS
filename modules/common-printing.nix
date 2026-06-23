@@ -28,3 +28,4 @@
   # Firewall pro CUPS
   # ----------------------
   networking.firewall.allowedTCPPorts = [ 631 ];
+  }
