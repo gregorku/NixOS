@@ -145,7 +145,7 @@
 
    #]))
 
-  #];
+  ];
 
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];
 
