@@ -142,7 +142,7 @@
    #(python3.withPackages (ps: with ps; [
     #pandas
     #openpyxl
-   (pkgs-unstable.python3.withPackages (ps: with ps; [
+   (unstable.python3.withPackages (ps: with ps; [
     pandas
     openpyxl
    ]))
