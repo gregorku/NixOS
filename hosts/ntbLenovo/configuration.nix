@@ -142,12 +142,10 @@
    #(python3.withPackages (ps: with ps; [
     #pandas
     #openpyxl
-   (unstable.python3.withPackages (ps: with ps; [
-    pandas
-    openpyxl
-   ]))
 
-  ];
+   #]))
+
+  #];
 
   environment.pathsToLink = [ "/share/icons" "/share/themes" ];
 
