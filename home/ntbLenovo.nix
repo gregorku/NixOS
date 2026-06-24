@@ -10,5 +10,6 @@
     ./menu/ntbLenovo/ssh.nix
     ./menu/ntbLenovo/hdd.nix
     ./menu/ntbLenovo/kamery.nix
+    ./menu/ntbLenovo/programy.nix
   ];
 }

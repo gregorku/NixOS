@@ -314,6 +314,22 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
   </Menu>
 
   <!-- ========================= -->
+  <!-- Programy ostatní          -->
+  <!-- ========================= -->
+  <Menu>
+    <Name>Programy</Name>
+    <Directory>programy-moje-desktop.directory</Directory>
+
+    <Include>
+      <Filename>programy-krusader-root.desktop</Filename>
+    </Include>
+
+    <Layout>
+      <Filename>programy-krusader-root.desktop</Filename>
+    </Layout>
+  </Menu>
+
+  <!-- ========================= -->
   <!-- Pořadí hlavního menu      -->
   <!-- ========================= -->
 
@@ -324,6 +340,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     <Menuname>SSH</Menuname>
     <Menuname>HDD</Menuname>    
     <Menuname>Kamery</Menuname>
+    <Menuname>Programy</Menuname>
   </Layout>
 
 </Menu>
