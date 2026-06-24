@@ -137,9 +137,12 @@
     jellyfin-media-player
 
    # ----------------------  
-   # Python
+   # Python nefunguje verze 0.3.33
    # ---------------------- 
-   (python3.withPackages (ps: with ps; [
+   #(python3.withPackages (ps: with ps; [
+    #pandas
+    #openpyxl
+   (pkgs-unstable.python3.withPackages (ps: with ps; [
     pandas
     openpyxl
    ]))
