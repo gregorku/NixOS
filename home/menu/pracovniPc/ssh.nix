@@ -230,12 +230,12 @@ Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/ssh-virtpc-webmin.desktop".text = ''
+home.file.".local/share/applications/ssh-vu-satelit.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=VirtPC Webmin
-Exec=/home/gregor/.ssh/ssh/ssh-virtpc-webmin.sh
+Name=VU Satelit
+Exec=/home/gregor/.ssh/ssh/ssh-vu-satelit.sh
 Icon=utilities-terminal
 Terminal=false
 StartupNotify=true

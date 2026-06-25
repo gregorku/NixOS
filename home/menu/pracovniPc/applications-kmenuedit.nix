@@ -116,7 +116,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-nikola-root.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>ssh-virtpc-webmin.desktop</Filename>
+        <Filename>ssh-vu-satelit.desktop</Filename>
       </Include>
 
       <Layout>
@@ -137,7 +137,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>ssh-nikola-root.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola.desktop</Filename>
         <Filename>ssh-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>ssh-virtpc-webmin.desktop</Filename>
+        <Filename>ssh-vu-satelit.desktop</Filename>
       </Layout>
     </Menu>
 
@@ -230,7 +230,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>hdd-nikola-root.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>hdd-virtpc-webmin.desktop</Filename>
+        <Filename>hdd-satelit-vu.desktop</Filename>
       </Include>
 
       <Layout>
@@ -251,7 +251,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
         <Filename>hdd-nikola-root.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola.desktop</Filename>
         <Filename>hdd-raspberry-3b-nikola-root.desktop</Filename>
-        <Filename>hdd-virtpc-webmin.desktop</Filename>
+        <Filename>hdd-satelit-vu.desktop</Filename>
       </Layout>
     </Menu>
 
@@ -302,12 +302,30 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
       <Filename>kamera-loznice.desktop</Filename>
       <Filename>kamera-obyvak.desktop</Filename>
       <Filename>kamera-3dprint.desktop</Filename>
+      <Filename>kamera-online-ps.desktop</Filename>
     </Include>
 
     <Layout>
       <Filename>kamera-loznice.desktop</Filename>
       <Filename>kamera-obyvak.desktop</Filename>
       <Filename>kamera-3dprint.desktop</Filename>
+      <Filename>kamera-online-ps.desktop</Filename>
+    </Layout>
+  </Menu>
+
+  <!-- ========================= -->
+  <!-- Programy ostatní          -->
+  <!-- ========================= -->
+  <Menu>
+    <Name>Programy</Name>
+    <Directory>programy-moje-desktop.directory</Directory>
+
+    <Include>
+      <Filename>programy-krusader-root.desktop</Filename>
+    </Include>
+
+    <Layout>
+      <Filename>programy-krusader-root.desktop</Filename>
     </Layout>
   </Menu>
 
@@ -322,6 +340,7 @@ home.file.".config/menus/applications-kmenuedit.menu".text = ''
     <Menuname>SSH</Menuname>
     <Menuname>HDD</Menuname>    
     <Menuname>Kamery</Menuname>
+    <Menuname>Programy</Menuname>
   </Layout>
 
 </Menu>

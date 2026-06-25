@@ -223,12 +223,12 @@ Terminal=false
 StartupNotify=true
 '';
 
-home.file.".local/share/applications/hdd-virtpc-webmin.desktop".text = ''
+home.file.".local/share/applications/hdd-satelit-vu.desktop".text = ''
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=VirtPC Webmin HDD
-Exec=/home/gregor/.ssh/hdd/hdd-virtpc-webmin.sh
+Name=VU satelit HDD
+Exec=/home/gregor/.ssh/hdd/hdd-satelit-vu.sh
 Icon=drive-harddisk-symbolic
 Terminal=false
 StartupNotify=true
