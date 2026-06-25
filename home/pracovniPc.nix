@@ -10,5 +10,6 @@
     ./menu/pracovniPc/ssh.nix
     ./menu/pracovniPc/hdd.nix
     ./menu/pracovniPc/kamery.nix
+    ./menu/ntbLenovo/programy.nix   
   ];
 }
