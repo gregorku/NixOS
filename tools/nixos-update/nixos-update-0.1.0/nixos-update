@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
-
-echo 'nixos-update 0.1.0'
-echo 'Milestone 1 - project skeleton'
