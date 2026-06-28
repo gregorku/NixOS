@@ -19,11 +19,20 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
-readonly CORE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-readonly PROJECT_ROOT="$(cd -- "${CORE_DIR}/.." && pwd)"
-readonly LIB_DIR="${PROJECT_ROOT}/lib"
-readonly PROJECT_NAME="nixos-update"
-readonly VERSION_FILE="${PROJECT_ROOT}/VERSION"
+CORE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly CORE_DIR
+
+PROJECT_ROOT="$(cd -- "${CORE_DIR}/.." && pwd)"
+readonly PROJECT_ROOT
+
+LIB_DIR="${PROJECT_ROOT}/lib"
+readonly LIB_DIR
+
+PROJECT_NAME="nixos-update"
+readonly PROJECT_NAME
+
+VERSION_FILE="${PROJECT_ROOT}/VERSION"
+readonly VERSION_FILE
 
 ##
 # Return project root directory.
@@ -64,7 +73,6 @@ core::version_file() {
 # Return project version.
 #
 core::version() {
-
     local version="unknown"
 
     if [[ -r "${VERSION_FILE}" ]]; then
