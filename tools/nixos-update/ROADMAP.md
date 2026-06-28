@@ -1,12 +1,29 @@
-# Roadmap
+0.1.0
+✔ Project structure
 
-- [x] Milestone 1: Project structure
-- [ ] Milestone 2: Logging
-- [ ] Milestone 3: Configuration
-- [ ] Milestone 4: Environment checks
-- [ ] Milestone 5: Git module
-- [ ] Milestone 6: Backup
-- [ ] Milestone 7: Build
-- [ ] Milestone 8: Analysis
-- [ ] Milestone 9: Summary
-- [ ] Milestone 10: Rollback
+0.2.0
+□ Logging
+
+0.3.0
+□ Configuration
+
+0.4.0
+□ Environment
+
+0.5.0
+□ Git
+
+0.6.0
+□ Backup
+
+0.7.0
+□ Build
+
+0.8.0
+□ Analysis
+
+0.9.0
+□ Rollback
+
+1.0.0
+□ Stable release
