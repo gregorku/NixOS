@@ -23,6 +23,7 @@
       "md.obsidian.Obsidian"         # Obsidian (novější než nixpkgs)
       "com.bitwarden.desktop"        # Bitwarden (aktuální verze)
       "org.localsend.localsend_app"  # Sdílení souborů (AirDrop-like)
+      "org.onlyoffice.desktopeditors"#OnliOffice
     ];
 
     # Automatické aktualizace (jednou týdně)
