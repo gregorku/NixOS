@@ -16,6 +16,7 @@
     ../../modules/server/incus.nix
     ../../modules/server/firewall/firewall-testServerPrace.nix
     ../../modules/server/server-br0.nix
+    ../../modules/modules/security/initrd-unlock.nix
   ];
 
   # ─────────────────────────────────────
