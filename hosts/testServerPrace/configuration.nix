@@ -47,6 +47,31 @@
     "/crypto_keyfile.bin" = "/boot/crypto_keyfile.bin";
   };
 
+  # ─────────────────────────────────────
+  # 🌐 Initrd network
+  # ─────────────────────────────────────
+  #
+  # Síť používaná v initrd ještě před připojením
+  # šifrovaného root filesystemu.
+  #
+  # Slouží pro vzdálené odemykání LUKS přes SSH.
+  #
+  # V initrd ještě neexistují bridge (br0), VLAN ani
+  # další virtuální rozhraní. Používá se vždy fyzické
+  # síťové rozhraní.
+  #
+  # Pro servery je doporučeno použít statickou IP,
+  # aby byl initrd dostupný i při výpadku DHCP.
+  #
+  # Po spuštění běžného systému převezme konfiguraci
+  # standardní networking NixOS (např. bridge br0
+  # s DHCP nebo statickou IP).
+  #
+
+  boot.kernelParams = [
+    "ip=192.168.220.100::192.168.220.1:255.255.255.0::enp1s0:none"
+  ];
+
   ## =========================
   ## ZFS – import datapool po bootu
   ## =========================

@@ -1,63 +1,72 @@
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 {
   # ─────────────────────────────────────
   # 🔐 Initrd SSH Unlock
   # ─────────────────────────────────────
   #
-  # Tento modul připravuje vzdálené odemykání LUKS
-  # přes SSH ještě před připojením root filesystemu.
+  # Univerzální modul pro vzdálené odemykání LUKS přes SSH.
   #
-  # Podporuje:
-  #   • více VPS serverů
-  #   • více administrátorských klíčů
-  #   • WireGuard/OpenVPN za routerem
-  #   • statickou i DHCP konfiguraci
+  # Modul:
+  #   • zapne síť v initrd
+  #   • zapne SSH server v initrd
+  #   • nastaví port SSH
+  #   • použije vlastní host key
+  #   • umožní definovat více autorizovaných klíčů
   #
-  # Poznámka:
-  #   Samotné odemykání LUKS (keyFile nebo passphrase)
-  #   zůstává v configuration.nix.
+  # Modul záměrně NEobsahuje:
+  #   • konfiguraci síťového rozhraní
+  #   • DHCP
+  #   • statickou IP
+  #   • bridge
+  #
+  # Tyto hodnoty jsou závislé na konkrétním stroji
+  # a nastavují se v configuration.nix daného hostitele.
+  #
+  # Samotné odemykání LUKS (keyFile nebo passphrase)
+  # zůstává v configuration.nix.
   #
 
   boot.initrd.systemd.enable = true;
-
   boot.initrd.network.enable = true;
 
-  #
-  # Síť
-  #
-  # Výchozí nastavení používá DHCP.
-  # Pro jednotlivé servery lze přepsat v configuration.nix.
-  #
-  boot.initrd.network.interfaces.enp1s0.useDHCP = lib.mkDefault true;
-
-  #
-  # SSH server v initrd
-  #
   boot.initrd.network.ssh = {
     enable = true;
 
+    #
+    # Port SSH serveru v initrd
+    #
     port = lib.mkDefault 2223;
 
     #
     # Host key initrd SSH serveru.
+    #
+    # Vygenerování:
+    #
+    #   sudo mkdir -p /etc/secrets/initrd-ssh
+    #
+    #   sudo ssh-keygen \
+    #     -t ed25519 \
+    #     -f /etc/secrets/initrd-ssh/ssh_host_ed25519_key \
+    #     -N ""
     #
     hostKeys = [
       "/etc/secrets/initrd-ssh/ssh_host_ed25519_key"
     ];
 
     #
-    # Seznam administrátorských klíčů.
+    # Seznam veřejných SSH klíčů,
+    # které smějí přistupovat do initrd.
     #
     authorizedKeys = [
 
       # VPS
-      # "ssh-ed25519 AAAA... unlock-vps"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFNp2SoswZLY/AkmKQO0Prp1wPra0ppuTt74oWQMCSFM luks-unlock"
 
       # Notebook
       # "ssh-ed25519 AAAA... unlock-ntbLenovo"
 
-      # Workstation
+      # Pracovní PC
       # "ssh-ed25519 AAAA... unlock-pracovniPc"
 
     ];
