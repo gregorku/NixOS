@@ -16,6 +16,7 @@
     # Server-only moduly
     ##################################################
     ../../modules/server/server-apps.nix
+    ../../modules/server/server-base.nix
     # ../../modules/server/libvirt.nix
     ../../modules/server/cockpit.nix
     # ../../modules/server/zfs.nix
