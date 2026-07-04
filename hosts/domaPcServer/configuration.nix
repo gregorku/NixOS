@@ -226,6 +226,24 @@
     interface = "enp7s0";
   };
 
+  # ─────────────────────────────────────
+  # 🔐 SSH
+  # ─────────────────────────────────────
+
+  services.openssh = {
+    enable = true;
+
+    settings = {
+      # Root se může přihlásit pouze pomocí SSH klíče.
+      # Přihlášení roota heslem je zakázané.
+      PermitRootLogin = "prohibit-password";
+
+      # Po ověření SSH klíče uživatele gregor
+      # změnit na false.
+      PasswordAuthentication = true;
+    };
+  };
+
   ## =========================
   ## NIXOS KOMPATIBILITA
   ## =========================
