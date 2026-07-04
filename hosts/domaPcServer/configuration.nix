@@ -18,7 +18,7 @@
     ../../modules/server/server-apps.nix
     #../../modules/server/libvirt.nix
     ../../modules/server/cockpit.nix
-    ../../modules/server/zfs.nix
+    #../../modules/server/zfs.nix
     #../../auto-upgrade.nix
 
     ##################################################
@@ -53,7 +53,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi = {
     canTouchEfiVariables = true;
-    efiSysMountPoint = "/boot/efi";
+
+    # EFI oddíl je při instalaci připojen přímo do /boot.
+    efiSysMountPoint = "/boot";
   };
 
   ## =========================
@@ -61,7 +63,13 @@
   ## =========================
   users.users.gregor = {
     isNormalUser = true;
+
+    # Pouze pro první přihlášení po instalaci.
+    # Po základním rozběhu serveru nastav heslo příkazem:
+    #   passwd gregor
+    # a následně tento řádek z konfigurace odstraň.
     initialPassword = "zmenit";
+
     extraGroups = [
       "wheel"
       "networkmanager"
@@ -69,26 +77,38 @@
   };
 
   ## =========================
-  ## VIDEO DISK (sdb → /video)
+  ## VIDEO DISK (XFS → /video)
   ## =========================
-  fileSystems."/video" = {
-    device = "/dev/disk/by-uuid/4cf97703-5ef4-43e0-a73a-b1b2fcdc133d";
-    fsType = "xfs";
-    options = [
-      "noatime"
-      "nofail"
-    ];
-  };
+  # Přidat až po základním rozběhu systému a ověření správného UUID.
+  # Aktuální disk lze ověřit:
+  #   lsblk -f
+  #
+  # fileSystems."/video" = {
+  #   device = "/dev/disk/by-uuid/4cf97703-5ef4-43e0-a73a-b1b2fcdc133d";
+  #   fsType = "xfs";
+  #   options = [
+  #     "noatime"
+  #     "nofail"
+  #   ];
+  # };
 
   ## =========================
   ## ZFS – import datapool po bootu
   ## =========================
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "datapool" ]; # Explicitní import
-  networking.hostId = "deadbeef"; # Nutné pro stabilitu
-
-  services.zfs.autoScrub.enable = true;
-  services.zfs.autoSnapshot.enable = true;
+  # ZFS ponecháme připravené, ale pooly přidáme až po základním
+  # rozběhu systému a ověření jejich názvů a stavu.
+  #
+  # boot.supportedFilesystems = [ "zfs" ];
+  # boot.zfs.extraPools = [ "datapool" ];
+  #
+  # Pro ZFS musí být hostId stabilní a unikátní pro tento server.
+  # Nevkládej obecnou hodnotu typu "deadbeef"; před aktivací ZFS
+  # použij skutečné hostId serveru.
+  #
+  # networking.hostId = "xxxxxxxx";
+  #
+  # services.zfs.autoScrub.enable = true;
+  # services.zfs.autoSnapshot.enable = true;
 
   ## =========================
   ## SMART monitoring disků (KRITICKÉ)
