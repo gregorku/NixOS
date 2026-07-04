@@ -120,7 +120,7 @@
     #
     # a následně initialPassword z konfigurace odstraň.
 
-    initialPassword = "zmenit";
+    #initialPassword = "zmenit";
 
     extraGroups = [
       "wheel"
