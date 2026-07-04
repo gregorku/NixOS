@@ -155,7 +155,9 @@
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
-  #boot.zfs.extraPools = [ "zfs-pool-incus" ]; # Explicitní import
+  boot.zfs.extraPools = [
+  "datapool"
+  ];
   boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
 
   services.zfs.autoScrub.enable = false;
