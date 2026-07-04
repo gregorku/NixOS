@@ -139,17 +139,17 @@
   #
   #   lsblk -f
   #
-  # fileSystems."/video" = {
-  #   device =
-  #     "/dev/disk/by-uuid/4cf97703-5ef4-43e0-a73a-b1b2fcdc133d";
-  #
-  #   fsType = "xfs";
-  #
-  #   options = [
-  #     "noatime"
-  #     "nofail"
-  #   ];
-  # };
+  fileSystems."/hdd-disk/video" = {
+    device =
+      "/dev/disk/by-uuid/203f383c-f1b8-4a8e-8687-abeb29bd1721";
+  
+    fsType = "xfs";
+  
+    options = [
+      "noatime"
+      "nofail"
+    ];
+  };
 
   ## =========================
   ## ZFS – import datapool po bootu
