@@ -152,44 +152,14 @@
   # };
 
   ## =========================
-  ## ZFS
+  ## ZFS – import datapool po bootu
   ## =========================
-  #
-  # ZFS ponecháme připravené, ale pooly přidáme
-  # až po základním rozběhu systému a ověření:
-  #
-  #   zpool import
-  #
-  #   zpool status
-  #
-  #   zfs list
-  #
-  # Potom lze aktivovat například:
-  #
-  # boot.supportedFilesystems = [
-  #   "zfs"
-  # ];
-  #
-  # boot.zfs.extraPools = [
-  #   "datapool"
-  # ];
-  #
-  # Pro ZFS musí být hostId stabilní a unikátní
-  # pro tento server.
-  #
-  # Před aktivací ZFS vytvořit nebo ověřit:
-  #
-  #   hostid
-  #
-  # Nepoužívat obecnou hodnotu typu:
-  #
-  #   deadbeef
-  #
-  # networking.hostId = "xxxxxxxx";
-  #
-  # services.zfs.autoScrub.enable = true;
-  #
-  # services.zfs.autoSnapshot.enable = true;
+  boot.supportedFilesystems = [ "zfs" ];
+  #boot.zfs.extraPools = [ "zfs-pool-incus" ]; # Explicitní import
+  #boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
+
+  services.zfs.autoScrub.enable = false;
+  services.zfs.autoSnapshot.enable = false;
 
   ## =========================
   ## SMART MONITORING DISKŮ
