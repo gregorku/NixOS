@@ -27,6 +27,8 @@
     # Server-networking
     ##################################################
     ../../modules/server/server-br0.nix
+    ../../modules/server/firewall/firewall-domaServerPc.nix
+    ../../modules/server/firewall/dnat-domaServerPc.nix
 
     ##################################################
     # NSPAWN containers
