@@ -25,7 +25,7 @@
     ##################################################
     # Server-networking
     ##################################################
-    # ../../modules/server/br0-domaPcServer.nix
+    ../../modules/server/server-br0.nix
 
     ##################################################
     # NSPAWN containers
@@ -222,15 +222,38 @@
     freeSwapThreshold = 10;
   };
 
-  ## =========================
-  ## SÍŤ A BEZPEČNÉ DEFAULTY
-  ## =========================
+  # ─────────────────────────────────────
+  # 🌐 SÍŤ
+  # ─────────────────────────────────────
 
-  networking.firewall.enable = true;
+  networking = {
+    hostName = "domaPcServer";
+
+    # NetworkManager musí být vypnutý,
+    # protože bridge br0 spravuje síťový modul.
+    networkmanager.enable = false;
+
+    # Unikátní hostId pro tento server.
+    # Důležité také pro pozdější použití ZFS.
+    hostId = "f474d573";
+
+    firewall.enable = true;
+
+    useHostResolvConf = false;
+  };
 
   services.resolved.enable = true;
 
-  networking.useHostResolvConf = false;
+  # ----------------------
+  # Bridge br0 (LAN)
+  # ----------------------
+
+  server.br0 = {
+    enable = true;
+
+    # Fyzické LAN rozhraní tohoto serveru.
+    interface = "enp7s0";
+  };
 
   ## =========================
   ## NIXOS KOMPATIBILITA
