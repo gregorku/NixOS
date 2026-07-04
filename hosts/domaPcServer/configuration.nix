@@ -210,8 +210,6 @@
     # Důležité také pro pozdější použití ZFS.
     hostId = "f474d573";
 
-    firewall.enable = true;
-
     useHostResolvConf = false;
   };
 
