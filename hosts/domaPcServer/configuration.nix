@@ -157,6 +157,7 @@
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.extraPools = [
   "datapool"
+  "zfs-NVME-4TB"
   ];
   boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
 
