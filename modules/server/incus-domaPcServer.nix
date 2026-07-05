@@ -1,18 +1,42 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  # ─────────────────────────────────────
-  # 📦 INCUS
-  # ─────────────────────────────────────
+  # ==================================================
+  # INCUS
+  # ==================================================
+  #
+  # Incus slouží pro provoz systémových kontejnerů
+  # a případně virtuálních strojů.
+  #
+  # Storage:
+  #
+  #   Incus storage pool:  default
+  #   ZFS backend:         zfs-image/incus
+  #
+  # Síť:
+  #
+  #   br0
+  #     systémový bridge spravovaný NixOS
+  #     a systemd-networkd
+  #
+  #   incusbr0
+  #     privátní NAT síť spravovaná Incus
+  #
 
   virtualisation.incus = {
     enable = true;
     ui.enable = true;
   };
 
-  # ─────────────────────────────────────
-  # 👤 INCUS ADMIN
-  # ─────────────────────────────────────
+
+  # ==================================================
+  # INCUS ADMIN
+  # ==================================================
+  #
+  # Uživatel gregor může spravovat Incus bez sudo.
+  #
+  # Po prvním přidání uživatele do skupiny je nutné
+  # nové přihlášení, aby se členství aktivovalo.
 
   users.groups.incus-admin = { };
 
@@ -20,41 +44,51 @@
     "incus-admin"
   ];
 
-  # ─────────────────────────────────────
-  # 📦 BALÍČKY
-  # ─────────────────────────────────────
+
+  # ==================================================
+  # BALÍČKY
+  # ==================================================
 
   environment.systemPackages = with pkgs; [
     incus
   ];
 
-  # ─────────────────────────────────────
-  # ⚙️ INCUS INITIAL SETUP
-  # ─────────────────────────────────────
+
+  # ==================================================
+  # INCUS INITIAL SETUP
+  # ==================================================
   #
-  # Služba:
+  # Inicializační služba:
   #
-  #   1. vytvoří NAT síť incusbr0
-  #   2. přidá systémový bridge br0 do Incus
-  #   3. připojí existující ZFS dataset:
+  #   1. vytvoří NAT síť incusbr0, pokud neexistuje;
   #
-  #        zfs-NVME-4TB/incus
+  #   2. vytvoří Incus storage pool default nad:
   #
-  #      jako Incus storage pool:
+  #        zfs-image/incus
   #
-  #        default
+  #      pokud ještě neexistuje;
   #
-  #   4. nastaví default profil na síť br0
+  #   3. vytvoří root disk v profilu default,
+  #      pokud ještě neexistuje;
   #
-  # Jednotlivé kroky jsou idempotentní:
-  # existující síť nebo storage pool se znovu nevytváří.
+  #   4. vytvoří síťové zařízení eth0 v profilu
+  #      default, pokud ještě neexistuje.
+  #
+  # Systémový bridge br0 Incus nevytváří ani
+  # nespravuje. Kontejnery se na něj připojují přes:
+  #
+  #   nictype = bridged
+  #   parent   = br0
+  #
+  # Služba je idempotentní:
+  # již existující objekty znovu nevytváří.
 
   systemd.services.incus-init = {
     description = "Incus initial setup for domaPcServer";
 
     after = [
       "incus.service"
-      "zfs-import-zfs-NVME-4TB.service"
+      "zfs-import-zfs-image.service"
     ];
 
     requires = [
@@ -67,29 +101,40 @@
 
     serviceConfig = {
       Type = "oneshot";
-
       RemainAfterExit = true;
     };
 
     script = ''
-      set -e
+      set -euo pipefail
 
       INCUS=${pkgs.incus}/bin/incus
+
 
       echo "========================================"
       echo " Incus init – domaPcServer"
       echo "========================================"
 
 
-      # ─────────────────────────────────────
+      # ==================================================
       # NAT NETWORK – incusbr0
-      # ─────────────────────────────────────
+      # ==================================================
+      #
+      # Privátní Incus síť:
+      #
+      #   subnet:   10.10.10.0/24
+      #   gateway:  10.10.10.1
+      #   IPv4 NAT: ano
+      #   IPv6:     vypnuto
+      #
+      # Síť není nastavena jako výchozí síť profilu
+      # default. Je připravena pro kontejnery, které
+      # mají být oddělené od fyzické LAN.
 
-      if ! $INCUS network show incusbr0 >/dev/null 2>&1; then
+      if ! "$INCUS" network show incusbr0 >/dev/null 2>&1; then
 
         echo "Creating Incus NAT network incusbr0..."
 
-        $INCUS network create incusbr0 \
+        "$INCUS" network create incusbr0 \
           ipv4.address=10.10.10.1/24 \
           ipv4.nat=true \
           ipv6.address=none
@@ -101,56 +146,26 @@
       fi
 
 
-      # ─────────────────────────────────────
-      # LAN BRIDGE – br0
-      # ─────────────────────────────────────
-      #
-      # br0 je systémový bridge vytvořený
-      # modulem server-br0.nix.
-      #
-      # Incus jej používá jako physical network.
-
-      if ! $INCUS network show br0 >/dev/null 2>&1; then
-
-        echo "Creating Incus physical network br0..."
-
-        $INCUS network create br0 \
-          --type=physical \
-          parent=br0 \
-          ipv4.address=none \
-          ipv6.address=none
-
-      else
-
-        echo "Network br0 already exists."
-
-      fi
-
-
-      # ─────────────────────────────────────
+      # ==================================================
       # STORAGE – ZFS
-      # ─────────────────────────────────────
-      #
-      # ZFS pool:
-      #
-      #   zfs-image
-      #
-      # bude používat Incus pro běžící
-      # kontejnery a virtuální stroje.
+      # ==================================================
       #
       # Incus storage pool:
       #
       #   default
       #
-      # ZFS dataset:
+      # ZFS backend:
       #
       #   zfs-image/incus
+      #
+      # Dataset není nutné vytvářet ručně.
+      # Při čisté inicializaci jej vytvoří Incus.
 
-      if ! $INCUS storage show default >/dev/null 2>&1; then
+      if ! "$INCUS" storage show default >/dev/null 2>&1; then
 
         echo "Creating Incus ZFS storage pool default..."
 
-        $INCUS storage create default zfs \
+        "$INCUS" storage create default zfs \
           source=zfs-image/incus
 
       else
@@ -159,17 +174,73 @@
 
       fi
 
-      # ─────────────────────────────────────
-      # DEFAULT PROFILE → br0
-      # ─────────────────────────────────────
 
-      echo "Setting default profile network to br0..."
+      # ==================================================
+      # DEFAULT PROFILE – ROOT DISK
+      # ==================================================
+      #
+      # Root filesystem kontejnerů používajících profil
+      # default bude uložen na storage poolu default:
+      #
+      #   default
+      #     -> zfs-image/incus
 
-      $INCUS profile device set \
-        default \
-        eth0 \
-        network=br0 \
-        || true
+      if "$INCUS" profile device show default \
+        | grep -q '^root:'; then
+
+        echo "Root device already exists in default profile."
+
+      else
+
+        echo "Adding root device to default profile..."
+
+        "$INCUS" profile device add \
+          default \
+          root \
+          disk \
+          path=/ \
+          pool=default
+
+      fi
+
+
+      # ==================================================
+      # DEFAULT PROFILE – LAN NETWORK
+      # ==================================================
+      #
+      # Výchozí kontejnery budou připojené přímo
+      # do fyzické LAN přes systémový bridge:
+      #
+      #   br0
+      #
+      # br0 je unmanaged z pohledu Incus.
+      #
+      # Proto se nepoužívá:
+      #
+      #   network=br0
+      #
+      # ale:
+      #
+      #   nictype=bridged
+      #   parent=br0
+
+      if "$INCUS" profile device show default \
+        | grep -q '^eth0:'; then
+
+        echo "Network device eth0 already exists in default profile."
+
+      else
+
+        echo "Adding eth0 to default profile..."
+
+        "$INCUS" profile device add \
+          default \
+          eth0 \
+          nic \
+          nictype=bridged \
+          parent=br0
+
+      fi
 
 
       echo "========================================"
