@@ -246,6 +246,41 @@ in
 
 
         # ───────────────────────────────
+        # INCUS KONTEJNERY PŘES br0
+        # ───────────────────────────────
+        #
+        # Kontejnery používající profil:
+        #
+        #   nictype = bridged
+        #   parent   = br0
+        #
+        # jsou připojené přímo do LAN.
+        #
+        # Na tomto serveru je aktivní:
+        #
+        #   br_netfilter
+        #
+        # a:
+        #
+        #   net.bridge.bridge-nf-call-iptables = 1
+        #
+        # Bridgovaný IPv4 provoz proto prochází
+        # také přes tento inet/filter/forward chain.
+        #
+        # Bez těchto pravidel DHCP Discover odejde
+        # z kontejneru do br0, ale je zahozen před
+        # odesláním přes fyzické rozhraní enp7s0.
+        #
+        # Povolení obou směrů umožňuje kontejnerům
+        # připojeným přes br0 komunikovat přímo
+        # s fyzickou LAN.
+
+        iifname "br0" accept;
+
+        oifname "br0" accept;
+
+
+        # ───────────────────────────────
         # INCUS NAT NETWORK
         # ───────────────────────────────
         #
@@ -257,7 +292,7 @@ in
         #
         #   10.10.10.0/24
         #
-        # NAT bude vytvářet Incus.
+        # NAT vytváří Incus.
 
         iifname "incusbr0" accept;
 
