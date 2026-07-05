@@ -131,36 +131,33 @@
       # STORAGE – ZFS
       # ─────────────────────────────────────
       #
-      # Existující ZFS dataset:
+      # ZFS pool:
       #
-      #   zfs-NVME-4TB/incus
+      #   zfs-image
       #
-      # bude použit jako Incus storage pool:
+      # bude používat Incus pro běžící
+      # kontejnery a virtuální stroje.
+      #
+      # Incus storage pool:
       #
       #   default
       #
-      # Existující struktura:
+      # ZFS dataset:
       #
-      #   zfs-NVME-4TB/incus/containers
-      #   zfs-NVME-4TB/incus/images
-      #   zfs-NVME-4TB/incus/custom
-      #   zfs-NVME-4TB/incus/virtual-machines
-      #
-      # zůstává zachována.
+      #   zfs-image/incus
 
       if ! $INCUS storage show default >/dev/null 2>&1; then
 
         echo "Creating Incus ZFS storage pool default..."
 
         $INCUS storage create default zfs \
-          source=zfs-NVME-4TB/incus
+          source=zfs-image/incus
 
       else
 
         echo "Storage pool default already exists."
 
       fi
-
 
       # ─────────────────────────────────────
       # DEFAULT PROFILE → br0

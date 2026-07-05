@@ -1,37 +1,80 @@
 { config, pkgs, ... }:
 
 {
+  # ==================================================
+  # IMPORTY MODULŮ
+  # ==================================================
+
   imports = [
+    # ────────────────────────────────────────────────
+    # Hardware tohoto serveru
+    # ────────────────────────────────────────────────
+
     ./hardware-configuration.nix
+
+
+    # ────────────────────────────────────────────────
+    # Secrets
+    # ────────────────────────────────────────────────
+
     # /etc/nixos/secrets/ssh
 
-    ##################################################
+
+    # ────────────────────────────────────────────────
     # Common – sdílené moduly
-    ##################################################
+    # ────────────────────────────────────────────────
+
     ../../modules/common-security.nix
     ../../modules/common-server-swap.nix
+
     # ../../modules/common-snapshots.nix
 
-    ##################################################
-    # Server-only moduly
-    ##################################################
+
+    # ────────────────────────────────────────────────
+    # Server – základní moduly
+    # ────────────────────────────────────────────────
+
     ../../modules/server/server-apps.nix
     ../../modules/server/server-base.nix
-    # ../../modules/server/libvirt.nix
-    #../../modules/server/incus-domaPcServer.nix
     ../../modules/server/cockpit.nix
+
+    # Incus zapnout po dokončení konfigurace storage.
+    #
+    # ../../modules/server/incus-domaPcServer.nix
+
+    # Libvirt zatím není potřeba.
+    #
+    # ../../modules/server/libvirt.nix
+
+    # Samostatný ZFS modul zatím nepoužíváme.
+    # Import poolů je definován přímo v tomto souboru.
+    #
     # ../../modules/server/zfs.nix
+
+    # Automatické aktualizace zapnout až po dokončení
+    # a otestování základní konfigurace serveru.
+    #
     # ../../auto-upgrade.nix
 
-    ##################################################
-    # Server-networking
-    ##################################################
+
+    # ────────────────────────────────────────────────
+    # Síť
+    # ────────────────────────────────────────────────
+
+    # Bridge br0.
     ../../modules/server/server-br0.nix
+
+    # Vlastní nftables firewall a DNAT pravidla.
     ../../modules/server/firewall/firewall-domaServerPc.nix
 
-    ##################################################
-    # NSPAWN containers
-    ##################################################
+
+    # ────────────────────────────────────────────────
+    # systemd-nspawn kontejnery
+    # ────────────────────────────────────────────────
+    #
+    # Aktuálně nepoužívané.
+    # Ponecháno jako vzor pro případné budoucí použití.
+
     # ../../containers/ha-doma/container.nix
     # ../../containers/caddy/container.nix
     # ../../containers/zigbee2mqtt/container.nix
@@ -39,9 +82,10 @@
     # ../../containers/frigate/container.nix
   ];
 
-  ## =========================
-  ## ZÁKLADNÍ NASTAVENÍ
-  ## =========================
+
+  # ==================================================
+  # ZÁKLADNÍ NASTAVENÍ SYSTÉMU
+  # ==================================================
 
   time.timeZone = "Europe/Prague";
 
@@ -49,29 +93,57 @@
 
   console.keyMap = "cz";
 
+
+  # ────────────────────────────────────────────────
+  # Nix – flakes
+  # ────────────────────────────────────────────────
+
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
 
-  ## =========================
-  ## BOOTLOADER
-  ## =========================
+
+  # ==================================================
+  # BOOTLOADER
+  # ==================================================
+  #
+  # Server bootuje přes UEFI a systemd-boot.
+  #
+  # EFI System Partition je připojená přímo:
+  #
+  #   /boot
+  #
+  # Obsahuje:
+  #
+  #   systemd-boot
+  #   NixOS boot entries
+  #   kernel
+  #   initrd
+  #   LUKS keyfile
 
   boot.loader.systemd-boot.enable = true;
 
   boot.loader.efi = {
     canTouchEfiVariables = true;
 
-    # EFI oddíl je připojen přímo do /boot.
     efiSysMountPoint = "/boot";
   };
 
-  ## =========================
-  ## LUKS – ŠIFROVANÝ ROOT
-  ## =========================
+
+  # ==================================================
+  # LUKS – ŠIFROVANÝ SYSTÉMOVÝ DISK
+  # ==================================================
   #
-  # Root filesystem je na:
+  # Systémový disk:
+  #
+  #   /dev/nvme0n1
+  #
+  # EFI:
+  #
+  #   /dev/nvme0n1p1
+  #
+  # LUKS:
   #
   #   /dev/nvme0n1p2
   #
@@ -79,113 +151,300 @@
   #
   #   5a775301-f99e-4b41-9332-dbbfc8947db6
   #
-  # Keyfile je uložen na EFI oddílu:
+  # Odemčení při bootu probíhá pomocí keyfile:
   #
   #   /boot/crypto_keyfile.bin
   #
-  # Při sestavení systému je keyfile vložen do initrd jako:
+  # NixOS vloží keyfile do initrd jako:
   #
   #   /crypto_keyfile.bin
   #
-  # Původní LUKS heslo ponechat jako záložní možnost
-  # ručního odemčení disku.
+  # Původní LUKS heslo zůstává jako záložní možnost
+  # pro ruční odemčení systémového disku.
 
   boot.initrd.luks.devices."cryptroot" = {
     device =
       "/dev/disk/by-uuid/5a775301-f99e-4b41-9332-dbbfc8947db6";
 
-    # Server nepoužívá LVM.
-    # Proto zde není potřeba:
+    keyFile = "/crypto_keyfile.bin";
+
+    # Systémový disk nepoužívá LVM.
+    #
+    # Proto zde není:
     #
     # preLVM = true;
-
-    keyFile = "/crypto_keyfile.bin";
   };
+
+
+  # Keyfile je při sestavení initrd načten z EFI oddílu.
 
   boot.initrd.secrets = {
     "/crypto_keyfile.bin" =
       "/boot/crypto_keyfile.bin";
   };
 
-  ## =========================
-  ## UŽIVATEL
-  ## =========================
 
-  users.users.gregor = {
-    isNormalUser = true;
+  # ==================================================
+  # FILESYSTEMY A DATOVÉ DISKY
+  # ==================================================
 
-    # Pouze pro první přihlášení po instalaci.
-    #
-    # Po základním rozběhu serveru nastav heslo:
-    #
-    #   passwd gregor
-    #
-    # a následně initialPassword z konfigurace odstraň.
 
-    #initialPassword = "zmenit";
-
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
-  };
-
-  ## =========================
-  ## VIDEO DISK (XFS → /video)
-  ## =========================
+  # ────────────────────────────────────────────────
+  # VIDEO DISK – XFS
+  # ────────────────────────────────────────────────
   #
-  # Přidat až po základním rozběhu systému
-  # a ověření správného UUID.
+  # Samostatný datový disk pro video.
   #
-  # Aktuální disky lze ověřit:
+  # UUID:
+  #
+  #   203f383c-f1b8-4a8e-8687-abeb29bd1721
+  #
+  # Mountpoint:
+  #
+  #   /hdd-disk/video
+  #
+  # nofail:
+  #
+  #   Server nabootuje i v případě, že disk nebude
+  #   dostupný.
+  #
+  # Stav lze ověřit:
   #
   #   lsblk -f
   #
+  #   findmnt /hdd-disk/video
+
   fileSystems."/hdd-disk/video" = {
     device =
       "/dev/disk/by-uuid/203f383c-f1b8-4a8e-8687-abeb29bd1721";
-  
+
     fsType = "xfs";
-  
+
     options = [
       "noatime"
       "nofail"
     ];
   };
 
-  ## =========================
-  ## ZFS – import datapool po bootu
-  ## =========================
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [
-  "datapool"
-  "zfs-NVME-4TB"
+
+  # ==================================================
+  # ZFS
+  # ==================================================
+  #
+  # Server používá tři samostatné ZFS pooly:
+  #
+  #
+  # 1. datapool
+  #
+  #    Mountpoint:
+  #
+  #      /zfs-datapool
+  #
+  #    Obsahuje například:
+  #
+  #      datapool/ha-data
+  #
+  #
+  # 2. zfs-NVME-4TB
+  #
+  #    Mountpoint:
+  #
+  #      /zfs-incus
+  #
+  #    Obsahuje původní Incus datasety a další data.
+  #
+  #
+  # 3. zfs-image
+  #
+  #    Mountpoint:
+  #
+  #      /zfs-image
+  #
+  #    Samostatný NVMe pool určený pro běžící
+  #    Incus kontejnery a virtuální stroje.
+  #
+  #    Incus bude používat:
+  #
+  #      zfs-image/incus
+  #
+  #    jako backend pro Incus storage pool:
+  #
+  #      default
+
+
+  boot.supportedFilesystems = [
+    "zfs"
   ];
-  boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
+
+
+  # Explicitní import datových ZFS poolů při bootu.
+
+  boot.zfs.extraPools = [
+    "datapool"
+    "zfs-NVME-4TB"
+    "zfs-image"
+  ];
+
+
+  # Root filesystem není na ZFS.
+  #
+  # Systémový root je:
+  #
+  #   LUKS
+  #     └── Btrfs
+  #
+  # Proto není potřeba vynucovat import root ZFS poolu.
+
+  boot.zfs.forceImportRoot = false;
+
+
+  # Automatický scrub je zatím vypnutý.
+  #
+  # Později lze přidat vlastní plánovaný scrub
+  # pro jednotlivé pooly.
 
   services.zfs.autoScrub.enable = false;
+
+
+  # Automatické ZFS snapshoty jsou zatím vypnuté.
+  #
+  # Snapshot strategii nastavíme samostatně podle
+  # typu dat v jednotlivých poolech.
+
   services.zfs.autoSnapshot.enable = false;
 
-  ## =========================
-  ## SMART MONITORING DISKŮ
-  ## =========================
+
+  # ==================================================
+  # SÍŤ
+  # ==================================================
+
+  networking = {
+    hostName = "domaPcServer";
+
+
+    # NetworkManager je vypnutý.
+    #
+    # Síťovou konfiguraci a bridge br0 spravuje
+    # systemd-networkd přes server-br0.nix.
+
+    networkmanager.enable = false;
+
+
+    # Unikátní 8znakový hostId serveru.
+    #
+    # Je důležitý zejména pro bezpečné rozlišení
+    # hostitele při práci se ZFS pooly.
+
+    hostId = "f474d573";
+
+
+    # DNS resolver spravuje systemd-resolved.
+
+    useHostResolvConf = false;
+  };
+
+
+  # ────────────────────────────────────────────────
+  # DNS resolver
+  # ────────────────────────────────────────────────
+
+  services.resolved.enable = true;
+
+
+  # ────────────────────────────────────────────────
+  # LAN bridge br0
+  # ────────────────────────────────────────────────
+  #
+  # Fyzické rozhraní:
+  #
+  #   enp7s0
+  #
+  # je členem bridge:
+  #
+  #   br0
+  #
+  # IP adresa serveru je přidělena bridge br0,
+  # nikoli fyzickému rozhraní enp7s0.
+  #
+  # Bridge bude později možné používat také
+  # pro Incus kontejnery připojené přímo do LAN.
+
+  server.br0 = {
+    enable = true;
+
+    interface = "enp7s0";
+  };
+
+
+  # ==================================================
+  # SSH
+  # ==================================================
+
+  services.openssh = {
+    enable = true;
+
+    settings = {
+      # Root se může přes SSH přihlásit pouze pomocí
+      # SSH klíče.
+      #
+      # Přihlášení roota heslem je zakázané.
+
+      PermitRootLogin = "prohibit-password";
+
+
+      # Dočasně povolené přihlášení uživatele heslem.
+      #
+      # Po ověření SSH klíče uživatele gregor změnit:
+      #
+      # PasswordAuthentication = false;
+
+      PasswordAuthentication = true;
+    };
+  };
+
+
+  # ==================================================
+  # MONITORING DISKŮ
+  # ==================================================
+  #
+  # smartd automaticky detekuje podporované disky
+  # a sleduje jejich SMART stav.
 
   services.smartd = {
     enable = true;
+
     autodetect = true;
+
+    # E-mailové notifikace zatím nejsou nastavené.
 
     notifications.mail.enable = false;
   };
 
-  ## =========================
-  ## SSD / NVMe TRIM
-  ## =========================
+
+  # ==================================================
+  # SSD / NVMe TRIM
+  # ==================================================
+  #
+  # Pravidelný TRIM pro SSD a NVMe zařízení.
 
   services.fstrim.enable = true;
 
-  ## =========================
-  ## OCHRANA PAMĚTI – EARLYOOM
-  ## =========================
+
+  # ==================================================
+  # OCHRANA PAMĚTI – EARLYOOM
+  # ==================================================
+  #
+  # earlyoom ukončí procesy při kritickém nedostatku
+  # RAM nebo swap prostoru dříve, než server přestane
+  # reagovat.
+  #
+  # freeMemThreshold:
+  #
+  #   zásah při poklesu volné RAM pod 5 %
+  #
+  # freeSwapThreshold:
+  #
+  #   zásah při poklesu volného swapu pod 10 %
 
   services.earlyoom = {
     enable = true;
@@ -195,58 +454,40 @@
     freeSwapThreshold = 10;
   };
 
-  # ─────────────────────────────────────
-  # 🌐 SÍŤ
-  # ─────────────────────────────────────
 
-  networking = {
-    hostName = "domaPcServer";
+  # ==================================================
+  # UŽIVATELÉ
+  # ==================================================
 
-    # NetworkManager musí být vypnutý,
-    # protože bridge br0 spravuje síťový modul.
-    networkmanager.enable = false;
+  users.users.gregor = {
+    isNormalUser = true;
 
-    # Unikátní hostId pro tento server.
-    # Důležité také pro pozdější použití ZFS.
-    hostId = "f474d573";
 
-    useHostResolvConf = false;
+    # Heslo není deklarováno v konfiguraci.
+    #
+    # Nastavuje se ručně:
+    #
+    #   sudo passwd gregor
+
+
+    # wheel:
+    #
+    #   umožňuje používat sudo.
+
+    extraGroups = [
+      "wheel"
+    ];
   };
 
-  services.resolved.enable = true;
 
-  # ----------------------
-  # Bridge br0 (LAN)
-  # ----------------------
-
-  server.br0 = {
-    enable = true;
-
-    # Fyzické LAN rozhraní tohoto serveru.
-    interface = "enp7s0";
-  };
-
-  # ─────────────────────────────────────
-  # 🔐 SSH
-  # ─────────────────────────────────────
-
-  services.openssh = {
-    enable = true;
-
-    settings = {
-      # Root se může přihlásit pouze pomocí SSH klíče.
-      # Přihlášení roota heslem je zakázané.
-      PermitRootLogin = "prohibit-password";
-
-      # Po ověření SSH klíče uživatele gregor
-      # změnit na false.
-      PasswordAuthentication = true;
-    };
-  };
-
-  ## =========================
-  ## NIXOS KOMPATIBILITA
-  ## =========================
+  # ==================================================
+  # NIXOS STATE VERSION
+  # ==================================================
+  #
+  # Tuto hodnotu neměnit při běžném upgrade NixOS.
+  #
+  # Určuje kompatibilní výchozí chování stavových
+  # služeb od první instalace tohoto systému.
 
   system.stateVersion = "26.05";
 }
