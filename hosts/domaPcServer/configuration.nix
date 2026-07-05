@@ -18,7 +18,7 @@
     ../../modules/server/server-apps.nix
     ../../modules/server/server-base.nix
     # ../../modules/server/libvirt.nix
-    ../../modules/server/incus-domaPcServer.nix
+    #../../modules/server/incus-domaPcServer.nix
     ../../modules/server/cockpit.nix
     # ../../modules/server/zfs.nix
     # ../../auto-upgrade.nix
