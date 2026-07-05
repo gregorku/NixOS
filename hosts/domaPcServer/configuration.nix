@@ -40,7 +40,7 @@
 
     # Incus zapnout po dokončení konfigurace storage.
     #
-    # ../../modules/server/incus-domaPcServer.nix
+    ../../modules/server/incus-domaPcServer.nix
 
     # Libvirt zatím není potřeba.
     #
