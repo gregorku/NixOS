@@ -46,6 +46,11 @@ in
         ip protocol icmp accept;
         ip6 nexthdr icmpv6 accept;
 
+        # Incus bridge – DHCP a DNS
+        iifname "incusbr0" udp dport 67 accept;
+        iifname "incusbr0" udp dport 53 accept;
+        iifname "incusbr0" tcp dport 53 accept;
+
         # SSH
         tcp dport 22 accept;
 
@@ -67,26 +72,6 @@ in
 
         # Logging
         limit rate 5/minute log prefix "FW DROP IN: ";
-        drop;
-      }
-
-      chain forward {
-        type filter hook forward priority filter; policy drop;
-
-        ct state established,related accept;
-
-        # Incus
-        iifname "incusbr0" accept;
-        oifname "incusbr0" accept;
-
-        # WireGuard
-        iifname { "wg1", "wg2", "wg3" } accept;
-        oifname { "wg1", "wg2", "wg3" } accept;
-
-        # DNAT provoz
-        ct status dnat accept;
-
-        limit rate 5/minute log prefix "FW DROP FWD: ";
         drop;
       }
 
