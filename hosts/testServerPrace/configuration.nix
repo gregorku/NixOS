@@ -40,12 +40,12 @@
   boot.initrd.luks.devices."cryptroot" = {
     device = "/dev/disk/by-uuid/bdf93ac1-e5a0-4099-8f49-00a884378a43";
     preLVM = true;
-    keyFile = "/crypto_keyfile.bin";
+  #  keyFile = "/crypto_keyfile.bin";
   };
 
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = "/boot/crypto_keyfile.bin";
-  };
+  #boot.initrd.secrets = {
+  #  "/crypto_keyfile.bin" = "/boot/crypto_keyfile.bin";
+  #};
 
   # ─────────────────────────────────────
   # 🌐 Initrd network
