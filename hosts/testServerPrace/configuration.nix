@@ -68,9 +68,33 @@
   # s DHCP nebo statickou IP).
   #
 
-  boot.kernelParams = [
-    "ip=192.168.220.100::192.168.220.1:255.255.255.0::enp1s0:none"
-  ];
+  #
+  # Síť používaná pouze během initrd pro
+  # vzdálené odemykání LUKS přes SSH.
+  #
+  # Po přechodu do běžného systému tato
+  # konfigurace zanikne a síť převezme
+  # standardní konfigurace serveru.
+  #
+  boot.initrd.systemd.network.enable = true;
+
+  boot.initrd.systemd.network.networks."10-initrd-enp1s0" = {
+    matchConfig.Name = "enp1s0";
+
+    address = [
+      "192.168.220.100/24"
+    ];
+
+    routes = [
+      {
+        Gateway = "192.168.220.1";
+      }
+    ];
+
+    networkConfig = {
+      DHCP = "no";
+    };
+  };
 
   ## =========================
   ## ZFS – import datapool po bootu
