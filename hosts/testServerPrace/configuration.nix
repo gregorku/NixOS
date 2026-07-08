@@ -95,6 +95,19 @@
     hostId = "7a23ccfe";
   };
 
+  # ─────────────────────────────────────
+  # 🌐 Síťový ovladač v initrd
+  # ─────────────────────────────────────
+  #
+  # Síťová karta enp1s0 používá ovladač r8169.
+  # Ovladač musí být dostupný už v initrd,
+  # aby bylo možné použít síť pro vzdálené
+  # odemykání LUKS přes SSH.
+  #
+  boot.initrd.availableKernelModules = [
+    "r8169"
+  ];
+
   # ----------------------
   # Bridge br0 (LAN)
   # ----------------------
