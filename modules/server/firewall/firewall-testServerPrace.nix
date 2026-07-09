@@ -74,6 +74,10 @@ in
         iifname "incusbr0" accept;
         oifname "incusbr0" accept;
 
+        # DHCP pro Incus kontejnery na br0
+        iifname "br0" oifname "br0" udp sport 68 udp dport 67 accept
+        iifname "br0" oifname "br0" udp sport 67 udp dport 68 accept
+
         # přesměrované (DNAT) spojení
         ct status dnat accept;
 
