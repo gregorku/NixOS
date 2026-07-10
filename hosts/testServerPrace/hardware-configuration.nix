@@ -18,9 +18,6 @@
     fsType = "ext4";
 
     options = [
-      # Root filesystem musí být připojen už v initrd.
-      "x-initrd.mount"
-
       # Root filesystem je na LVM uvnitř LUKS.
       #
       # Při vzdáleném odemykání může initrd čekat
