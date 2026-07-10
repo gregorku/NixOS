@@ -26,7 +26,6 @@
     # Automatické vzdálené odemykání LUKS serverů.
     ../../modules/security/server-unlock.nix
 
-
     ##################################################
     # VPS-specific
     ##################################################
@@ -168,6 +167,9 @@
 
         normalPort = 10522;
 
+        hostPublicKey =
+         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPQjYeNfmlGn8fXI9V2jpzX0ZCM/KqHrtgoDOgRdhHyg";
+
         keyFile =
           "/root/.ssh/unlock_servers";
 
@@ -247,16 +249,19 @@
       #
       domaPcServer = {
         host = "10.100.100.100";
-      
+
         unlockPort = 2227;
-      
+
         normalPort = 10022;
-      
+
+        hostPublicKey =
+         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWjGsXeAtGIEBoclDPnKF+gTvMsNZGrsqh42DvGsPEj";
+
         keyFile =
-          "/root/.ssh/unlock_servers";
-      
+         "/root/.ssh/unlock_servers";
+
         passwordFile =
-          "/etc/secrets/server-unlock/domaPcServer.pass";
+         "/etc/secrets/server-unlock/domaPcServer.pass";
       };
     };
   };

@@ -46,6 +46,22 @@ let
       };
 
 
+      hostPublicKey = lib.mkOption {
+        type = lib.types.str;
+
+        description = ''
+          Veřejný SSH host key initrd SSH serveru.
+
+          Používá se pro deklarativní vytvoření
+          systémového SSH known_hosts na VPS.
+
+          Příklad:
+
+            ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI...
+        '';
+      };
+
+
       keyFile = lib.mkOption {
         type = lib.types.str;
 
@@ -104,6 +120,27 @@ let
           )
           cfg.servers
       );
+
+
+  # ─────────────────────────────────────
+  # Deklarativní SSH known_hosts
+  # ─────────────────────────────────────
+
+  serverKnownHosts =
+    lib.mapAttrs'
+      (
+        name: server:
+          lib.nameValuePair
+            "${name}-initrd"
+            {
+              hostNames = [
+                "[${server.host}]:${toString server.unlockPort}"
+              ];
+
+              publicKey = server.hostPublicKey;
+            }
+      )
+      cfg.servers;
 
 
   # ─────────────────────────────────────
@@ -530,6 +567,32 @@ in
   # ─────────────────────────────────────
 
   config = lib.mkIf cfg.enable {
+
+
+    # ─────────────────────────────────────
+    # Kontrola konfigurace
+    # ─────────────────────────────────────
+
+    assertions =
+      lib.mapAttrsToList
+        (
+          name: server: {
+            assertion =
+              server.hostPublicKey != "";
+
+            message =
+              "services.serverUnlock.servers.${name}.hostPublicKey nesmí být prázdný";
+          }
+        )
+        cfg.servers;
+
+
+    # ─────────────────────────────────────
+    # Deklarativní SSH known_hosts
+    # ─────────────────────────────────────
+
+    programs.ssh.knownHosts =
+      serverKnownHosts;
 
 
     # ─────────────────────────────────────
