@@ -73,7 +73,7 @@
     #
     # Síť používaná pouze během initrd pro
     # vzdálené odemykání LUKS přes SSH.
-    #
+    ../../modules/security/initrd-unlock.nix
     # V initrd ještě neexistuje bridge br0.
     # Proto se statická IP adresa nastavuje
     # přímo na fyzické rozhraní enp7s0.
