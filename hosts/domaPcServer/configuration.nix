@@ -68,6 +68,7 @@
     ../../modules/server/firewall/firewall-domaServerPc.nix
     # Unlock port 2223
     ../../modules/security/initrd-unlock.nix
+    ];
     # ─────────────────────────────────────
     # 🌐 Initrd network
     # ─────────────────────────────────────
