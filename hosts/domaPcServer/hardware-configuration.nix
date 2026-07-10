@@ -44,6 +44,15 @@
       "subvol=@root"
       "compress=zstd"
       "noatime"
+
+      # Při vzdáleném odemykání může initrd čekat
+      # libovolně dlouho na dostupnost VPN a VPS.
+      #
+      # Bez této volby může systemd ukončit čekání
+      # na /dev/mapper/cryptroot po device timeoutu.
+      #
+      # Hodnota 0 znamená čekání bez časového limitu.
+      "x-systemd.device-timeout=0"
     ];
   };
 

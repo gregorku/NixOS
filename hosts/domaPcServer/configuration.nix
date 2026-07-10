@@ -67,6 +67,59 @@
     # Vlastní nftables firewall a DNAT pravidla.
     ../../modules/server/firewall/firewall-domaServerPc.nix
 
+    # ─────────────────────────────────────
+    # 🌐 Initrd network
+    # ─────────────────────────────────────
+    #
+    # Síť používaná pouze během initrd pro
+    # vzdálené odemykání LUKS přes SSH.
+    #
+    # V initrd ještě neexistuje bridge br0.
+    # Proto se statická IP adresa nastavuje
+    # přímo na fyzické rozhraní enp7s0.
+    #
+    # Po odemčení LUKS a přechodu do běžného
+    # systému tato konfigurace zanikne.
+    #
+    # Následně běžná konfigurace NixOS vytvoří
+    # bridge br0, připojí do něj enp7s0 a síť
+    # bude pokračovat podle konfigurace br0.
+    #
+
+    boot.initrd.systemd.network.enable = true;
+
+    boot.initrd.systemd.network.networks."10-initrd-enp7s0" = {
+      matchConfig.Name = "enp7s0";
+
+      address = [
+        "192.168.100.200/24"
+      ];
+
+      routes = [
+        {
+          Gateway = "192.168.100.1";
+        }
+      ];
+
+      networkConfig = {
+        DHCP = "no";
+      };
+    };
+
+    # ─────────────────────────────────────
+    # 🌐 Síťový ovladač v initrd
+    # ─────────────────────────────────────
+    #
+    # Síťová karta enp7s0 používá ovladač r8169.
+    #
+    # Ovladač musí být dostupný už v initrd,
+    # aby bylo možné inicializovat síť před
+    # odemčením šifrovaného root filesystemu.
+    #
+
+    boot.initrd.availableKernelModules = [
+      "r8169"
+    ];
 
     # ────────────────────────────────────────────────
     # systemd-nspawn kontejnery
