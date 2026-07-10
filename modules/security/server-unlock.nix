@@ -1,3 +1,4 @@
+```nix
 { config, lib, pkgs, ... }:
 
 let
@@ -206,6 +207,8 @@ let
         local ssh_key="$5"
         local password_file="$6"
 
+        local ssh_status=0
+
 
         if [[ ! -r "$password_file" ]]; then
 
@@ -246,11 +249,12 @@ let
         # Po úspěšném odemčení initrd zanikne a SSH
         # spojení může skončit návratovým kódem != 0.
         #
-        # Proto návratový kód SSH nepovažujeme sám
-        # o sobě za důkaz neúspěšného unlocku.
+        # Návratový kód SSH proto zaznamenáme,
+        # ale skutečný výsledek ověříme podle stavu
+        # produkčního a initrd SSH portu.
         #
 
-        ssh \
+        if ssh \
           -tt \
           -i "$ssh_key" \
           -p "$unlock_port" \
@@ -259,12 +263,83 @@ let
           -o ConnectionAttempts=1 \
           root@"$host" \
           systemd-tty-ask-password-agent \
-          < "$password_file" \
-          || true
+          < "$password_file"
+        then
 
+          ssh_status=0
+
+        else
+
+          ssh_status=$?
+
+        fi
+
+
+        if (( ssh_status == 0 )); then
+
+          log INFO \
+            "$name: SSH příkaz pro odemčení skončil úspěšně"
+
+        else
+
+          log WARN \
+            "$name: SSH spojení skončilo s návratovým kódem $ssh_status"
+
+        fi
+
+
+        #
+        # Krátká prodleva umožní initrd po úspěšném
+        # odemčení ukončit SSH a pokračovat v bootu.
+        #
+
+        sleep 3
+
+
+        #
+        # 1. Produkční SSH už odpovídá.
+        #
+        # Server úspěšně naběhl.
+        #
+
+        if port_open "$host" "$normal_port"; then
+
+          log INFO \
+            "$name: server úspěšně naběhl"
+
+          return 0
+
+        fi
+
+
+        #
+        # 2. Initrd SSH stále odpovídá.
+        #
+        # Odemčení pravděpodobně selhalo.
+        #
+        # Vrátíme chybu a hlavní smyčka provede
+        # další pokus po CHECK_INTERVAL.
+        #
+
+        if port_open "$host" "$unlock_port"; then
+
+          log WARN \
+            "$name: initrd SSH je stále dostupné, odemčení pravděpodobně selhalo"
+
+          return 1
+
+        fi
+
+
+        #
+        # 3. Initrd SSH už zmizelo a produkční SSH
+        # zatím ještě není dostupné.
+        #
+        # Server pravděpodobně pokračuje v bootu.
+        #
 
         log INFO \
-          "$name: požadavek na odemčení byl odeslán"
+          "$name: initrd SSH již není dostupné, čekám na produkční SSH"
 
 
         wait_for_normal_ssh \
@@ -567,3 +642,4 @@ in
 
   };
 }
+```
