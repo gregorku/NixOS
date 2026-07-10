@@ -245,19 +245,19 @@
       #
       # Aktivovat až po ověření testServerPrace.
       #
-      # domaPcServer = {
-      #   host = "10.100.100.5";
-      #
-      #   unlockPort = 2227;
-      #
-      #   normalPort = 10526;
-      #
-      #   keyFile =
-      #     "/root/.ssh/unlock_servers";
-      #
-      #   passwordFile =
-      #     "/etc/secrets/server-unlock/domaPcServer.pass";
-      # };
+      domaPcServer = {
+        host = "10.100.100.100";
+      
+        unlockPort = 2227;
+      
+        normalPort = 10022;
+      
+        keyFile =
+          "/root/.ssh/unlock_servers";
+      
+        passwordFile =
+          "/etc/secrets/server-unlock/domaPcServer.pass";
+      };
     };
   };
 
