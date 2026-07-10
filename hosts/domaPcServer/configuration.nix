@@ -129,13 +129,6 @@
     # Aktuálně nepoužívané.
     # Ponecháno jako vzor pro případné budoucí použití.
 
-    # ../../containers/ha-doma/container.nix
-    # ../../containers/caddy/container.nix
-    # ../../containers/zigbee2mqtt/container.nix
-    # ../../containers/jellyfin/container.nix
-    # ../../containers/frigate/container.nix
-  ];
-
 
   # ==================================================
   # ZÁKLADNÍ NASTAVENÍ SYSTÉMU
