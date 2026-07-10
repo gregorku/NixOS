@@ -13,10 +13,26 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/mapper/vg0-root";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/mapper/vg0-root";
+    fsType = "ext4";
+
+    options = [
+      # Root filesystem musí být připojen už v initrd.
+      "x-initrd.mount"
+
+      # Root filesystem je na LVM uvnitř LUKS.
+      #
+      # Při vzdáleném odemykání může initrd čekat
+      # delší dobu na dostupnost sítě, VPN nebo VPS.
+      #
+      # Bez této volby systemd čeká na zařízení
+      # /dev/mapper/vg0-root pouze omezenou dobu.
+      #
+      # Hodnota 0 znamená čekání bez časového limitu.
+      "x-systemd.device-timeout=0"
+    ];
+  };
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/931a30f8-fc4d-455f-bf71-caa890b1ab38";
