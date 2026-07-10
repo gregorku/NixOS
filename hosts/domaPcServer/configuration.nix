@@ -213,7 +213,7 @@
     device =
       "/dev/disk/by-uuid/5a775301-f99e-4b41-9332-dbbfc8947db6";
 
-    keyFile = "/crypto_keyfile.bin";
+    #keyFile = "/crypto_keyfile.bin";
 
     # Systémový disk nepoužívá LVM.
     #
@@ -225,10 +225,10 @@
 
   # Keyfile je při sestavení initrd načten z EFI oddílu.
 
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" =
-      "/boot/crypto_keyfile.bin";
-  };
+  #boot.initrd.secrets = {
+  #  "/crypto_keyfile.bin" =
+  #    "/boot/crypto_keyfile.bin";
+  #};
 
 
   # ==================================================
