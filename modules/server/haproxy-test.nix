@@ -30,7 +30,7 @@
           use_backend zabbix_http             if { hdr(host) -i zabbix.serveftp.org }
           use_backend homeassistant_http      if { hdr(host) -i homeassistant.serveftp.org }
           use_backend homeassistant_net_http  if { hdr(host) -i homeassistant.serveftp.net }
-          use_backend grafana_http            if { hdr(host) -i grafana.serveftp.org }
+          use_backend grafana_http            if { hdr(host) -i grafana.serveftp.net }
 
           default_backend nextcloud_http
 
@@ -60,7 +60,8 @@
 
       backend grafana_http
           mode http
-          server grafana 200.1.1.200:80
+          option forwardfor
+          server grafana 10.10.10.10:80 send-proxy-v2
 
       # -------------------------
       # HTTPS (TCP passthrough)
@@ -77,7 +78,7 @@
           use_backend zabbix_https             if { req_ssl_sni -i zabbix.serveftp.org }
           use_backend homeassistant_https      if { req_ssl_sni -i homeassistant.serveftp.org }
           use_backend homeassistant_net_https  if { req_ssl_sni -i homeassistant.serveftp.net }
-          use_backend grafana_https            if { req_ssl_sni -i grafana.serveftp.org }
+          use_backend grafana_https            if { req_ssl_sni -i grafana.serveftp.net }
 
           default_backend nextcloud_https
 
@@ -106,7 +107,7 @@
 
       backend grafana_https
           mode tcp
-          server grafana 200.1.1.200:443
+          server grafana 10.10.10.10:443 send-proxy-v2
 
       # -------------------------
       # TCP služby (např. Zabbix agent)
