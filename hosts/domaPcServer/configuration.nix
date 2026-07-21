@@ -46,10 +46,15 @@
     #
     # ../../modules/server/libvirt.nix
 
+
     # Samostatný ZFS modul zatím nepoužíváme.
     # Import poolů je definován přímo v tomto souboru.
     #
     # ../../modules/server/zfs.nix
+
+    # Moritorings server Pc.
+    #
+    ../../modules/server/monitoringsPc.nix
 
     # Automatické aktualizace zapnout až po dokončení
     # a otestování základní konfigurace serveru.
