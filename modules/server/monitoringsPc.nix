@@ -57,9 +57,9 @@
       RestartSec = "5";
 
       ExecStart = ''
-  ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter \
-      --web.listen-address=:9633
-  '';
+        ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter \
+          --web.listen-address=:9633
+      '';
     };
   };
 
@@ -80,9 +80,9 @@
       RestartSec = "5";
 
       ExecStart = ''
-    ${pkgs.prometheus-zfs-exporter}/bin/zfs_exporter \
-      --web.listen-address=:9134
-  '';
+        ${pkgs.prometheus-zfs-exporter}/bin/zfs_exporter \
+          --web.listen-address=:9134
+      '';
     };
   };
 
