@@ -48,8 +48,10 @@
     # ../../modules/server/security.nix
     # ../../modules/server/security-test.nix
     # ../../modules/server/acme.nix
-
-    # ../../modules/server/profiles/test.nix
+  
+    # Moritoring server Pc.
+    #
+    ../../modules/server/monitoringPc.nix
   ];
 
 

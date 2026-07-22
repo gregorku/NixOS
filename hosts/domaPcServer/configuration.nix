@@ -52,9 +52,9 @@
     #
     # ../../modules/server/zfs.nix
 
-    # Moritorings server Pc.
+    # Moritoring server Pc.
     #
-    ../../modules/server/monitoringsPc.nix
+    ../../modules/server/monitoringPc.nix
 
     # Automatické aktualizace zapnout až po dokončení
     # a otestování základní konfigurace serveru.
