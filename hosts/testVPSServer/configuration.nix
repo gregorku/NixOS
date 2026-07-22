@@ -49,7 +49,7 @@
     # ../../modules/server/security-test.nix
     # ../../modules/server/acme.nix
   
-    # Moritoring server Pc.
+    # Monitoring server Pc.
     #
     ../../modules/server/monitoringPc.nix
   ];

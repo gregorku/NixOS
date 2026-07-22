@@ -52,7 +52,7 @@
     #
     # ../../modules/server/zfs.nix
 
-    # Moritoring server Pc.
+    # Monitoring server Pc.
     #
     ../../modules/server/monitoringPc.nix
 
