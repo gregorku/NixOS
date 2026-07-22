@@ -90,7 +90,7 @@
     gimp
     easytag
     puddletag
-    unstable.freecad
+    #unstable.freecad
 
     # ======================
     # 📨 KANCELÁŘ
