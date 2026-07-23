@@ -31,11 +31,8 @@
   };
 programs.vscode = {
     enable = true;
-    # Obalíme VSCodium do FHS prostředí, které mu poskytne všechny C/C++ knihovny a binárky:
-    package = pkgs.vscode-with-extensions.override {
-      vscode = unstable.vscodium;
-      forFHSEnv = true;
-    };
+    # Použijeme přímo připravený FHS balíček z unstable kanálu:
+    package = unstable.vscodium-fhs;
     extensions = with pkgs.vscode-extensions; [
       continue.continue
     ];
