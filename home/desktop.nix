@@ -31,7 +31,11 @@
   };
   programs.vscode = {
     enable = true;
-    package = pkgs.unstable.vscodium-fhs;   # ← novější verze
+    package = (import <nixos-unstable> { 
+      system = pkgs.system; 
+      config.allowUnfree = true; 
+    }).vscodium-fhs;
+
     mutableExtensionsDir = true;
     
     extensions = with pkgs.vscode-extensions; [
