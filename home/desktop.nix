@@ -29,4 +29,14 @@
       };
     };
   };
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscodium-fhs;
+    mutableExtensionsDir = true;
+    
+    extensions = with pkgs.vscode-extensions; [
+      continue.continue
+      # sem můžeš přidat další extenze
+    ];
+  };
 }
