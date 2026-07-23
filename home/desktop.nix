@@ -31,15 +31,15 @@
   };
   programs.vscode = {
     enable = true;
-    package = (import <nixos-unstable> { 
-      system = pkgs.system; 
-      config.allowUnfree = true; 
-    }).vscodium-fhs;
-
-    mutableExtensionsDir = true;
-    
+    package = pkgs.vscodium-bin;   # nebo pkgs.vscodium
     extensions = with pkgs.vscode-extensions; [
-      continue.continue
+      ms-python.python
+      # ... další rozšíření
     ];
+    userSettings = {
+      "editor.fontSize" = 14;
+      "workbench.colorTheme" = "Default Dark+";
+    };
   };
+  # ... zbytek konfigurace
 }
