@@ -31,7 +31,7 @@
   };
   programs.vscode = {
     enable = true;
-    package = pkgs.vscodium-fhs;
+    package = pkgs.unstable.vscodium-fhs;   # ← novější verze
     mutableExtensionsDir = true;
     
     extensions = with pkgs.vscode-extensions; [
