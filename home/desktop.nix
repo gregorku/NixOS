@@ -31,7 +31,7 @@
   };
   programs.vscode = {
     enable = true;
-    package = pkgs.vscodium-bin;   # nebo pkgs.vscodium
+    package = pkgs.unstable.vscodium-bin;
     extensions = with pkgs.vscode-extensions; [
       ms-python.python
       # ... další rozšíření
