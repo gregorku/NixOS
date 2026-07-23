@@ -31,15 +31,12 @@
   };
   programs.vscode = {
     enable = true;
-    # Pokud chceš nejnovější verzi:
-    package = pkgs.vscodium.overrideAttrs (old: {
-      src = pkgs.fetchurl {
-        url = "https://github.com/VSCodium/vscodium/releases/download/1.100.0.24307/codium-1.100.0.24307-el8.x86_64.rpm"; # nahraď aktuální verzí
-        hash = "sha256-..."; # musíš doplnit
-      };
-    });
-
-    # Nebo jednodušší varianta – použít unstable:
-    # package = pkgs.unstable.vscodium;
+    package = pkgs.unstable.vscodium;
+    mutableExtensionsDir = true;
+    
+    extensions = with pkgs.vscode-extensions; [
+      continue.continue
+      # sem můžeš přidat další extenze
+    ];
   };
 }
