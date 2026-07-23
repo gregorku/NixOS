@@ -1,4 +1,4 @@
-{ config, pkgs, unstable, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 
 {
   imports = [ ./common.nix ];
@@ -31,7 +31,7 @@
   };
   programs.vscode = {
     enable = true;
-    package = pkgs.unstable.vscodium;
+    package = pkgs-unstable.vscodium;
     extensions = with pkgs.vscode-extensions; [
       continue.continue
       # Sem můžeš přidat i další rozšíření, např.:
