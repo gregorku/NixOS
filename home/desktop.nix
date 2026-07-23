@@ -29,14 +29,15 @@
       };
     };
   };
-  programs.vscode = {
+programs.vscode = {
     enable = true;
-    package = unstable.vscodium;
+    # Obalíme VSCodium do FHS prostředí, které mu poskytne všechny C/C++ knihovny a binárky:
+    package = pkgs.vscode-with-extensions.override {
+      vscode = unstable.vscodium;
+      forFHSEnv = true;
+    };
     extensions = with pkgs.vscode-extensions; [
-      #continue.continue
-      # Sem můžeš přidat i další rozšíření, např.:
-      # ms-python.python
-      # jock.svg
+      continue.continue
     ];
   };
 }
