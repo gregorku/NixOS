@@ -29,17 +29,4 @@
       };
     };
   };
-  programs.vscode = {
-    enable = true;
-    package = pkgs.unstable.vscodium-bin;
-    extensions = with pkgs.vscode-extensions; [
-      ms-python.python
-      # ... další rozšíření
-    ];
-    userSettings = {
-      "editor.fontSize" = 14;
-      "workbench.colorTheme" = "Default Dark+";
-    };
-  };
-  # ... zbytek konfigurace
 }
