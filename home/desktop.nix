@@ -31,12 +31,13 @@
   };
   programs.vscode = {
     enable = true;
-    package = pkgs.unstable.vscodium;
+    package = pkgs.vscodium;           # stabilní verze (dost dobrá)
+    # package = pkgs.vscodium-fhs;     # alternativně FHS verze (lepší kompatibilita)
+
     mutableExtensionsDir = true;
     
     extensions = with pkgs.vscode-extensions; [
       continue.continue
-      # sem můžeš přidat další extenze
     ];
   };
 }
