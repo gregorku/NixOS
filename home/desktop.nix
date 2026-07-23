@@ -40,6 +40,7 @@
         hash = "sha256-..."; # musíš doplnit
       };
     });
+
     # Nebo jednodušší varianta – použít unstable:
     # package = pkgs.unstable.vscodium;
   };
