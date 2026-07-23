@@ -31,8 +31,6 @@
   };
   programs.vscode = {
     enable = true;
-    package = pkgs.vscodium;           # nebo pkgs.vscodium-fhs
-
     # Pokud chceš nejnovější verzi:
     package = pkgs.vscodium.overrideAttrs (old: {
       src = pkgs.fetchurl {
