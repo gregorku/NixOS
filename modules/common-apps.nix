@@ -8,7 +8,7 @@
     # ======================
     git
     nvd
-    unstable.vscodium
+    #unstable.vscodium
     nano
     mc
     btop

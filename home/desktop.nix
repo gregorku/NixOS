@@ -29,4 +29,14 @@
       };
     };
   };
+  programs.vscode = {
+    enable = true;
+    package = pkgs.unstable.vscodium;
+    extensions = with pkgs.vscode-extensions; [
+      continue.continue
+      # Sem můžeš přidat i další rozšíření, např.:
+      # ms-python.python
+      # jock.svg
+    ];
+  };
 }
