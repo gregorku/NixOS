@@ -23,6 +23,7 @@
       "diskstats"
       "filesystem"
       "hwmon"
+      "thermal_zone"
       "loadavg"
       "meminfo"
       "netdev"
