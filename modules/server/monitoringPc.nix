@@ -22,6 +22,7 @@
       "cpu"
       "diskstats"
       "filesystem"
+      "hwmon"
       "loadavg"
       "meminfo"
       "netdev"
