@@ -17,6 +17,10 @@
     ../../modules/server/firewall/firewall-testServerPrace.nix
     ../../modules/server/server-br0.nix
     ../../modules/security/initrd-unlock.nix
+
+    # Monitoring server Pc.
+    #
+    ../../modules/server/monitoringPc.nix  
   ];
 
   # ─────────────────────────────────────
