@@ -61,6 +61,11 @@ in
         # logování zahazovaných paketů
         limit rate 5/minute log prefix "FW DROP IN: ";
         drop;
+
+        # ───────────────────────────────
+        # porty monitors
+        # ───────────────────────────────
+        tcp dport {9100,9134,9633} ip saddr @trusted accept
       }
 
       chain forward {
