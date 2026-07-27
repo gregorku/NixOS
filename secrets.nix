@@ -109,9 +109,11 @@ in
 "VPSsecret/wireguard/wg1-mujmobil-private.age".publicKeys = [ ntbLenovo ];
 
 ##################################################
-# 🔐 AI - Aider (OpenRouter)
+# 🔐 AI - OpenRouter (Aider)
 ##################################################
-"secrets/AI/aider.age".publicKeys = [
+"secrets/AI/openrouter-aider.age".publicKeys = [
   ntbLenovo
+  pracovniPc
+  # serverVPStest
 ];
 }
