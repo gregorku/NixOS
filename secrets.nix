@@ -107,4 +107,11 @@ in
 # 🔐 WIREGUARD (Mobil - mujmobil)
 ##################################################
 "VPSsecret/wireguard/wg1-mujmobil-private.age".publicKeys = [ ntbLenovo ];
+
+##################################################
+# 🔐 AI - Aider (OpenRouter)
+##################################################
+"secrets/AI/aider.age".publicKeys = [
+  ntbLenovo
+];
 }
