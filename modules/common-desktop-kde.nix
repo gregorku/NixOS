@@ -45,6 +45,9 @@
   # ----------------------
   environment.systemPackages = with pkgs; [
 
+    # KDE Partition Manager
+    kdePackages.partitionmanager
+
     # KDE Connect
     kdePackages.kdeconnect-kde
     # KDE Správa hesel
