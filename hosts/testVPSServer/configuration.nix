@@ -51,7 +51,7 @@
   
     # Monitoring server Pc.
     #
-    ../../modules/server/monitoringPc.nix
+    ../../modules/server/monitoringVPS.nix
   ];
 
 
