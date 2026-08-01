@@ -11,6 +11,18 @@ in
     jellyfin
   ];
 
+#
+# Převzetí originálního .desktop souboru.
+#
+# Zachová:
+#   • ikony
+#   • překlady
+#   • MIME asociace
+#   • AppStream metadata
+#
+# Mění pouze Exec= tak, aby se používal wrapper.
+#
+
   home.file.".local/share/applications/org.jellyfin.JellyfinDesktop.desktop".text =
     builtins.replaceStrings
       [ "Exec=jellyfin-desktop" ]
