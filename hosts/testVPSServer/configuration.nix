@@ -345,35 +345,34 @@
   };
 
 
-  ##################################################
-  # Nix
-  ##################################################
+##################################################
+# Nix
+##################################################
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
+nix.gc = {
+  automatic = true;
+  dates = "weekly";
+  options = "--delete-older-than 7d";
+};
 
-  # Nix zvětšení swap a omezení procesů
-  nix.settings.auto-optimise-store = true;
+nix.settings = {
+  auto-optimise-store = true;
+
+  # Testovací VPS – menší spotřeba RAM při buildu
+  max-jobs = 1;
+  cores = 1;
+};
+
+# Přidání klasického swapfile vedle zram
+swapDevices = [
   {
-    swapDevices = [
-      {
-        device = "/swapfile";
-        size = 4096;
-      }
-    ];
-
-    nix.settings = {
-      max-jobs = 1;
-      cores = 1;
-    };
+    device = "/swapfile";
+    size = 4096; # MiB = 4 GiB
   }
+];
 
-  ##################################################
-  # Version
-  ##################################################
+##################################################
+# Version
+##################################################
 
-  system.stateVersion = "26.05";
-}
+system.stateVersion = "26.05";
