@@ -14,7 +14,7 @@ in
   xdg.desktopEntries.jellyfin = {
     name = "Jellyfin";
     exec = "jellyfin";
-    icon = "jellyfinmediaplayer";
+    icon = "org.jellyfin.JellyfinDesktop";
     terminal = false;
     type = "Application";
     categories = [ "AudioVideo" "Video" ];
