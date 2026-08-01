@@ -134,7 +134,7 @@
    # ----------------------  
    # media player Jellyfin
    # ---------------------- 
-    jellyfin-media-player
+   #jellyfin-media-player
 
    # ----------------------  
    # Python nefunguje verze 0.3.33
