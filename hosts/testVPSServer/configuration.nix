@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 {
   imports = [
     ./hardware-configuration.nix
@@ -11,13 +17,11 @@
     ../../modules/common-swap.nix
     ../../modules/server/server-users.nix
 
-
     ##################################################
     # Server-only moduly
     ##################################################
     ../../modules/server/serverVPS-app.nix
     ../../modules/server/cockpit.nix
-
 
     ##################################################
     # Security
@@ -33,12 +37,10 @@
     # ../../modules/server/haproxy-test.nix
     ../../modules/server/firewall/firewall-vps-test.nix
 
-
     ##################################################
     # WireGuard
     ##################################################
     ../../modules/server/wireguard-vps-test.nix
-
 
     ##################################################
     # HAProxy
@@ -48,24 +50,20 @@
     # ../../modules/server/security.nix
     # ../../modules/server/security-test.nix
     # ../../modules/server/acme.nix
-  
+
     # Monitoring server Pc.
     #
     ../../modules/server/monitoringVPS.nix
   ];
 
-
   ##################################################
   # AGENIX SECRET
   ##################################################
 
-  age.secrets.test-secret.file =
-    ../../serverVPStest/test-secret.age;
+  age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
 
   # Zpřístupnění secretu do systému.
-  environment.etc."test-secret".source =
-    config.age.secrets.test-secret.path;
-
+  environment.etc."test-secret".source = config.age.secrets.test-secret.path;
 
   ##################################################
   # Server Unlock
@@ -110,14 +108,12 @@
   services.serverUnlock = {
     enable = true;
 
-
     # Interval mezi kontrolami serverů.
     #
     # Každých 10 sekund se kontroluje stav
     # produkčního a případně initrd SSH portu.
     #
     checkInterval = 10;
-
 
     # Maximální doba čekání související
     # s dostupností initrd SSH.
@@ -127,7 +123,6 @@
     #
     unlockTimeout = 900;
 
-
     # Maximální doba čekání na produkční SSH
     # po odeslání LUKS passphrase.
     #
@@ -135,14 +130,12 @@
     #
     bootTimeout = 600;
 
-
     # Úroveň logování.
     #
     # Pro první test doporučuji "debug".
     # Po dokončení testování lze změnit na "info".
     #
     logLevel = "debug";
-
 
     servers = {
 
@@ -169,16 +162,12 @@
 
         normalPort = 10522;
 
-        hostPublicKey =
-         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPQjYeNfmlGn8fXI9V2jpzX0ZCM/KqHrtgoDOgRdhHyg";
+        hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPQjYeNfmlGn8fXI9V2jpzX0ZCM/KqHrtgoDOgRdhHyg";
 
-        keyFile =
-          "/root/.ssh/unlock_servers";
+        keyFile = "/root/.ssh/unlock_servers";
 
-        passwordFile =
-          "/etc/secrets/server-unlock/testServerPrace.pass";
+        passwordFile = "/etc/secrets/server-unlock/testServerPrace.pass";
       };
-
 
       ################################################
       # virtServerPrace
@@ -200,7 +189,6 @@
       #     "/etc/secrets/server-unlock/virtServerPrace.pass";
       # };
 
-
       ################################################
       # pcServerPrace
       ################################################
@@ -220,7 +208,6 @@
       #   passwordFile =
       #     "/etc/secrets/server-unlock/pcServerPrace.pass";
       # };
-
 
       ################################################
       # pracovniPc
@@ -242,7 +229,6 @@
       #     "/etc/secrets/server-unlock/pracovniPc.pass";
       # };
 
-
       ################################################
       # domaPcServer
       ################################################
@@ -256,18 +242,14 @@
 
         normalPort = 10022;
 
-        hostPublicKey =
-         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWjGsXeAtGIEBoclDPnKF+gTvMsNZGrsqh42DvGsPEj";
+        hostPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWjGsXeAtGIEBoclDPnKF+gTvMsNZGrsqh42DvGsPEj";
 
-        keyFile =
-         "/root/.ssh/unlock_servers";
+        keyFile = "/root/.ssh/unlock_servers";
 
-        passwordFile =
-         "/etc/secrets/server-unlock/domaPcServer.pass";
+        passwordFile = "/etc/secrets/server-unlock/domaPcServer.pass";
       };
     };
   };
-
 
   ##################################################
   # Host
@@ -275,7 +257,6 @@
 
   networking.hostName = "VPSServer";
   networking.hostId = "ab12cd34";
-
 
   ##################################################
   # Síť
@@ -296,7 +277,6 @@
     dhcpV4Config.RouteMetric = 100;
   };
 
-
   ##################################################
   # Kernel
   ##################################################
@@ -306,7 +286,6 @@
     "overlay"
     "nf_conntrack"
   ];
-
 
   ##################################################
   # Lokalizace
@@ -318,7 +297,6 @@
 
   i18n.defaultLocale = "cs_CZ.UTF-8";
 
-
   ##################################################
   # Bootloader (UEFI)
   ##################################################
@@ -328,7 +306,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.loader.systemd-boot.configurationLimit = 10;
-
 
   ##################################################
   # SSH (dočasně otevřené)
@@ -344,36 +321,35 @@
     };
   };
 
+  ##################################################
+  # Nix
+  ##################################################
 
-##################################################
-# Nix
-##################################################
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
 
-nix.gc = {
-  automatic = true;
-  dates = "weekly";
-  options = "--delete-older-than 7d";
-};
+  nix.settings = {
+    auto-optimise-store = true;
 
-nix.settings = {
-  auto-optimise-store = true;
+    # Testovací VPS – menší spotřeba RAM při buildu
+    max-jobs = 1;
+    cores = 1;
+  };
 
-  # Testovací VPS – menší spotřeba RAM při buildu
-  max-jobs = 1;
-  cores = 1;
-};
+  # Přidání klasického swapfile vedle zram
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 4096; # MiB = 4 GiB
+    }
+  ];
 
-# Přidání klasického swapfile vedle zram
-swapDevices = [
-  {
-    device = "/swapfile";
-    size = 4096; # MiB = 4 GiB
-  }
-];
+  ##################################################
+  # Version
+  ##################################################
 
-##################################################
-# Version
-##################################################
-
-system.stateVersion = "26.05";
+  system.stateVersion = "26.05";
 }
