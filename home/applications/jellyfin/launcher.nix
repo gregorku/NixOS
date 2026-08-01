@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   jellyfin = pkgs.writeShellScriptBin "jellyfin" ''
@@ -11,12 +11,10 @@ in
     jellyfin
   ];
 
-  xdg.desktopEntries.jellyfin = {
-    name = "Jellyfin";
-    exec = "jellyfin";
-    icon = "org.jellyfin.JellyfinDesktop";
-    terminal = false;
-    type = "Application";
-    categories = [ "AudioVideo" "Video" ];
-  };
+  home.file.".local/share/applications/org.jellyfin.JellyfinDesktop.desktop".text =
+    builtins.replaceStrings
+      [ "Exec=jellyfin-desktop" ]
+      [ "Exec=jellyfin" ]
+      (builtins.readFile
+        "${pkgs.jellyfin-media-player}/share/applications/org.jellyfin.JellyfinDesktop.desktop");
 }
