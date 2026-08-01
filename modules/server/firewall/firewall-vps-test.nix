@@ -1,20 +1,25 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   dnat = import ./dnat-test.nix;
 
   # všechna WireGuard rozhraní
-  wgIfaces = [ "wg1" "wg2" "wg3" ];
+  wgIfaces = [
+    "wg1"
+    "wg2"
+    "wg3"
+  ];
 
   # generátor jednoho DNAT pravidla
-  genRule = iface: r:
-    ''iifname "${iface}" tcp dport ${toString r.port} dnat ip to ${r.target}'';
+  genRule = iface: r: ''iifname "${iface}" tcp dport ${toString r.port} dnat ip to ${r.target}'';
 
   # WireGuard DNAT
-  genWG =
-    lib.mapAttrsToList (iface: rules:
-      map (r: genRule iface r) rules
-    ) dnat.wireguard;
+  genWG = lib.mapAttrsToList (iface: rules: map (r: genRule iface r) rules) dnat.wireguard;
 
   wgRules = lib.flatten genWG;
 
@@ -22,12 +27,10 @@ let
   publicRules = map (r: genRule "ens3" r) dnat.public;
 
   # všechna DNAT pravidla
-  allDnatRules =
-    lib.concatStringsSep "\n" (wgRules ++ publicRules);
+  allDnatRules = lib.concatStringsSep "\n" (wgRules ++ publicRules);
 
   # nft syntaxe { "wg0", "wg1", ... }
-  wgSet =
-    "{ " + lib.concatStringsSep ", " (map (i: ''"${i}"'') wgIfaces) + " }";
+  wgSet = "{ " + lib.concatStringsSep ", " (map (i: ''"${i}"'') wgIfaces) + " }";
 
 in
 {
@@ -65,7 +68,7 @@ in
 
         # DNS + DHCP pro Incus
         iifname "incusbr0" udp dport { 53, 67 } accept
-        iifname "incusbr0" tcp dport 53 accept
+        iifname "incusbr0" tcp dport { 53, 9100 } accept
 
         # Cockpit
         tcp dport 9090 ip saddr @trusted accept
