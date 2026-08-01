@@ -1,17 +1,17 @@
-#
-# Jellyfin Desktop
-#
-# Hlavní modul aplikace.
-#
-# Přidává:
-#   • instalaci programu
-#   • launcher
-#   • přesměrování uživatelských dat
-#
-
 {
   imports = [
     ./launcher.nix
-    ./application-data.nix
   ];
+
+  my.applicationData = {
+    enable = true;
+
+    name = "jellyfin";
+
+    configDir = "jellyfin-desktop";
+
+    dataDir = "jellyfin-desktop";
+
+    cacheDir = "jellyfin-desktop";
+  };
 }

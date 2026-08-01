@@ -3,7 +3,7 @@
 {
   imports = [
     ./common.nix
-
+    ./modules/application-data.nix
     # Aplikace
     ./applications/jellyfin
   ];
