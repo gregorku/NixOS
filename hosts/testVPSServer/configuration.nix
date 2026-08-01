@@ -355,8 +355,21 @@
     options = "--delete-older-than 7d";
   };
 
+  # Nix zvětšení swap a omezení procesů
   nix.settings.auto-optimise-store = true;
+  {
+    swapDevices = [
+      {
+        device = "/swapfile";
+        size = 4096;
+      }
+    ];
 
+    nix.settings = {
+      max-jobs = 1;
+      cores = 1;
+    };
+  }
 
   ##################################################
   # Version
