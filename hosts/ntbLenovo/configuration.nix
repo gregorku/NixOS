@@ -1,4 +1,10 @@
-{ config, pkgs, lib, unstable, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  unstable,
+  ...
+}:
 {
   _module.args = { inherit unstable; };
 
@@ -131,23 +137,26 @@
     nixd
     nixfmt
 
-   # ----------------------  
-   # media player Jellyfin
-   # ---------------------- 
-   #jellyfin-media-player
+    # ----------------------
+    # media player Jellyfin
+    # ----------------------
+    #jellyfin-media-player
 
-   # ----------------------  
-   # Python nefunguje verze 0.3.33
-   # ---------------------- 
-   #(python3.withPackages (ps: with ps; [
+    # ----------------------
+    # Python nefunguje verze 0.3.33
+    # ----------------------
+    #(python3.withPackages (ps: with ps; [
     #pandas
     #openpyxl
 
-   #]))
+    #]))
 
   ];
 
-  environment.pathsToLink = [ "/share/icons" "/share/themes" ];
+  environment.pathsToLink = [
+    "/share/icons"
+    "/share/themes"
+  ];
 
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
@@ -157,8 +166,8 @@
   };
 
   environment.sessionVariables = {
-    AGENIX_AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
-    AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
+    AGENIX_AGE_KEY_FILE = "/home/gregor/.application-data/agenix/keys.txt";
+    AGE_KEY_FILE = "/home/gregor/.application-data/agenix/keys.txt";
   };
 
   # ----------------------
@@ -204,18 +213,18 @@
     device = "/dev/mapper/data_crypt";
     fsType = "btrfs";
     options = [
-    # 📦 Komprese
-    "compress=zstd"
+      # 📦 Komprese
+      "compress=zstd"
 
-    # 🚀 Menší počet zápisů na SSD
-    "noatime"
+      # 🚀 Menší počet zápisů na SSD
+      "noatime"
 
-    # 📂 Nezablokuje boot při chybě disku
-    "nofail"
+      # 📂 Nezablokuje boot při chybě disku
+      "nofail"
 
-    # 💾 Delší interval zápisu
-    "commit=120"
-  ];
+      # 💾 Delší interval zápisu
+      "commit=120"
+    ];
   };
 
   # ----------------------
@@ -241,7 +250,10 @@
   # ----------------------
   nix.settings = {
     auto-optimise-store = true;
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   nix.gc = {
@@ -267,10 +279,10 @@
   # 🧠 Lepší odezva při velkém zápisu
   boot.kernel.sysctl = {
     "vm.dirty_background_ratio" = 3;
-      "vm.dirty_ratio" = 6;
+    "vm.dirty_ratio" = 6;
     "vm.dirty_expire_centisecs" = 3000;
     "vm.dirty_writeback_centisecs" = 500;
   };
 
   system.stateVersion = "26.05";
-}  
+}
