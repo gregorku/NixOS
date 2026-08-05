@@ -145,11 +145,13 @@
     # ----------------------
     # Python nefunguje verze 0.3.33
     # ----------------------
-    #(python3.withPackages (ps: with ps; [
-    #pandas
-    #openpyxl
+    (python3.withPackages (
+      ps: with ps; [
+        pandas
+        openpyxl
 
-    #]))
+      ]
+    ))
 
   ];
 
