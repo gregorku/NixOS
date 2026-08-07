@@ -1,4 +1,10 @@
-{ config, pkgs, unstable, stable, ... }:
+{
+  config,
+  pkgs,
+  unstable,
+  stable,
+  ...
+}:
 
 {
   environment.systemPackages = with pkgs; [
@@ -15,8 +21,8 @@
     duf
     fastfetch
     usbutils
-    pciutils      # 👈 lspci (hardware debug)
-    alsa-utils    # 👈 aplay, amixer (audio debug)
+    pciutils # 👈 lspci (hardware debug)
+    alsa-utils # 👈 aplay, amixer (audio debug)
     system-config-printer
 
     aider-chat
@@ -29,10 +35,10 @@
     krusader
     kdiff3
     meld
-    
+
     # ======================
     # 📁 SOUBORY / decompression
-    # 
+    #
     unzip
     zip
     p7zip
@@ -101,7 +107,7 @@
     onlyoffice-desktopeditors
     evolution
     pdfarranger
-    portfolio
+    unstable.portfolio
 
     # ======================
     # 🧑‍💻 EDITORY
@@ -150,8 +156,14 @@
   ];
 
   fonts.fontconfig.defaultFonts = {
-    serif      = [ "Liberation Serif" "Carlito" ];
-    sansSerif  = [ "Carlito" "Liberation Sans" ];
-    monospace  = [ "FiraCode Nerd Font" ];
+    serif = [
+      "Liberation Serif"
+      "Carlito"
+    ];
+    sansSerif = [
+      "Carlito"
+      "Liberation Sans"
+    ];
+    monospace = [ "FiraCode Nerd Font" ];
   };
 }
