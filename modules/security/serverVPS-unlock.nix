@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.serverUnlock;
-
 
   # ─────────────────────────────────────
   # Typ konfigurace jednoho serveru
@@ -23,7 +27,6 @@ let
         '';
       };
 
-
       unlockPort = lib.mkOption {
         type = lib.types.port;
 
@@ -32,7 +35,6 @@ let
           odemykání LUKS.
         '';
       };
-
 
       normalPort = lib.mkOption {
         type = lib.types.port;
@@ -44,7 +46,6 @@ let
           zda je server již normálně spuštěný.
         '';
       };
-
 
       hostPublicKey = lib.mkOption {
         type = lib.types.str;
@@ -61,7 +62,6 @@ let
         '';
       };
 
-
       keyFile = lib.mkOption {
         type = lib.types.str;
 
@@ -72,7 +72,6 @@ let
           pro připojení k SSH serveru v initrd.
         '';
       };
-
 
       passwordFile = lib.mkOption {
         type = lib.types.str;
@@ -96,52 +95,38 @@ let
     };
   };
 
-
   # ─────────────────────────────────────
   # Kontrola jednoho serveru
   # ─────────────────────────────────────
 
-  serverChecks =
-    lib.concatStringsSep "\n"
-      (
-        lib.mapAttrsToList
-          (
-            name: server: ''
+  serverChecks = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (name: server: ''
 
-              check_server \
-                ${lib.escapeShellArg name} \
-                ${lib.escapeShellArg server.host} \
-                ${toString server.unlockPort} \
-                ${toString server.normalPort} \
-                ${lib.escapeShellArg server.keyFile} \
-                ${lib.escapeShellArg server.passwordFile}
+      check_server \
+        ${lib.escapeShellArg name} \
+        ${lib.escapeShellArg server.host} \
+        ${toString server.unlockPort} \
+        ${toString server.normalPort} \
+        ${lib.escapeShellArg server.keyFile} \
+        ${lib.escapeShellArg server.passwordFile}
 
-            ''
-          )
-          cfg.servers
-      );
-
+    '') cfg.servers
+  );
 
   # ─────────────────────────────────────
   # Deklarativní SSH known_hosts
   # ─────────────────────────────────────
 
-  serverKnownHosts =
-    lib.mapAttrs'
-      (
-        name: server:
-          lib.nameValuePair
-            "${name}-initrd"
-            {
-              hostNames = [
-                "[${server.host}]:${toString server.unlockPort}"
-              ];
+  serverKnownHosts = lib.mapAttrs' (
+    name: server:
+    lib.nameValuePair "${name}-initrd" {
+      hostNames = [
+        "[${server.host}]:${toString server.unlockPort}"
+      ];
 
-              publicKey = server.hostPublicKey;
-            }
-      )
-      cfg.servers;
-
+      publicKey = server.hostPublicKey;
+    }
+  ) cfg.servers;
 
   # ─────────────────────────────────────
   # Program server-unlock
@@ -151,7 +136,6 @@ let
 
     name = "server-unlock";
 
-
     runtimeInputs = with pkgs; [
       bash
       coreutils
@@ -159,7 +143,6 @@ let
       netcat-openbsd
       openssh
     ];
-
 
     text = ''
       set -u
@@ -286,8 +269,8 @@ let
         # spojení může skončit návratovým kódem != 0.
         #
         # Návratový kód SSH proto zaznamenáme,
-        # ale skutečný výsledek ověříme podle stavu
-        # produkčního a initrd SSH portu.
+        # ale skutečný výsledek ověříme podle dostupnosti
+        # produkčního SSH portu.
         #
 
         if ssh \
@@ -325,58 +308,18 @@ let
 
 
         #
-        # Krátká prodleva umožní initrd po úspěšném
-        # odemčení ukončit SSH a pokračovat v bootu.
+        # Po odeslání passphrase už NEHODNOTÍME stav
+        # initrd SSH.
         #
-
-        sleep 3
-
-
+        # Initrd SSH může být ještě několik sekund dostupné,
+        # než dokončí odemčení LUKS a pokračuje v bootování.
         #
-        # 1. Produkční SSH už odpovídá.
+        # Skutečným potvrzením úspěšného bootu je až
+        # dostupnost produkčního SSH portu.
         #
-        # Server úspěšně naběhl.
+        # Proto zde neprovádíme kontrolu unlock_port.
+        # Místo toho čekáme až do BOOT_TIMEOUT na normal_port.
         #
-
-        if port_open "$host" "$normal_port"; then
-
-          log INFO \
-            "$name: server úspěšně naběhl"
-
-          return 0
-
-        fi
-
-
-        #
-        # 2. Initrd SSH stále odpovídá.
-        #
-        # Odemčení pravděpodobně selhalo.
-        #
-        # Vrátíme chybu a hlavní smyčka provede
-        # další pokus po CHECK_INTERVAL.
-        #
-
-        if port_open "$host" "$unlock_port"; then
-
-          log WARN \
-            "$name: initrd SSH je stále dostupné, odemčení pravděpodobně selhalo"
-
-          return 1
-
-        fi
-
-
-        #
-        # 3. Initrd SSH už zmizelo a produkční SSH
-        # zatím ještě není dostupné.
-        #
-        # Server pravděpodobně pokračuje v bootu.
-        #
-
-        log INFO \
-          "$name: initrd SSH již není dostupné, čekám na produkční SSH"
-
 
         wait_for_normal_ssh \
           "$name" \
@@ -473,7 +416,6 @@ let
     '';
   };
 
-
 in
 {
 
@@ -483,10 +425,7 @@ in
 
   options.services.serverUnlock = {
 
-
-    enable = lib.mkEnableOption
-      "Automatic LUKS Unlock Manager";
-
+    enable = lib.mkEnableOption "Automatic LUKS Unlock Manager";
 
     servers = lib.mkOption {
 
@@ -500,7 +439,6 @@ in
       '';
     };
 
-
     checkInterval = lib.mkOption {
 
       type = lib.types.ints.positive;
@@ -511,7 +449,6 @@ in
         Interval kontroly serverů v sekundách.
       '';
     };
-
 
     unlockTimeout = lib.mkOption {
 
@@ -527,7 +464,6 @@ in
       '';
     };
 
-
     bootTimeout = lib.mkOption {
 
       type = lib.types.ints.positive;
@@ -541,7 +477,6 @@ in
         Výchozí hodnota je 600 sekund.
       '';
     };
-
 
     logLevel = lib.mkOption {
 
@@ -561,39 +496,27 @@ in
 
   };
 
-
   # ─────────────────────────────────────
   # Configuration
   # ─────────────────────────────────────
 
   config = lib.mkIf cfg.enable {
 
-
     # ─────────────────────────────────────
     # Kontrola konfigurace
     # ─────────────────────────────────────
 
-    assertions =
-      lib.mapAttrsToList
-        (
-          name: server: {
-            assertion =
-              server.hostPublicKey != "";
+    assertions = lib.mapAttrsToList (name: server: {
+      assertion = server.hostPublicKey != "";
 
-            message =
-              "services.serverUnlock.servers.${name}.hostPublicKey nesmí být prázdný";
-          }
-        )
-        cfg.servers;
-
+      message = "services.serverUnlock.servers.${name}.hostPublicKey nesmí být prázdný";
+    }) cfg.servers;
 
     # ─────────────────────────────────────
     # Deklarativní SSH known_hosts
     # ─────────────────────────────────────
 
-    programs.ssh.knownHosts =
-      serverKnownHosts;
-
+    programs.ssh.knownHosts = serverKnownHosts;
 
     # ─────────────────────────────────────
     # Program
@@ -602,7 +525,6 @@ in
     environment.systemPackages = [
       serverUnlockScript
     ];
-
 
     # ─────────────────────────────────────
     # Hlavní konfigurace služby
@@ -616,28 +538,20 @@ in
       SERVER_CONFIG=/etc/server-unlock/servers.conf
     '';
 
-
     # ─────────────────────────────────────
     # Seznam serverů
     # ─────────────────────────────────────
 
-    environment.etc."server-unlock/servers.conf".text =
-      lib.concatStringsSep "\n"
-        (
-          lib.mapAttrsToList
-            (
-              name: server: ''
-                [${name}]
-                HOST=${server.host}
-                UNLOCK_PORT=${toString server.unlockPort}
-                NORMAL_PORT=${toString server.normalPort}
-                SSH_KEY=${server.keyFile}
-                PASSWORD_FILE=${server.passwordFile}
-              ''
-            )
-            cfg.servers
-        );
-
+    environment.etc."server-unlock/servers.conf".text = lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: server: ''
+        [${name}]
+        HOST=${server.host}
+        UNLOCK_PORT=${toString server.unlockPort}
+        NORMAL_PORT=${toString server.normalPort}
+        SSH_KEY=${server.keyFile}
+        PASSWORD_FILE=${server.passwordFile}
+      '') cfg.servers
+    );
 
     # ─────────────────────────────────────
     # systemd service
@@ -645,24 +559,19 @@ in
 
     systemd.services.server-unlock = {
 
-      description =
-        "Automatic Server LUKS Unlock Manager";
-
+      description = "Automatic Server LUKS Unlock Manager";
 
       after = [
         "network-online.target"
       ];
 
-
       wants = [
         "network-online.target"
       ];
 
-
       wantedBy = [
         "multi-user.target"
       ];
-
 
       serviceConfig = {
 
@@ -676,9 +585,7 @@ in
 
         RestartSec = 10;
 
-        ExecStart =
-          "${serverUnlockScript}/bin/server-unlock";
-
+        ExecStart = "${serverUnlockScript}/bin/server-unlock";
 
         # Bezpečnostní omezení služby
 
@@ -689,7 +596,6 @@ in
         ProtectHome = "read-only";
 
         ProtectSystem = "strict";
-
 
         # Přístup k SSH klíči a LUKS password files
 
