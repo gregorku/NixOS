@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # ----------------------
@@ -53,6 +58,9 @@
     # KDE Správa hesel
     kdePackages.kwalletmanager
 
+    #vyhledávání souborů
+    kdePackages.kfind
+
     # Samba, MTP, archivy...
     kdePackages.kio-extras
     kdePackages.kio-fuse
@@ -66,21 +74,22 @@
   # 🔐 Sudo
   # ----------------------
   security.sudo.extraRules = [
-  {
-  users = [ "gregor" ];
-    commands = [
-      {
-       command = "/run/current-system/sw/bin/openconnect";
-       options = [ "NOPASSWD" ];
-      }
-      { command = "/run/current-system/sw/bin/pkill";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "/run/current-system/sw/bin/wg-quick";
-        options = [ "NOPASSWD" ];
-      }
-    ];
-  }
+    {
+      users = [ "gregor" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/openconnect";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/pkill";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/wg-quick";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
   ];
 }
