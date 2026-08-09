@@ -34,7 +34,8 @@ in
   '';
 
   home.file.".application-data/aider/config/aider.conf.yml".text = ''
-    model: openrouter/anthropic/claude-sonnet-4
+    model: openrouter/anthropic/claude-sonnet-4.6
+    weak-model: openrouter/anthropic/claude-haiku-4.5
 
     git: true
     auto-commits: true
