@@ -1,4 +1,9 @@
-{ config, pkgs, unstable, ... }:
+{
+  config,
+  pkgs,
+  unstable,
+  ...
+}:
 
 {
   imports = [
@@ -6,6 +11,7 @@
     ./modules/application-data.nix
     # Aplikace
     ./applications/jellyfin
+    ./applications/aider
   ];
 
   programs.librewolf = {
