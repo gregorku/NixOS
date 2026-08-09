@@ -1,6 +1,6 @@
 let
   serverVPStest = "age1ws5gtnuuamhksc8urq7rzekw3mrs968all0vkpvukc06dc4q7v0q7q58jr";
-  ntbLenovo = "age1h85f8wc9sx5p5sep7h49qjgq3xvj9llwgz75fe0eep9ue6qt4f0s8djvs2"; # sem vlož výstup
+  ntbLenovo = "age1pmlnsea6zm6c3gxa4uzvlzrslv7f5y0q858w3kkpudd0s88qvfeq9xuj0n";
 in
 {
   "serverVPStest/test-secret.age".publicKeys = [
@@ -112,7 +112,7 @@ in
   ##################################################
   "secrets/AI/openrouter-aider.age".publicKeys = [
     ntbLenovo
-    #pracovniPc
+    pracovniPc
     #serverVPStest
   ];
 }
