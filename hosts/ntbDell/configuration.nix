@@ -1,4 +1,10 @@
-{ config, pkgs, lib, unstable, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  unstable,
+  ...
+}:
 {
   _module.args = { inherit unstable; };
 
@@ -9,7 +15,7 @@
     ../../modules/common-users.nix
     ../../modules/common-audio.nix
     ../../modules/common-desktop-kde.nix
-    ../../modules/common-security.nix
+    ../../modules/common-securityPc.nix
     ../../modules/common-bluetooth.nix
     ../../modules/common-printing.nix
     ../../modules/common-apps.nix
@@ -143,7 +149,10 @@
 
   ];
 
-  environment.pathsToLink = [ "/share/icons" "/share/themes" ];
+  environment.pathsToLink = [
+    "/share/icons"
+    "/share/themes"
+  ];
 
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
@@ -184,7 +193,10 @@
   # ----------------------
   nix.settings = {
     auto-optimise-store = true;
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   nix.gc = {

@@ -15,7 +15,7 @@
     ../../modules/common-users.nix
     ../../modules/common-audio.nix
     ../../modules/common-desktop-kde.nix
-    ../../modules/common-security.nix
+    ../../modules/common-securityPc.nix
     ../../modules/common-bluetooth.nix
     ../../modules/common-printing.nix
     ../../modules/common-apps.nix

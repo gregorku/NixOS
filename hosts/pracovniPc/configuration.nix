@@ -1,14 +1,20 @@
-{ config, pkgs, lib, unstable, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  unstable,
+  ...
+}:
 {
   _module.args = { inherit unstable; };
 
   nixpkgs.config.allowUnfree = true;
   imports = [
     ./hardware-configuration.nix
-    
+
     ../../modules/common-users.nix
     ../../modules/common-desktop-kde.nix
-    ../../modules/common-security.nix
+    ../../modules/common-securityPc.nix
     ../../modules/common-bluetooth.nix
     ../../modules/common-printing.nix
     ../../modules/common-apps.nix
@@ -23,7 +29,7 @@
     #../../modules/hosts/pracovniPc-wireguard.nix
     ../../modules/common-networkmanager.nix
     # Vzdálený přístup
-    ../../modules/common-remote-access.nix 
+    ../../modules/common-remote-access.nix
 
   ];
 
@@ -155,22 +161,27 @@
     nixd
     nixfmt
 
-   # ----------------------  
-   # media player Jellyfin
-   # ---------------------- 
+    # ----------------------
+    # media player Jellyfin
+    # ----------------------
     jellyfin-media-player
 
-   # ----------------------  
-   # Python
-   # ---------------------- 
-   (python3.withPackages (ps: with ps; [
-    pandas
-    openpyxl
-   ]))
+    # ----------------------
+    # Python
+    # ----------------------
+    (python3.withPackages (
+      ps: with ps; [
+        pandas
+        openpyxl
+      ]
+    ))
 
   ];
 
-  environment.pathsToLink = [ "/share/icons" "/share/themes" ];
+  environment.pathsToLink = [
+    "/share/icons"
+    "/share/themes"
+  ];
 
   environment.variables = {
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
@@ -210,7 +221,10 @@
   # ----------------------
   nix.settings = {
     auto-optimise-store = true;
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   nix.gc = {
@@ -218,19 +232,18 @@
     dates = "weekly";
     options = "--delete-older-than 15d";
   };
-  
+
   ## ZFS – import datapool po bootu
   ## =========================
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
   boot.zfs.extraPools = [
-  "DataDisk"
-  "FastPool"
+    "DataDisk"
+    "FastPool"
   ];
   services.zfs.autoScrub.enable = false;
   services.zfs.autoSnapshot.enable = false;
 
-  
   # Kernel latest nefunkční zfs
   # boot.kernelPackages = pkgs.linuxPackages_latest;
   # ----------------------
