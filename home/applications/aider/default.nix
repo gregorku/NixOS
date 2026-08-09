@@ -2,9 +2,20 @@
 
 let
   aiderDataDir = "${config.home.homeDirectory}/.application-data/aider";
+  aiderSecret = "/run/agenix/aider-openrouter";
 
   aider = pkgs.writeShellScriptBin "aider" ''
     export HOME="${aiderDataDir}"
+
+    if [ ! -r "${aiderSecret}" ]; then
+      echo "ERROR: Aider OpenRouter secret is not available:" >&2
+      echo "       ${aiderSecret}" >&2
+      exit 1
+    fi
+
+    set -a
+    . "${aiderSecret}"
+    set +a
 
     exec ${pkgs.aider-chat}/bin/aider \
       --config "${aiderDataDir}/config/aider.conf.yml" \
