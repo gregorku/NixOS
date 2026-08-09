@@ -25,7 +25,7 @@
     alsa-utils # 👈 aplay, amixer (audio debug)
     system-config-printer
 
-    aider-chat
+    #aider-chat
 
     # ======================
     # 📁 SOUBORY / DISK
