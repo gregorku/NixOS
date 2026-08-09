@@ -112,7 +112,7 @@ in
   ##################################################
   "secrets/AI/openrouter-aider.age".publicKeys = [
     ntbLenovo
-    pracovniPc
+    #pracovniPc
     #serverVPStest
   ];
 }
