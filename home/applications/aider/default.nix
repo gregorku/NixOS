@@ -4,6 +4,8 @@ let
   aiderDataDir = "${config.home.homeDirectory}/.application-data/aider";
 
   aider = pkgs.writeShellScriptBin "aider" ''
+    export HOME="${aiderDataDir}"
+
     exec ${pkgs.aider-chat}/bin/aider \
       --config "${aiderDataDir}/config/aider.conf.yml" \
       "$@"
@@ -28,5 +30,9 @@ in
     dirty-commits: true
 
     disable-playwright: true
+
+    input-history-file: ${aiderDataDir}/.aider/input.history
+    chat-history-file: ${aiderDataDir}/.aider/chat.history.md
+    llm-history-file: ${aiderDataDir}/.aider/llm.history
   '';
 }
