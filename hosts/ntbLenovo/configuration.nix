@@ -31,6 +31,16 @@
     ../../modules/common-networkmanager.nix
   ];
 
+  # ----------------------
+  # 🔐 AGENIX - AI / Aider
+  # ----------------------
+  age.secrets.aider-openrouter = {
+    file = ../../secrets/AI/openrouter-aider.age;
+    owner = "gregor";
+    group = "users";
+    mode = "0400";
+  };
+
   networking.hostName = "ntbLenovo";
 
   # ----------------------
