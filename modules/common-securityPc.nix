@@ -40,6 +40,6 @@
   ];
 
   age.identityPaths = lib.mkDefault [
-    "/root/.config/age/keys.txt"
+    "/home/gregor/.application-data/agenix/keys.txt"
   ];
 }
