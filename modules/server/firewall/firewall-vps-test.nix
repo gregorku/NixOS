@@ -63,6 +63,9 @@ in
         # Web
         tcp dport { 80, 443 } accept
 
+        # NVR
+        tcp dport { 8000, 8181, 8182 } accept
+
         # WireGuard
         udp dport { 53820, 53821, 53822 } accept
 
