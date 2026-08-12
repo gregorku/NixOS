@@ -98,9 +98,11 @@ in
         #
         # Veškerý provoz z/do Incus bridge
         #
-
         iifname "incusbr0" accept
         oifname "incusbr0" accept
+
+# POVOLENÍ: Propouštění provozu do WireGuard rozhraní (např. wg1, wg2, wg3)
+        oifname { "wg1", "wg2", "wg3" } accept
 
         limit rate 5/minute log prefix "FW DROP FWD: "
         drop
