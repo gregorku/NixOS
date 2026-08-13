@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   services.haproxy = {
@@ -39,7 +44,8 @@
       # -------------------------
       backend vaultwarden_http
           mode http
-          server vaultwarden 200.1.1.200:80
+          option forwardfor
+          server vaultwarden 10.10.10.10:80 send-proxy-v2
 
       backend nextcloud_http
           mode http
@@ -87,7 +93,7 @@
       # -------------------------
       backend vaultwarden_https
           mode tcp
-          server vaultwarden 200.1.1.200:443
+          server vaultwarden 10.10.10.10:443 send-proxy-v2
 
       backend nextcloud_https
           mode tcp
