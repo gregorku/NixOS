@@ -34,7 +34,7 @@
     ##################################################
     # VPS-specific
     ##################################################
-    ../../modules/server/incus.nix
+    ../../modules/server/incus-netcupVPSServer.nix
     ../../modules/server/firewall/firewall-vps-netcup.nix
 
     ##################################################
