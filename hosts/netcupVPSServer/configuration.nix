@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 {
   imports = [
     ./hardware-configuration.nix
@@ -9,12 +15,21 @@
     ../../modules/common-base.nix
     ../../modules/common-security.nix
     ../../modules/common-swap.nix
+    ../../modules/server/server-users.nix
 
     ##################################################
     # Server-only moduly
     ##################################################
     ../../modules/server/serverVPS-app.nix
     ../../modules/server/cockpit.nix
+
+    ##################################################
+    # Security
+    ##################################################
+
+    # Automatické vzdálené odemykání LUKS serverů.
+    ../../modules/security/serverVPS-unlock.nix
+    ../../modules/security/serverVPS-unlock-setupPc.nix
 
     ##################################################
     # VPS-specific
@@ -29,61 +44,57 @@
     ../../modules/server/wireguard-vps.nix
 
     ##################################################
-    # Haproxy Acme
+    # HAProxy
     ##################################################
-       ../../modules/server/haproxy.nix
-    ../../modules/server/security.nix
-    ../../modules/server/security.nix
-    ../../modules/server/acme.nix
+    ../../modules/server/haproxy-test.nix
 
-    ../../modules/server/profiles/production.nix
+    # ../../modules/server/security.nix
+    # ../../modules/server/security-test.nix
+    # ../../modules/server/acme.nix
+
+    # Monitoring server Pc.
+    #
+    ../../modules/server/monitoringVPS.nix
   ];
 
   ##################################################
-  # agenix + age
+  # AGENIX SECRET
   ##################################################
 
-  environment.systemPackages = [
-    pkgs.age
-    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
-
-  # kde má agenix hledat private key
-  age.identityPaths = [ "/root/.config/age/keys.txt" ];
-
-  ##################################################
-  # AGENTIX SECRET (NOVÉ 🔥)
-  ##################################################
   age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
 
-  # zpřístupnění do systému
-  environment.etc."test-secret".source =
-    config.age.secrets.test-secret.path;
+  # Zpřístupnění secretu do systému.
+  environment.etc."test-secret".source = config.age.secrets.test-secret.path;
 
   ##################################################
   # Host
   ##################################################
-  networking.hostName = "VPSServer";
+  networking.hostName = "netcupVPSServer";
   networking.hostId = "ab12cd34";
 
   ##################################################
   # Síť
   ##################################################
+
   networking.useDHCP = false;
+
   systemd.network.enable = true;
 
   systemd.network.networks."10-wan" = {
     matchConfig.Name = "ens3";
+
     networkConfig = {
       DHCP = "yes";
       IPv6AcceptRA = true;
     };
+
     dhcpV4Config.RouteMetric = 100;
   };
 
   ##################################################
   # Kernel
   ##################################################
+
   boot.kernelModules = [
     "br_netfilter"
     "overlay"
@@ -91,41 +102,32 @@
   ];
 
   ##################################################
-  # Uživatelé
-  ##################################################
-  users.users.gregor = {
-    isNormalUser = true;
-    description  = "Server administrator";
-    extraGroups  = [ "wheel" "incus-admin" ];
-    shell        = pkgs.bashInteractive;
-    linger       = true;
-    initialPassword = "zmenit"; # změň ASAP
-
-    openssh.authorizedKeys.keys = [
-      # TODO: přesunout do agenix později
-      "ssh-rsa AAAAB3NzaC1yc2E..."
-    ];
-  };
-
-  ##################################################
   # Lokalizace
   ##################################################
+
   time.timeZone = "Europe/Prague";
+
   console.keyMap = "cz";
+
   i18n.defaultLocale = "cs_CZ.UTF-8";
 
   ##################################################
   # Bootloader (UEFI)
   ##################################################
+
   boot.loader.systemd-boot.enable = true;
+
   boot.loader.efi.canTouchEfiVariables = true;
+
   boot.loader.systemd-boot.configurationLimit = 10;
 
   ##################################################
   # SSH (dočasně otevřené)
   ##################################################
+
   services.openssh = {
     enable = true;
+
     settings = {
       PermitRootLogin = "yes";
       PasswordAuthentication = true;
@@ -136,16 +138,32 @@
   ##################################################
   # Nix
   ##################################################
+
   nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 7d";
   };
 
-  nix.settings.auto-optimise-store = true;
+  nix.settings = {
+    auto-optimise-store = true;
+
+    # Testovací VPS – menší spotřeba RAM při buildu
+    max-jobs = 1;
+    cores = 1;
+  };
+
+  # Přidání klasického swapfile vedle zram
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 4096; # MiB = 4 GiB
+    }
+  ];
 
   ##################################################
   # Version
   ##################################################
-  system.stateVersion = "25.11";
+
+  system.stateVersion = "26.05";
 }
