@@ -46,7 +46,7 @@
     ##################################################
     # HAProxy
     ##################################################
-    #../../modules/server/haproxy-test.nix
+    ../../modules/server/haproxy-netcupVPSServer.nix
 
     # ../../modules/server/security.nix
     # ../../modules/server/security-test.nix
