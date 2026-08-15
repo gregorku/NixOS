@@ -28,25 +28,25 @@
     ##################################################
 
     # Automatické vzdálené odemykání LUKS serverů.
-    ../../modules/security/serverVPS-unlock.nix
-    ../../modules/security/serverVPS-unlock-setupPc.nix
+    #../../modules/security/serverVPS-unlock.nix
+    #../../modules/security/serverVPS-unlock-setupPc.nix
 
     ##################################################
     # VPS-specific
     ##################################################
-    ../../modules/server/incus.nix
+    #../../modules/server/incus.nix
     # ../../modules/server/haproxy.nix
-    ../../modules/server/firewall-vps.nix
+    ../../modules/server/firewall/firewall-vps-netcup.nix
 
     ##################################################
     # WireGuard
     ##################################################
-    ../../modules/server/wireguard-vps.nix
+    #../../modules/server/wireguard-vps.nix
 
     ##################################################
     # HAProxy
     ##################################################
-    ../../modules/server/haproxy-test.nix
+    #../../modules/server/haproxy-test.nix
 
     # ../../modules/server/security.nix
     # ../../modules/server/security-test.nix
@@ -61,10 +61,10 @@
   # AGENIX SECRET
   ##################################################
 
-  age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
+  #age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
 
   # Zpřístupnění secretu do systému.
-  environment.etc."test-secret".source = config.age.secrets.test-secret.path;
+  #environment.etc."test-secret".source = config.age.secrets.test-secret.path;
 
   ##################################################
   # Host
@@ -81,7 +81,7 @@
   systemd.network.enable = true;
 
   systemd.network.networks."10-wan" = {
-    matchConfig.Name = "ens3";
+    matchConfig.Name = "eth0";
 
     networkConfig = {
       DHCP = "yes";
