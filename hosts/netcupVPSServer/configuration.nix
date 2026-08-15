@@ -81,7 +81,7 @@
   systemd.network.enable = true;
 
   systemd.network.networks."10-wan" = {
-    matchConfig.Name = "eth0";
+    matchConfig.Name = "ens3";
 
     networkConfig = {
       DHCP = "yes";
