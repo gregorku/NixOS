@@ -6,7 +6,7 @@
 }:
 
 let
-  dnat = import ./dnat-test.nix;
+  dnat = import ./dnat-netcupVPSServer.nix;
 
   # všechna WireGuard rozhraní
   wgIfaces = [
