@@ -40,7 +40,7 @@
     ##################################################
     # WireGuard
     ##################################################
-    #../../modules/server/wireguard-vps.nix
+    ../../modules/server/wireguard-netcupVPSServer.nix
 
     ##################################################
     # HAProxy
