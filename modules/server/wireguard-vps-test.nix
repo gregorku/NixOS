@@ -21,60 +21,60 @@
   networking.wireguard.interfaces = {
 
     wg1 = {
-      ips = [ "10.100.100.1/24" ];
-      listenPort = 53820;
+      ips = [ "10.100.101.1/24" ];
+      listenPort = 53830;
       privateKeyFile = config.age.secrets.wg1_serverVPS-private.path;
 
       peers = [
         {
           # Mikrotik doma wg1
           publicKey = "ZRRN9IVqc8atE1Cby4k00YKe0bd74N7/TkKZkIybKyk=";
-          allowedIPs = [ "10.100.100.100/32" ];
+          allowedIPs = [ "10.100.101.100/32" ];
         }
         {
           # Mikrotik jirkov wg1
           publicKey = "vy/pvrKC55vhw1HDNrP/TnG3Y5mdaUcUsTOdJhRylWA=";
-          allowedIPs = [ "10.100.100.220/32" ];
+          allowedIPs = [ "10.100.101.220/32" ];
         }
         {
           # Mikrotik bratrmach wg1
           publicKey = "bozqiwT51C/Zhls/IBlKvHzYYQbAdUDJhB4pNoKdzEQ=";
-          allowedIPs = [ "10.100.100.10/32" ];
+          allowedIPs = [ "10.100.101.10/32" ];
         }
         {
           # Mikrotik klinovec wg1
           publicKey = "h0MYWHaQ0tZLv6MSJEb+QLX0MgJvJHs6wT0vDzqY2Qw=";
-          allowedIPs = [ "10.100.100.210/32" ];
+          allowedIPs = [ "10.100.101.210/32" ];
         }
         {
           # Mikrotik prace wg1
           publicKey = "67t2MwYpEsjDZUYs2cwmeWImcJE+v/r+z8MT47jJEDU=";
-          allowedIPs = [ "10.100.100.12/32" ];
+          allowedIPs = [ "10.100.101.12/32" ];
         }
         {
           # Mikrotik test wg1
           publicKey = "4gCXT1X3S25rmRBAqSbC9fQLFCARJHfSqwUhlOyIKgw=";
-          allowedIPs = [ "10.100.100.5/32" ];
+          allowedIPs = [ "10.100.101.5/32" ];
         }
         {
           # Mikrotik udlice wg1
           publicKey = "f9JErcFF6j5DRZnSmFtr89lWOiSBSvrXIdFB29Nw3Fs=";
-          allowedIPs = [ "10.100.100.200/32" ];
+          allowedIPs = [ "10.100.101.200/32" ];
         }
         {
           # Mobil mujmobil wg1
           publicKey = "J6EufZFy3mb7wyCV6vP/XvrEEZLd4THYYzcKiB+THzo=";
-          allowedIPs = [ "10.100.100.152/32" ];
+          allowedIPs = [ "10.100.101.152/32" ];
         }
         {
           # Notebook ntblenovo wg1
           publicKey = "hDKHmFQ0SyFgOzAoZQb4ywb0PwMyJAlqwXyuC3+oATU=";
-          allowedIPs = [ "10.100.100.150/32" ];
+          allowedIPs = [ "10.100.101.150/32" ];
         }
         {
           # Notebook ntbpracovni wg1
           publicKey = "ZwQudYCEjias6xdptTSjwtfpemhYVdmGOvBvnQyoeRo=";
-          allowedIPs = [ "10.100.100.151/32" ];
+          allowedIPs = [ "10.100.101.151/32" ];
         }
       ];
     };

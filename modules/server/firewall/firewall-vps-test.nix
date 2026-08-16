@@ -67,7 +67,7 @@ in
             tcp dport { 8000, 8181, 8182 } accept
 
             # WireGuard
-            udp dport { 53820, 53831, 53832 } accept
+            udp dport { 53830, 53831, 53832 } accept
 
             # DNS + DHCP pro Incus
             iifname "incusbr0" udp dport { 53, 67 } accept
