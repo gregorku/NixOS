@@ -117,7 +117,7 @@ in
 
         # --- Rozhraní WG3 ---
         # Komunikace uvnitř wg3 + přístup na internet
-        #iifname "wg3" oifname "wg3" accept
+        iifname "wg3" oifname "wg3" accept
         #iifname "wg3" oifname "eth0" accept
 
         limit rate 5/minute log prefix "FW DROP FWD: "
