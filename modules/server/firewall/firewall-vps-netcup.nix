@@ -108,12 +108,12 @@ in
 
         # --- Rozhraní WG1 ---
         # Povolit komunikaci pouze uvnitř wg1 a přístup na internet
-        #iifname "wg1" oifname "wg1" accept
+        iifname "wg1" oifname "wg1" accept
         #iifname "wg1" oifname "eth0" accept
 
         # --- Rozhraní WG2 ---
         # Pouze komunikace mezi klienty uvnitř wg2 (BEZ přístupu na internet a jiné sítě)
-        #iifname "wg2" oifname "wg2" accept
+        iifname "wg2" oifname "wg2" accept
 
         # --- Rozhraní WG3 ---
         # Komunikace uvnitř wg3 + přístup na internet
