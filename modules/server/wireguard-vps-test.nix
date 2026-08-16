@@ -80,45 +80,45 @@
     };
 
     wg2 = {
-      ips = [ "10.110.100.1/24" ];
-      listenPort = 53821;
+      ips = [ "10.110.110.1/24" ];
+      listenPort = 53831;
       privateKeyFile = config.age.secrets.wg2_serverVPS-private.path;
 
       peers = [
         {
           # Mikrotik doma wg2
           publicKey = "F4BOM0b5wukasvyv63EG6p61ZNMuwySSp09+j06iyHQ=";
-          allowedIPs = [ "10.110.100.100/32" ];
+          allowedIPs = [ "10.110.110.100/32" ];
         }
         {
           # Mikrotik jirkov wg2
           publicKey = "OEnlmHsnNk+oIpvGOf8nF48r05G7PsCIjvMUJ8Cxd1Y=";
-          allowedIPs = [ "10.110.100.220/32" ];
+          allowedIPs = [ "10.110.110.220/32" ];
         }
         {
           # Mikrotik bratrmach wg2
           publicKey = "781kl7aR4tKfycU9hU30pzmD5sDpHgjpQPnWODPpWUk=";
-          allowedIPs = [ "10.110.100.10/32" ];
+          allowedIPs = [ "10.110.110.10/32" ];
         }
         {
           # Mikrotik klinovec wg2
           publicKey = "BJrynnxoI/PkErV2IGLUw3YuolmJMOxKnP5Kx1y/8n4=";
-          allowedIPs = [ "10.110.100.210/32" ];
+          allowedIPs = [ "10.110.110.210/32" ];
         }
         {
           # Mikrotik prace wg2
           publicKey = "RQ0tpTCNb6XJLBAb/KeTe66+xGAWMGoro6n3JIDvq0w=";
-          allowedIPs = [ "10.110.100.12/32" ];
+          allowedIPs = [ "10.110.110.12/32" ];
         }
         {
           # Mikrotik test wg2
           publicKey = "IAPBFkq+wBhbUzfXiSa+yMyXvntiVXOt1r/zLB996Sk=";
-          allowedIPs = [ "10.110.100.5/32" ];
+          allowedIPs = [ "10.110.110.5/32" ];
         }
         {
           # Mikrotik udlice wg2
           publicKey = "uPV1wEMUbTGtPD2nYFpemg8paucEOGIOhMnHGJr4WSw=";
-          allowedIPs = [ "10.110.100.200/32" ];
+          allowedIPs = [ "10.110.110.200/32" ];
         }
       ];
     };
