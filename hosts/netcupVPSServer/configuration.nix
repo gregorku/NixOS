@@ -63,7 +63,7 @@
   age.secrets.netcupVPS-secret.file = ../../secrets/serverVPSnetcup/netcupVPS-secret.age;
 
   # Zpřístupnění secretu do systému.
-  nvironment.etc."netcupVPS-secret".source = config.age.secrets.netcupVPS-secret.path;
+  environment.etc."netcupVPS-secret".source = config.age.secrets.netcupVPS-secret.path;
 
   ##################################################
   # Host
