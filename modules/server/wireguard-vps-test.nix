@@ -1,17 +1,19 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   ##################################################
   # AGENIX secrets
   ##################################################
-  age.secrets.wg1_serverVPS-private.file =
-    ../../VPSsecret/wireguard/wg1_serverVPS-private.age;
+  age.secrets.wg1_serverVPS-private.file = ../../VPSsecret/wireguard/wg1_serverVPS-private.age;
 
-  age.secrets.wg2_serverVPS-private.file =
-    ../../VPSsecret/wireguard/wg2_serverVPS-private.age;
+  age.secrets.wg2_serverVPS-private.file = ../../VPSsecret/wireguard/wg2_serverVPS-private.age;
 
-  age.secrets.wg3_serverVPS-private.file =
-    ../../VPSsecret/wireguard/wg3_serverVPS-private.age;
+  age.secrets.wg3_serverVPS-private.file = ../../VPSsecret/wireguard/wg3_serverVPS-private.age;
 
   ##################################################
   # WireGuard
@@ -122,45 +124,45 @@
     };
 
     wg3 = {
-      ips = [ "10.120.100.1/24" ];
-      listenPort = 53822;
+      ips = [ "10.120.120.1/24" ];
+      listenPort = 53832;
       privateKeyFile = config.age.secrets.wg3_serverVPS-private.path;
 
       peers = [
         {
           # Mikrotik doma wg3
           publicKey = "YHrYI2NdO8whuGxkEel1AixrvMVDz/KuMqmzI/v73QA=";
-          allowedIPs = [ "10.120.100.100/32" ];
+          allowedIPs = [ "10.120.120.100/32" ];
         }
         {
           # Mikrotik jirkov wg3
           publicKey = "HJmLfobWN7ZEjPt5PgeId0IUZBS+5odYCZATmR7whw4=";
-          allowedIPs = [ "10.120.100.220/32" ];
+          allowedIPs = [ "10.120.120.220/32" ];
         }
         {
           # Mikrotik bratrmach wg3
           publicKey = "LK5kXiC0Ze7OiSjH+jgD+tcCfiAdPg6OqzMG34Lxm2A=";
-          allowedIPs = [ "10.120.100.10/32" ];
+          allowedIPs = [ "10.120.120.10/32" ];
         }
         {
           # Mikrotik klinovec wg3
           publicKey = "s9SmdTiHfIC17SApFbii+IHoZGi/tYk7tNVD0mrE6WA=";
-          allowedIPs = [ "10.120.100.210/32" ];
+          allowedIPs = [ "10.120.120.210/32" ];
         }
         {
           # Mikrotik prace wg3
           publicKey = "G6Pf0bPmFXY9cQOoT1MERNY58ZisX9sL9wkFLd8DGh8=";
-          allowedIPs = [ "10.120.100.12/32" ];
+          allowedIPs = [ "10.120.120.12/32" ];
         }
         {
           # Mikrotik test wg3
           publicKey = "UDL0tHuDl0gEoUa6G/zM31fgjiIG6CdGnsVPqmo18V8=";
-          allowedIPs = [ "10.120.100.5/32" ];
+          allowedIPs = [ "10.120.120.5/32" ];
         }
         {
           # Mikrotik udlice wg3
           publicKey = "2JhsoHf/VXltiU6NJFhU3Rc0bt2hHJy2wJOcB8RZ11c=";
-          allowedIPs = [ "10.120.100.200/32" ];
+          allowedIPs = [ "10.120.120.200/32" ];
         }
       ];
     };
