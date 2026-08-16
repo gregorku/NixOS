@@ -38,104 +38,120 @@ in
   networking.firewall.enable = false;
 
   networking.nftables.ruleset = ''
-        table inet filter {
+    table inet filter {
 
-          set trusted {
-            type ipv4_addr;
-            flags interval;
-            elements = {
-              127.0.0.1/32
-            };
-          }
+      set trusted {
+        type ipv4_addr;
+        flags interval;
+        elements = {
+          127.0.0.1/32
+        };
+      }
 
-          chain input {
-            type filter hook input priority filter; policy drop;
+      chain input {
+        type filter hook input priority filter; policy drop;
 
-            ct state established,related accept
-            iifname lo accept
+        ct state established,related accept
+        iifname lo accept
 
-            ip protocol icmp accept
-            ip6 nexthdr icmpv6 accept
+        ip protocol icmp accept
+        ip6 nexthdr icmpv6 accept
 
-            # SSH
-            tcp dport 22 accept
+        # Přístup k samotnému VPS z jednotlivých WG sítí
+        iifname "wg1" accept
+        iifname "wg2" accept
+        iifname "wg3" accept
 
-            # Web
-            tcp dport { 80, 443 } accept
+        # SSH
+        tcp dport 22 accept
 
-            # NVR
-            tcp dport { 8000, 8181, 8182 } accept
+        # Web
+        tcp dport { 80, 443 } accept
 
-            # WireGuard
-            udp dport { 53820, 53821, 53822 } accept
+        # NVR
+        tcp dport { 8000, 8181, 8182 } accept
 
-            # DNS + DHCP pro Incus
-            iifname "incusbr0" udp dport { 53, 67 } accept
-            iifname "incusbr0" tcp dport { 53, 9100 } accept
+        # WireGuard
+        udp dport { 53820, 53821, 53822 } accept
 
-            # Cockpit
-            tcp dport 9090 ip saddr @trusted accept
-            tcp dport 9090 iifname "wg1" accept
+        # DNS + DHCP pro Incus
+        iifname "incusbr0" udp dport { 53, 67 } accept
+        iifname "incusbr0" tcp dport { 53, 9100 } accept
 
-            # HAProxy stats
-            tcp dport 8404 ip saddr @trusted accept
+        # Cockpit
+        tcp dport 9090 ip saddr @trusted accept
+        tcp dport 9090 iifname "wg1" accept
 
-            # Incus API
-            iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 8443 accept
+        # HAProxy stats
+        tcp dport 8404 ip saddr @trusted accept
 
-            # Incus infrastructure 10.10.10.10
-            iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 9440-9448 accept
+        # Incus API
+        iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 8443 accept
 
-            limit rate 5/minute log prefix "FW DROP IN: "
-            drop
-          }
+        # Incus infrastructure 10.10.10.10
+        iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 9440-9448 accept
 
-          chain forward {
-            type filter hook forward priority filter; policy drop;
+        limit rate 5/minute log prefix "FW DROP IN: "
+        drop
+      }
 
-            ct state established,related accept
+      chain forward {
+        type filter hook forward priority filter; policy drop;
 
-            #
-            # Veškerý provoz z/do Incus bridge
-            #
-            iifname "incusbr0" accept
-            oifname "incusbr0" accept
+        ct state established,related accept
 
-    # POVOLENÍ: Propouštění provozu do WireGuard rozhraní (např. wg1, wg2, wg3)
-            oifname { "wg1", "wg2", "wg3" } accept
+        #
+        # Veškerý provoz z/do Incus bridge
+        #
+        iifname "incusbr0" accept
+        oifname "incusbr0" accept
 
-            limit rate 5/minute log prefix "FW DROP FWD: "
-            drop
-          }
+        # --- Rozhraní WG1 ---
+        # Povolit komunikaci pouze uvnitř wg1 a přístup na internet
+        #iifname "wg1" oifname "wg1" accept
+        #iifname "wg1" oifname "eth0" accept
 
-          chain output {
-            type filter hook output priority filter; policy accept;
-          }
-        }
+        # --- Rozhraní WG2 ---
+        # Pouze komunikace mezi klienty uvnitř wg2 (BEZ přístupu na internet a jiné sítě)
+        #iifname "wg2" oifname "wg2" accept
 
-        table inet nat {
+        # --- Rozhraní WG3 ---
+        # Komunikace uvnitř wg3 + přístup na internet
+        #iifname "wg3" oifname "wg3" accept
+        #iifname "wg3" oifname "eth0" accept
 
-          chain prerouting {
-            type nat hook prerouting priority dstnat; policy accept;
+        limit rate 5/minute log prefix "FW DROP FWD: "
+        drop
+      }
 
-            ${allDnatRules}
-          }
+      chain output {
+        type filter hook output priority filter; policy accept;
+      }
+    }
 
-          chain postrouting {
-            type nat hook postrouting priority srcnat; policy accept;
+    table inet nat {
 
-            # Incus -> Internet
-            ip saddr 10.10.10.0/24 oifname "eth0" masquerade
+      chain prerouting {
+        type nat hook prerouting priority dstnat; policy accept;
 
-            # Incus -> WireGuard
-            ip saddr 10.10.10.0/24 oifname "wg1" masquerade
+        ${allDnatRules}
+      }
 
-            # WireGuard -> Internet
-            ip saddr 10.100.100.0/24 oifname "eth0" masquerade
-            ip saddr 10.110.100.0/24 oifname "eth0" masquerade
-            ip saddr 10.120.100.0/24 oifname "eth0" masquerade
-          }
-        }
+      chain postrouting {
+        type nat hook postrouting priority srcnat; policy accept;
+
+        # Incus -> Internet
+        ip saddr 10.10.10.0/24 oifname "eth0" masquerade
+
+        # Incus -> WireGuard
+        ip saddr 10.10.10.0/24 oifname "wg1" masquerade
+
+        # WireGuard -> Internet
+        ip saddr 10.100.100.0/24 oifname "eth0" masquerade
+        ip saddr 10.110.100.0/24 oifname "eth0" masquerade
+        ip saddr 10.120.100.0/24 oifname "eth0" masquerade
+      }
+    }
   '';
 
   environment.systemPackages = with pkgs; [
