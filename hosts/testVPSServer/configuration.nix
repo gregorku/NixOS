@@ -61,7 +61,7 @@
   # AGENIX SECRET
   ##################################################
 
-  age.secrets.test-secret.file = ../../serverVPStest/test-secret.age;
+  age.secrets.test-secret.file = ../../secrets/serverVPStest/test-secret.age;
 
   # Zpřístupnění secretu do systému.
   environment.etc."test-secret".source = config.age.secrets.test-secret.path;
