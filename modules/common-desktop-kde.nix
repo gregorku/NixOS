@@ -65,6 +65,9 @@
     kdePackages.kio-extras
     kdePackages.kio-fuse
 
+    #Mikrotik
+    pkgs.winbox
+
     # 🎨 Theme
     catppuccin-kde
     papirus-icon-theme
