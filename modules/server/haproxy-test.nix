@@ -50,7 +50,7 @@
       backend nextcloud_http
           mode http
           option forwardfor
-          server nextcloud 10.100.100.12:22280 send-proxy-v2
+          server nextcloud 10.100.101.12:22280 send-proxy-v2
 
       backend zabbix_http
           mode http
@@ -58,11 +58,11 @@
 
       backend homeassistant_http
           mode http
-          server homeassistant 10.100.100.100:22080
+          server homeassistant 10.100.101.100:22080
 
       backend homeassistant_net_http
           mode http
-          server homeassistant_net 10.100.100.12:23080
+          server homeassistant_net 10.100.101.12:23080
 
       backend grafana_http
           mode http
@@ -97,7 +97,7 @@
 
       backend nextcloud_https
           mode tcp
-          server nextcloud 10.100.100.12:22443 send-proxy-v2
+          server nextcloud 10.100.101.12:22443 send-proxy-v2
 
       backend zabbix_https
           mode tcp
@@ -105,11 +105,11 @@
 
       backend homeassistant_https
           mode tcp
-          server homeassistant 10.100.100.100:22443
+          server homeassistant 10.100.101.100:22443
 
       backend homeassistant_net_https
           mode tcp
-          server homeassistant_net 10.100.100.12:23443
+          server homeassistant_net 10.100.101.12:23443
 
       backend grafana_https
           mode tcp
