@@ -81,10 +81,10 @@ in
             tcp dport 8404 ip saddr @trusted accept
 
             # Incus API
-            iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 8443 accept
+            iifname "wg1" ip saddr 10.100.101.0/24 tcp dport 8443 accept
 
             # Incus infrastructure 10.10.10.10
-            iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 9440-9448 accept
+            iifname "wg1" ip saddr 10.100.101.0/24 tcp dport 9440-9448 accept
 
             limit rate 5/minute log prefix "FW DROP IN: "
             drop
@@ -131,9 +131,9 @@ in
             ip saddr 10.10.10.0/24 oifname "wg1" masquerade
 
             # WireGuard -> Internet
-            ip saddr 10.100.100.0/24 oifname "ens3" masquerade
-            ip saddr 10.110.100.0/24 oifname "ens3" masquerade
-            ip saddr 10.120.100.0/24 oifname "ens3" masquerade
+            ip saddr 10.100.101.0/24 oifname "ens3" masquerade
+            ip saddr 10.110.101.0/24 oifname "ens3" masquerade
+            ip saddr 10.120.101.0/24 oifname "ens3" masquerade
           }
         }
   '';
