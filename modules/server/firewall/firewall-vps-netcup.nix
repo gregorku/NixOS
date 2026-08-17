@@ -24,7 +24,7 @@ let
   wgRules = lib.flatten genWG;
 
   # Public interface
-  publicRules = map (r: genRule "eth0" r) dnat.public;
+  publicRules = map (r: genRule "ens3" r) dnat.public;
 
   # všechna DNAT pravidla
   allDnatRules = lib.concatStringsSep "\n" (wgRules ++ publicRules);
@@ -109,7 +109,7 @@ in
         # --- Rozhraní WG1 ---
         # Povolit komunikaci pouze uvnitř wg1 a přístup na internet
         iifname "wg1" oifname "wg1" accept
-        #iifname "wg1" oifname "eth0" accept
+        #iifname "wg1" oifname "ens3" accept
 
         # --- Rozhraní WG2 ---
         # Pouze komunikace mezi klienty uvnitř wg2 (BEZ přístupu na internet a jiné sítě)
@@ -118,7 +118,7 @@ in
         # --- Rozhraní WG3 ---
         # Komunikace uvnitř wg3 + přístup na internet
         iifname "wg3" oifname "wg3" accept
-        #iifname "wg3" oifname "eth0" accept
+        #iifname "wg3" oifname "ens3" accept
 
         limit rate 5/minute log prefix "FW DROP FWD: "
         drop
@@ -141,15 +141,15 @@ in
         type nat hook postrouting priority srcnat; policy accept;
 
         # Incus -> Internet
-        ip saddr 10.10.10.0/24 oifname "eth0" masquerade
+        ip saddr 10.10.10.0/24 oifname "ens3" masquerade
 
         # Incus -> WireGuard
         ip saddr 10.10.10.0/24 oifname "wg1" masquerade
 
         # WireGuard -> Internet
-        ip saddr 10.100.100.0/24 oifname "eth0" masquerade
-        ip saddr 10.110.100.0/24 oifname "eth0" masquerade
-        ip saddr 10.120.100.0/24 oifname "eth0" masquerade
+        ip saddr 10.100.100.0/24 oifname "ens3" masquerade
+        ip saddr 10.110.100.0/24 oifname "ens3" masquerade
+        ip saddr 10.120.100.0/24 oifname "ens3" masquerade
       }
     }
   '';
