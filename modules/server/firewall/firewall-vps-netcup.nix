@@ -45,6 +45,7 @@ in
         flags interval;
         elements = {
           127.0.0.1/32
+          10.100.100.0/24
         };
       }
 
