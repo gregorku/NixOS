@@ -35,7 +35,7 @@
           use_backend zabbix_http             if { hdr(host) -i zabbix.serveftp.org }
           use_backend homeassistant_http      if { hdr(host) -i homeassistant.serveftp.org }
           use_backend homeassistant_net_http  if { hdr(host) -i homeassistant.serveftp.net }
-          use_backend grafana_http            if { hdr(host) -i grafana.serveftp.net }
+          use_backend grafana_http            if { hdr(host) -i grafana.serveftp.org }
 
           default_backend nextcloud_http
 
@@ -84,7 +84,7 @@
           use_backend zabbix_https             if { req_ssl_sni -i zabbix.serveftp.org }
           use_backend homeassistant_https      if { req_ssl_sni -i homeassistant.serveftp.org }
           use_backend homeassistant_net_https  if { req_ssl_sni -i homeassistant.serveftp.net }
-          use_backend grafana_https            if { req_ssl_sni -i grafana.serveftp.net }
+          use_backend grafana_https            if { req_ssl_sni -i grafana.serveftp.org }
 
           default_backend nextcloud_https
 
