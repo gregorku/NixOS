@@ -280,7 +280,7 @@
 
   # 🐧 Nechávám latest kernel
   # Legion 5 + AMD + NVIDIA funguje bez problémů
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.libinput.enable = true;
 
