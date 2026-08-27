@@ -6,11 +6,22 @@
   ...
 }:
 {
-  _module.args = { inherit unstable; };
+  # ============================================================
+  # NIXPKGS / MODULY
+  # ============================================================
+
+  _module.args = {
+    inherit unstable;
+  };
 
   nixpkgs.config.allowUnfree = true;
+
   imports = [
     ./hardware-configuration.nix
+
+    # ----------------------------------------------------------
+    # ZÁKLADNÍ SYSTÉMOVÉ MODULY
+    # ----------------------------------------------------------
 
     ../../modules/common-users.nix
     ../../modules/common-audio.nix
@@ -24,33 +35,70 @@
     ../../modules/common-snapshots.nix
     ../../modules/gpu-nvidia-amd.nix
 
+    # ----------------------------------------------------------
+    # NOTEBOOK
+    # ----------------------------------------------------------
+
     ../../modules/notebook-power.nix
-    ../../modules/common-virtualization.nix
-    ../../modules/common-incus.nix
+
+    # ----------------------------------------------------------
+    # SÍŤ / SWAP
+    # ----------------------------------------------------------
+
     ../../modules/common-swap.nix
     ../../modules/common-networkmanager.nix
+
+    # ----------------------------------------------------------
+    # VIRTUALIZACE / INCUS
+    #
+    # ZATÍM VYPNUTO.
+    #
+    # Vrátíme po prvním úspěšném bootu a základní kontrole
+    # systému.
+    # ----------------------------------------------------------
+
+    # ../../modules/common-virtualization.nix
+    # ../../modules/common-incus.nix
   ];
 
-  # ----------------------
-  # 🔐 AGENIX - AI / Aider
-  # ----------------------
+
+  # ============================================================
+  # HOSTNAME
+  # ============================================================
+
+  networking.hostName = "ntbLenovo";
+
+
+  # ============================================================
+  # AGENIX
+  #
+  # ZATÍM VYPNUTO.
+  #
+  # Vyžaduje soubory ze secrets/ a konfiguraci klíčů.
+  # Aktivujeme až po dokončení základní instalace.
+  # ============================================================
+
+  /*
   age.secrets.aider-openrouter = {
     file = ../../secrets/AI/openrouter-aider.age;
     owner = "gregor";
     group = "users";
     mode = "0400";
   };
+  */
 
-  networking.hostName = "ntbLenovo";
 
-  # ----------------------
-  # Lokalizace / Jazyk
-  # ----------------------
+  # ============================================================
+  # LOKALIZACE / JAZYK
+  # ============================================================
+
   i18n.defaultLocale = "cs_CZ.UTF-8";
+
   i18n.supportedLocales = [
     "cs_CZ.UTF-8/UTF-8"
     "en_US.UTF-8/UTF-8"
   ];
+
   time.timeZone = "Europe/Prague";
 
   console.keyMap = "cz";
@@ -60,11 +108,14 @@
     variant = "";
   };
 
-  # ----------------------
-  # 🐟 FISH + CLI
-  # ----------------------
+
+  # ============================================================
+  # FISH + CLI
+  # ============================================================
+
   programs.fish = {
     enable = true;
+
     interactiveShellInit = ''
       set -gx STARSHIP_CONFIG /etc/starship.toml
 
@@ -79,16 +130,19 @@
       alias ll="eza -lah"
       alias cat="bat"
       alias cd="z"
-      # 🔨 Rebuild tohoto notebooku
+
+      # Rebuild tohoto notebooku
       alias rebuild="sudo nixos-rebuild switch --flake /etc/nixos#ntbLenovo"
 
       set -g fish_greeting ""
     '';
   };
 
-  # ----------------------
+
+  # ============================================================
   # STARSHIP
-  # ----------------------
+  # ============================================================
+
   programs.starship.enable = true;
 
   environment.etc."starship.toml".text = ''
@@ -126,14 +180,24 @@
     error_symbol = "[✗](#f38ba8)"
   '';
 
-  # ----------------------
-  # CATPPUCCIN + nástroje
-  # ----------------------
+
+  # ============================================================
+  # CATPPUCCIN + SYSTÉMOVÉ NÁSTROJE
+  # ============================================================
+
   environment.systemPackages = with pkgs; [
+    # ----------------------------------------------------------
+    # Vzhled
+    # ----------------------------------------------------------
+
     catppuccin-gtk
     papirus-icon-theme
     hicolor-icon-theme
     adwaita-icon-theme
+
+    # ----------------------------------------------------------
+    # CLI
+    # ----------------------------------------------------------
 
     zoxide
     fzf
@@ -144,25 +208,32 @@
     tmux
     lazygit
 
+    # ----------------------------------------------------------
+    # Nix
+    # ----------------------------------------------------------
+
     nixd
     nixfmt
 
-    # ----------------------
-    # media player Jellyfin
-    # ----------------------
-    #jellyfin-media-player
+    # ----------------------------------------------------------
+    # Jellyfin Media Player
+    # ----------------------------------------------------------
 
-    # ----------------------
-    # Python nefunguje verze 0.3.33
-    # ----------------------
+    # jellyfin-media-player
+
+    # ----------------------------------------------------------
+    # Python
+    # Verze 0.3.33 nefunguje
+    # ----------------------------------------------------------
+
     (python3.withPackages (
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         pandas
         openpyxl
-
       ]
     ))
-
   ];
 
   environment.pathsToLink = [
@@ -174,17 +245,30 @@
     GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
     EDITOR = "nano";
     SAL_USE_VCLPLUGIN = "kf6";
-    GTK2_RC_FILES = "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
+
+    GTK2_RC_FILES =
+      "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
   };
 
+
+  # ============================================================
+  # AGENIX – PROMĚNNÉ PRO KLÍČE
+  #
+  # ZATÍM VYPNUTO.
+  # ============================================================
+
+  /*
   environment.sessionVariables = {
     AGENIX_AGE_KEY_FILE = "/home/gregor/.application-data/agenix/keys.txt";
     AGE_KEY_FILE = "/home/gregor/.application-data/agenix/keys.txt";
   };
+  */
 
-  # ----------------------
+
+  # ============================================================
   # KITTY
-  # ----------------------
+  # ============================================================
+
   environment.etc."xdg/kitty/kitty.conf".text = ''
     font_family FiraCode Nerd Font
     font_size 10
@@ -204,45 +288,50 @@
     map ctrl+alt+v launch --location=vsplit
   '';
 
-  # ----------------------
-  # 💾 disk DataLinux (LUKS + Btrfs)
-  # ----------------------
 
-  # 🔐 LUKS auto unlock
+  # ============================================================
+  # DATALINUX – DRUHÝ DISK
+  #
+  # Samsung 990 EVO 2TB
+  #
+  # ZATÍM VYPNUTO.
+  #
+  # Druhý disk zprovozníme až po prvním úspěšném bootu.
+  # Konfiguraci nemažeme, pouze ji ponecháváme zakomentovanou.
+  # ============================================================
+
+  /*
   boot.initrd.luks.devices."data_crypt" = {
     device = "/dev/disk/by-uuid/b56c0b20-f566-44b5-8f81-54bbcd61cf10";
     keyFile = "/root/keys/data.key";
     allowDiscards = true;
   };
 
-  # 🔑 keyfile dostupný v initrd
   boot.initrd.secrets = {
     "/root/keys/data.key" = /root/keys/data.key;
   };
 
-  # 📂 mount DataLinux (stejné místo jako dřív)
   fileSystems."/run/media/gregor/DataLinux" = {
     device = "/dev/mapper/data_crypt";
     fsType = "btrfs";
+
     options = [
-      # 📦 Komprese
       "compress=zstd"
-
-      # 🚀 Menší počet zápisů na SSD
       "noatime"
-
-      # 📂 Nezablokuje boot při chybě disku
       "nofail"
-
-      # 💾 Delší interval zápisu
       "commit=120"
     ];
   };
+  */
 
-  # ----------------------
-  # 🔊 AMD Audio fix (Legion 5 ACH6H)
-  # ----------------------
-  hardware.firmware = [ pkgs.sof-firmware ];
+
+  # ============================================================
+  # LEGION 5 – AMD AUDIO FIX
+  # ============================================================
+
+  hardware.firmware = [
+    pkgs.sof-firmware
+  ];
 
   boot.blacklistedKernelModules = [
     "snd_pci_acp5x"
@@ -257,11 +346,14 @@
     "snd_hda_intel.dmic_detect=0"
   ];
 
-  # ----------------------
-  # 🔧 NIX OPTIMALIZACE
-  # ----------------------
+
+  # ============================================================
+  # NIX OPTIMALIZACE
+  # ============================================================
+
   nix.settings = {
     auto-optimise-store = true;
+
     experimental-features = [
       "nix-command"
       "flakes"
@@ -274,27 +366,48 @@
     options = "--delete-older-than 15d";
   };
 
-  # ----------------------
-  # 🔧 SYSTEM
-  # ----------------------
 
-  # 🐧 Nechávám latest kernel
-  # Legion 5 + AMD + NVIDIA funguje bez problémů
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  # ============================================================
+  # SYSTEM
+  # ============================================================
+
+  # ------------------------------------------------------------
+  # Kernel
+  #
+  # Používáme výchozí kernel.
+  #
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  # ------------------------------------------------------------
 
   services.libinput.enable = true;
 
+
+  # ------------------------------------------------------------
+  # systemd-boot
+  # ------------------------------------------------------------
+
   boot.loader.systemd-boot.enable = true;
+
   boot.loader.systemd-boot.configurationLimit = 5;
+
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # 🧠 Lepší odezva při velkém zápisu
+
+  # ------------------------------------------------------------
+  # Odezva systému při velkém zápisu
+  # ------------------------------------------------------------
+
   boot.kernel.sysctl = {
     "vm.dirty_background_ratio" = 3;
     "vm.dirty_ratio" = 6;
     "vm.dirty_expire_centisecs" = 3000;
     "vm.dirty_writeback_centisecs" = 500;
   };
+
+
+  # ============================================================
+  # NIXOS STATE VERSION
+  # ============================================================
 
   system.stateVersion = "26.05";
 }
