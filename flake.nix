@@ -93,6 +93,8 @@
         # 🖥️ Servery
         domaPcServer = mkHost "domaPcServer" ./home/server.nix;
 
+        virtServerPrace = mkHost "virtServerPrace" ./home/server.nix;
+
         netcupVPSServer = mkHost "netcupVPSServer" ./home/server.nix;
 
         testVPSServer = mkHost "testVPSServer" ./home/server.nix;
