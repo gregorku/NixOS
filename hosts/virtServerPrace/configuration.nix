@@ -12,80 +12,80 @@
   imports = [
     ./hardware-configuration.nix
 
-    # server moduly
+    # ZÁKLAD SERVERU
     ../../modules/server/server-base.nix
     ../../modules/server/server-apps.nix
     ../../modules/server/server-locale.nix
+
+    # ───────────────────────────────────
+    # POZDĚJI AKTIVOVAT
+    # ───────────────────────────────────
+
+    # ZFS
     #../../modules/server/server-zfs.nix
+
+    # Cockpit
     #../../modules/server/cockpit.nix
+
+    # Incus
     #../../modules/server/incus.nix
+
+    # Firewall
     #../../modules/server/firewall/firewall-testServerPrace.nix
+
+    # Bridge
     #../../modules/server/server-br0.nix
+
+    # Vzdálené odemykání LUKS přes SSH
     #../../modules/security/initrd-unlock.nix
 
-    # Monitoring server Pc.
-    #
-    ../../modules/server/monitoringPc.nix
+    # Monitoring serveru
+    #../../modules/server/monitoringPc.nix
   ];
 
   # ─────────────────────────────────────
-  # 💽 BOOTLOADER (UEFI + GRUB + LUKS)
+  # 💽 BOOTLOADER
+  # UEFI + systemd-boot
   # ─────────────────────────────────────
-  boot.loader.grub = {
-    enable = true;
-    device = "nodev";
-    efiSupport = true;
-    enableCryptodisk = true;
-  };
+
+  boot.loader.systemd-boot.enable = true;
 
   boot.loader.efi = {
     canTouchEfiVariables = true;
-    efiSysMountPoint = "/boot/efi";
+    efiSysMountPoint = "/boot";
   };
 
   # ─────────────────────────────────────
-  # 🔐 LUKS (šifrovaný root)
+  # 🔐 LUKS2
+  # šifrovaný systémový disk
   # ─────────────────────────────────────
-  #boot.initrd.luks.devices."cryptroot" = {
-  #  device = "/dev/disk/by-uuid/bdf93ac1-e5a0-4099-8f49-00a884378a43";
-  #  preLVM = true;
-  #  keyFile = "/crypto_keyfile.bin";
-  #};
+
+  boot.initrd.luks.devices."cryptroot" = {
+    device = "/dev/disk/by-uuid/476554ca-6f6b-420a-bc4a-7c056518f086";
+  };
+
+  # ─────────────────────────────────────
+  # 🔐 Alternativa – později můžeme použít
+  # keyfile pro automatické odemykání
+  # ─────────────────────────────────────
 
   #boot.initrd.secrets = {
   #  "/crypto_keyfile.bin" = "/boot/crypto_keyfile.bin";
   #};
 
   # ─────────────────────────────────────
-  # 🌐 Initrd network
+  # 🌐 INITRD NETWORK
   # ─────────────────────────────────────
   #
-  # Síť používaná v initrd ještě před připojením
-  # šifrovaného root filesystemu.
+  # Zatím vypnuto.
   #
-  # Slouží pro vzdálené odemykání LUKS přes SSH.
+  # Později použijeme pro vzdálené
+  # odemykání LUKS přes SSH.
   #
-  # V initrd ještě neexistují bridge (br0), VLAN ani
-  # další virtuální rozhraní. Používá se vždy fyzické
-  # síťové rozhraní.
-  #
-  # Pro servery je doporučeno použít statickou IP,
-  # aby byl initrd dostupný i při výpadku DHCP.
-  #
-  # Po spuštění běžného systému převezme konfiguraci
-  # standardní networking NixOS (např. bridge br0
-  # s DHCP nebo statickou IP).
+  # V initrd ještě není br0 ani VLAN.
+  # Použije se fyzické síťové rozhraní.
   #
 
-  #
-  # Síť používaná pouze během initrd pro
-  # vzdálené odemykání LUKS přes SSH.
-  #
-  # Po přechodu do běžného systému tato
-  # konfigurace zanikne a síť převezme
-  # standardní konfigurace serveru.
-  #
-  #uvolnit
   #boot.initrd.systemd.network.enable = true;
 
   #boot.initrd.systemd.network.networks."10-initrd-enp1s0" = {
@@ -106,12 +106,20 @@
   #  };
   #};
 
-  ## =========================
-  ## ZFS – import datapool po bootu
-  ## =========================
+  # ─────────────────────────────────────
+  # 💽 ZFS
+  # ─────────────────────────────────────
+  #
+  # Datová ZFS pole budou přidána později.
+  #
+
   #boot.supportedFilesystems = [ "zfs" ];
-  #boot.zfs.extraPools = [ "zfs-pool-incus" ]; # Explicitní import
-  #boot.zfs.forceImportRoot = false; # Doporučeno od NixOS 26.11
+
+  #boot.zfs.extraPools = [
+  #  "zfs-pool-incus"
+  #];
+
+  #boot.zfs.forceImportRoot = false;
 
   #services.zfs.autoScrub.enable = false;
   #services.zfs.autoSnapshot.enable = false;
@@ -119,13 +127,15 @@
   # ─────────────────────────────────────
   # 🌐 SÍŤ
   # ─────────────────────────────────────
+
   networking = {
     hostName = "virt-server";
 
-    # ❗ vypnout NetworkManager (nutné pro bridge)
+    # Zatím nepoužíváme NetworkManager.
     networkmanager.enable = false;
 
-    # unikátní pro každý server
+    # Unikátní ID serveru.
+    # Důležité později pro ZFS.
     hostId = "7a23ccfe";
   };
 
@@ -133,28 +143,36 @@
   # 🌐 Síťový ovladač v initrd
   # ─────────────────────────────────────
   #
-  # Síťová karta enp1s0 používá ovladač r8169.
-  # Ovladač musí být dostupný už v initrd,
-  # aby bylo možné použít síť pro vzdálené
-  # odemykání LUKS přes SSH.
+  # Zatím není potřeba.
   #
-  boot.initrd.availableKernelModules = [
-    "r8169"
-  ];
+  # Později aktivujeme společně s initrd
+  # networking pro vzdálené odemykání LUKS.
+  #
 
-  # ----------------------
-  # Bridge br0 (LAN)
-  # ----------------------
-  server.br0 = {
-    enable = true;
-    interface = "eno1"; # uprav podle serveru
-  };
+  #boot.initrd.availableKernelModules = [
+  #  "r8169"
+  #];
+
+  # ─────────────────────────────────────
+  # 🌐 BRIDGE br0
+  # ─────────────────────────────────────
+  #
+  # Aktivujeme až po ověření skutečného
+  # názvu fyzického síťového rozhraní.
+  #
+
+  #server.br0 = {
+  #  enable = true;
+  #  interface = "eno1";
+  #};
 
   # ─────────────────────────────────────
   # 🔐 SSH
   # ─────────────────────────────────────
+
   services.openssh = {
     enable = true;
+
     settings = {
       PermitRootLogin = "prohibit-password";
       PasswordAuthentication = true; # později vypnout
@@ -164,27 +182,38 @@
   # ─────────────────────────────────────
   # 👤 UŽIVATELÉ
   # ─────────────────────────────────────
+
   users.users = {
     admin = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      initialPassword = "gregorku"; # ⚠️ jen dočasně
+      extraGroups = [
+        "wheel"
+      ];
+
+      # ⚠️ Pouze dočasně během instalace.
+      # Později odstranit.
+      initialPassword = "gregorku";
     };
 
     gregor = {
       isNormalUser = true;
       description = "Gregor";
-      extraGroups = [ "wheel" ];
+
+      extraGroups = [
+        "wheel"
+      ];
     };
   };
 
   # ─────────────────────────────────────
   # 🛡 SUDO
   # ─────────────────────────────────────
+
   security.sudo.wheelNeedsPassword = true;
 
   # ─────────────────────────────────────
   # 🧾 VERZE SYSTÉMU
   # ─────────────────────────────────────
+
   system.stateVersion = "26.05";
 }
