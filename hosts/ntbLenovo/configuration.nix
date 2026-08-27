@@ -78,14 +78,14 @@
   # Aktivujeme až po dokončení základní instalace.
   # ============================================================
 
-  /*
+  #/*
   age.secrets.aider-openrouter = {
     file = ../../secrets/AI/openrouter-aider.age;
     owner = "gregor";
     group = "users";
     mode = "0400";
   };
-  */
+  #*/
 
 
   # ============================================================
@@ -257,12 +257,12 @@
   # ZATÍM VYPNUTO.
   # ============================================================
 
-  /*
+  #/*
   environment.sessionVariables = {
     AGENIX_AGE_KEY_FILE = "/home/gregor/.application-data/agenix/keys.txt";
     AGE_KEY_FILE = "/home/gregor/.application-data/agenix/keys.txt";
   };
-  */
+  #*/
 
 
   # ============================================================
@@ -300,7 +300,7 @@
   # Konfiguraci nemažeme, pouze ji ponecháváme zakomentovanou.
   # ============================================================
 
-  /*
+  #/*
   boot.initrd.luks.devices."data_crypt" = {
     device = "/dev/disk/by-uuid/b56c0b20-f566-44b5-8f81-54bbcd61cf10";
     keyFile = "/root/keys/data.key";
@@ -322,7 +322,7 @@
       "commit=120"
     ];
   };
-  */
+  #*/
 
 
   # ============================================================
