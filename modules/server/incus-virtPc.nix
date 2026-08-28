@@ -16,7 +16,6 @@ incus
 systemd.services.incus-init = {
 description = "Incus initial setup (network + storage)";
 
-```
 after = [
   "incus.service"
   "zfs-import.target"
