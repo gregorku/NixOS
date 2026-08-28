@@ -61,7 +61,15 @@
   # ─────────────────────────────────────
 
   boot.initrd.luks.devices."cryptroot" = {
-    device = "/dev/disk/by-uuid/476554ca-6f6b-420a-bc4a-7c056518f086";
+  device = "/dev/disk/by-uuid/476554ca-6f6b-420a-bc4a-7c056518f086";
+
+  # Automatické odemknutí během ladění.
+  # KEYFILE JE NA NEŠIFROVANÉM /boot!
+  keyFile = "/boot/cryptroot.key";
+  };
+
+  boot.initrd.secrets = {
+    "/boot/cryptroot.key" = "/boot/cryptroot.key";
   };
 
   # ─────────────────────────────────────
