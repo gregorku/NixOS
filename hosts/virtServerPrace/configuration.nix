@@ -117,17 +117,16 @@
   # ─────────────────────────────────────
   # 💽 ZFS
   # ─────────────────────────────────────
-  #
-  # Datová ZFS pole budou přidána později.
-  #
 
-  #boot.supportedFilesystems = [ "zfs" ];
+  boot.supportedFilesystems = [ "zfs" ];
 
-  #boot.zfs.extraPools = [
-  #  "zfs-pool-incus"
-  #];
+  boot.zfs.extraPools = [
+    "zfs-NVME-4TB"
+    "zfs-RAID-8TB"
+  ];
 
-  #boot.zfs.forceImportRoot = false;
+  # Datové pooly násilně neimportovat.
+  boot.zfs.forceImportRoot = false;
 
   #services.zfs.autoScrub.enable = false;
   #services.zfs.autoSnapshot.enable = false;
