@@ -15,7 +15,17 @@
 
   systemd.services.incus-init = {
     description = "Incus initial setup (network + storage)";
-    after = [ "incus.service" ];
+
+    after = [
+      "incus.service"
+      "zfs-import.target"
+    ];
+
+    requires = [
+      "incus.service"
+      "zfs-import.target"
+    ];
+
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig.Type = "oneshot";
@@ -29,7 +39,7 @@
       # ----------------------
       # NAT network (incusbr0)
       # ----------------------
-      if ! $INCUS network list | grep -q incusbr0; then
+      if ! $INCUS network list | grep -q '^| incusbr0 '; then
         echo "Creating incusbr0..."
         $INCUS network create incusbr0 \
           ipv4.address=10.10.10.1/24 \
@@ -38,22 +48,30 @@
       fi
 
       # ----------------------
-      # LAN bridge (br0) — existující systémový bridge
+      # LAN bridge (br0)
+      # Existující systémový bridge
       # ----------------------
       if ! $INCUS network list | grep -q '^| br0 '; then
         echo "Creating br0 network..."
-        $INCUS network create br0 --type=physical \
+        $INCUS network create br0 \
+          --type=physical \
           parent=br0 \
           ipv4.address=none \
           ipv6.address=none
       fi
 
       # ----------------------
-      # Storage (existující ZFS)
+      # ZFS storage
+      # Existující pool:
+      # zfs-NVME-4TB
+      #
+      # Incus vytvoří:
+      # zfs-NVME-4TB/incus
       # ----------------------
       if ! $INCUS storage list | grep -q '^| default '; then
         echo "Creating ZFS storage..."
-        $INCUS storage create default zfs source=zfs-NVME-4TB/incus
+        $INCUS storage create default zfs \
+          source=zfs-NVME-4TB/incus
       fi
 
       # ----------------------
@@ -61,6 +79,8 @@
       # ----------------------
       echo "Setting default profile to br0..."
       $INCUS profile device set default eth0 network=br0 || true
+
+      echo "=== Incus init complete ==="
     '';
   };
 }
