@@ -31,7 +31,7 @@
     ../../modules/server/incus.nix
 
     # Firewall
-    #../../modules/server/firewall/firewall-virtServerPrace.nix
+    ../../modules/server/firewall/firewall-virtServerPrace.nix
 
     # Bridge
     ../../modules/server/server-br0.nix
