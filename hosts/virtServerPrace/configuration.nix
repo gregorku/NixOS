@@ -25,10 +25,10 @@
     ../../modules/server/server-zfs.nix
 
     # Cockpit
-    #../../modules/server/cockpit.nix
+    ../../modules/server/cockpit.nix
 
     # Incus
-    #../../modules/server/incus.nix
+    ../../modules/server/incus.nix
 
     # Firewall
     #../../modules/server/firewall/firewall-testServerPrace.nix
@@ -40,7 +40,7 @@
     #../../modules/security/initrd-unlock.nix
 
     # Monitoring serveru
-    #../../modules/server/monitoringPc.nix
+    ../../modules/server/monitoringPc.nix
   ];
 
   # ─────────────────────────────────────
