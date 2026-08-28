@@ -28,7 +28,7 @@
     ../../modules/server/cockpit.nix
 
     # Incus
-    ../../modules/server/incus.nix
+    ../../modules/server/incus-virtPc.nix
 
     # Firewall
     ../../modules/server/firewall/firewall-virtServerPrace.nix
