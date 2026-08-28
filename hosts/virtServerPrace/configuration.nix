@@ -22,7 +22,7 @@
     # ───────────────────────────────────
 
     # ZFS
-    #../../modules/server/server-zfs.nix
+    ../../modules/server/server-zfs.nix
 
     # Cockpit
     #../../modules/server/cockpit.nix
