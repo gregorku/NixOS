@@ -85,7 +85,6 @@ script = ''
 
   echo "=== Incus init complete ==="
 '';
-```
 
 };
 }
