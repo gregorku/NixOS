@@ -34,7 +34,7 @@
     #../../modules/server/firewall/firewall-testServerPrace.nix
 
     # Bridge
-    #../../modules/server/server-br0.nix
+    ../../modules/server/server-br0.nix
 
     # Vzdálené odemykání LUKS přes SSH
     #../../modules/security/initrd-unlock.nix
@@ -169,10 +169,10 @@
   # názvu fyzického síťového rozhraní.
   #
 
-  #server.br0 = {
-  #  enable = true;
-  #  interface = "eno1";
-  #};
+  server.br0 = {
+    enable = true;
+    interface = "eno1";
+  };
 
   # ─────────────────────────────────────
   # 🔐 SSH
