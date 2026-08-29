@@ -92,7 +92,7 @@
   ## Firewall
   ############################
 
-  networking.firewall.interfaces.wg1.allowedTCPPorts = [
+  networking.firewall.interfaces.wg3.allowedTCPPorts = [
     9100  # node_exporter
     9134  # zfs_exporter
     9633  # smartctl_exporter
