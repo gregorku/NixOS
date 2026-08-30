@@ -146,6 +146,8 @@ in
 
         # Incus -> WireGuard
         ip saddr 10.10.10.0/24 oifname "wg1" masquerade
+        ip saddr 10.10.10.0/24 oifname "wg2" masquerade
+        ip saddr 10.10.10.0/24 oifname "wg3" masquerade
 
         # WireGuard -> Internet
         ip saddr 10.100.100.0/24 oifname "ens3" masquerade
