@@ -58,17 +58,13 @@ script = ''
 
   # ----------------------
   # ZFS storage
-  #
-  # Existing pool:
-  # zfs-NVME-4TB
-  #
-  # Incus creates:
-  # zfs-NVME-4TB/incus
   # ----------------------
-  if ! $INCUS storage list | grep -q '^| default '; then
+  if ! $INCUS storage show default >/dev/null 2>&1; then
     echo "Creating ZFS storage..."
     $INCUS storage create default zfs \
       source=zfs-NVME-4TB/incus
+  else
+    echo "default storage already exists."
   fi
 
   # ----------------------
