@@ -39,12 +39,14 @@ script = ''
   # ----------------------
   # NAT network (incusbr0)
   # ----------------------
-  if ! $INCUS network list | grep -q '^| incusbr0 '; then
+  if ! $INCUS network show incusbr0 >/dev/null 2>&1; then
     echo "Creating incusbr0..."
     $INCUS network create incusbr0 \
       ipv4.address=10.10.10.1/24 \
       ipv4.nat=true \
       ipv6.address=none
+  else
+    echo "incusbr0 already exists."
   fi
 
   # ----------------------
