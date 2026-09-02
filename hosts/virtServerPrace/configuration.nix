@@ -123,6 +123,7 @@
   boot.zfs.extraPools = [
     "zfs-NVME-4TB"
     "zfs-RAID-8TB"
+    "zfs-HDD-6TB"
   ];
 
   # Datové pooly násilně neimportovat.
