@@ -71,7 +71,7 @@
         }
         {
           # Notebook ntbpracovni wg1
-          publicKey = "ZwQudYCEjias6xdptTSjwtfpemhYVdmGOvBvnQyoeRo=";
+          publicKey = "aoNFdXvTciXud3FlzJZB0uy1ZPlmK3CgKiwFcyb4lX8=";
           allowedIPs = [ "10.100.100.151/32" ];
         }
       ];
