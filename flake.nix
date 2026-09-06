@@ -85,7 +85,7 @@
         # 💻 Notebooky (stable základ + možnost unstable balíčků)
         ntbLenovo = mkHost "ntbLenovo" ./home/ntbLenovo.nix;
 
-        ntbDell = mkHost "ntbDell" ./home/desktop.nix;
+        ntbDell = mkHost "ntbDell" ./home/ntbDell.nix;
 
         # 🖥️ vzdálená plocha
         pracovniPc = mkHost "pracovniPc" ./home/pracovniPc.nix;
