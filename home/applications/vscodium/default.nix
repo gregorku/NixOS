@@ -19,7 +19,7 @@
         "https://open-vsx.org/api/ZooCodeOrganization/zoo-code/3.82.0/file/"
         + "ZooCodeOrganization.zoo-code-3.82.0.vsix";
 
-      # Záměrně fakeHash – Nix nám při prvním buildu vypíše správný hash.
+      # Při prvním buildu Nix vypíše správný hash.
       hash = pkgs.lib.fakeHash;
     };
 
@@ -57,38 +57,85 @@
     '';
   };
 in {
+  # ------------------------------------------------------------
+  # VSCodium + Nix nástroje
+  # ------------------------------------------------------------
+
   home.packages = [
     vscodium
     pkgs.nil
     pkgs.alejandra
   ];
 
-  home.activation.vscodiumDirectories = config.lib.dag.entryAfter ["writeBoundary"] ''
-    mkdir -p "${vscodiumUserDataDir}"
+  # ------------------------------------------------------------
+  # Adresáře VSCodiumu
+  #
+  # Veškerá důležitá uživatelská data:
+  #
+  # ~/.application-data/vscodium/
+  # ├── user-data/
+  # └── extensions/
+  #
+  # ------------------------------------------------------------
+
+  home.activation.vscodiumDirectories = config.lib.dag.entryAfter ["linkGeneration"] ''
+    mkdir -p "${vscodiumUserDataDir}/User"
     mkdir -p "${vscodiumExtensionsDir}"
   '';
 
-  home.file.".application-data/vscodium/user-data/User/settings.json".text = builtins.toJSON {
-    "editor.insertSpaces" = true;
-    "editor.tabSize" = 2;
-    "editor.formatOnSave" = true;
+  # ------------------------------------------------------------
+  # Výchozí settings.json
+  #
+  # Soubor není spravován pomocí home.file, protože VSCodium
+  # ho musí mít možnost normálně zapisovat.
+  #
+  # Pokud už settings.json existuje, jeho obsah se nemění.
+  # ------------------------------------------------------------
 
-    "files.autoSave" = "afterDelay";
-    "files.autoSaveDelay" = 1000;
+  home.activation.vscodiumSettings = config.lib.dag.entryAfter ["vscodiumDirectories"] ''
+          SETTINGS="${vscodiumUserDataDir}/User/settings.json"
 
-    "workbench.startupEditor" = "none";
+          # Pokud zde zůstal starý Home Manager symlink,
+          # odstraníme ho, aby vznikl skutečný zapisovatelný soubor.
+          if [ -L "$SETTINGS" ]; then
+            rm -f "$SETTINGS"
+          fi
 
-    "nix.enableLanguageServer" = true;
-    "nix.serverPath" = "nil";
-    "nix.formatterPath" = "alejandra";
+          # Výchozí nastavení vytvoříme pouze při první instalaci.
+          if [ ! -e "$SETTINGS" ]; then
+            cat > "$SETTINGS" <<'EOF'
+    {
+      "editor.insertSpaces": true,
+      "editor.tabSize": 2,
+      "editor.formatOnSave": true,
 
-    "[nix]" = {
-      "editor.defaultFormatter" = "kamadorueda.alejandra";
-      "editor.formatOnSave" = true;
-      "editor.tabSize" = 2;
-      "editor.insertSpaces" = true;
-    };
-  };
+      "files.autoSave": "afterDelay",
+      "files.autoSaveDelay": 1000,
+
+      "workbench.startupEditor": "none",
+
+      "nix.enableLanguageServer": true,
+      "nix.serverPath": "nil",
+      "nix.formatterPath": "alejandra",
+
+      "[nix]": {
+        "editor.defaultFormatter": "kamadorueda.alejandra",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+      }
+    }
+    EOF
+          fi
+  '';
+
+  # ------------------------------------------------------------
+  # Rozšíření
+  #
+  # Rozšíření jsou deklarativní a mohou zůstat jako symlinky
+  # do /nix/store.
+  #
+  # ------------------------------------------------------------
 
   home.file = {
     ".application-data/vscodium/extensions/jnoortheen.nix-ide".source = "${pkgs.vscode-extensions.jnoortheen.nix-ide}/share/vscode/extensions/jnoortheen.nix-ide";
