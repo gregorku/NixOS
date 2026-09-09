@@ -20,7 +20,7 @@
         + "ZooCodeOrganization.zoo-code-3.82.0.vsix";
 
       # Při prvním buildu Nix vypíše správný hash.
-      hash = pkgs.lib.fakeHash;
+      hash = "sha256-68UrCEXwwLu+lAlvpgrtL0V+FjboSG6N0hOVPnUk9S4=";
     };
 
     nativeBuildInputs = [
