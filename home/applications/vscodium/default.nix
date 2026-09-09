@@ -19,7 +19,6 @@
         "https://open-vsx.org/api/ZooCodeOrganization/zoo-code/3.82.0/file/"
         + "ZooCodeOrganization.zoo-code-3.82.0.vsix";
 
-      # Při prvním buildu Nix vypíše správný hash.
       hash = "sha256-68UrCEXwwLu+lAlvpgrtL0V+FjboSG6N0hOVPnUk9S4=";
     };
 
@@ -70,12 +69,11 @@ in {
   # ------------------------------------------------------------
   # Adresáře VSCodiumu
   #
-  # Veškerá důležitá uživatelská data:
-  #
   # ~/.application-data/vscodium/
   # ├── user-data/
   # └── extensions/
   #
+  # Tyto adresáře jsou součástí zálohy .application-data.
   # ------------------------------------------------------------
 
   home.activation.vscodiumDirectories = config.lib.dag.entryAfter ["linkGeneration"] ''
@@ -86,22 +84,24 @@ in {
   # ------------------------------------------------------------
   # Výchozí settings.json
   #
-  # Soubor není spravován pomocí home.file, protože VSCodium
-  # ho musí mít možnost normálně zapisovat.
+  # settings.json NENÍ spravován přes home.file.
   #
-  # Pokud už settings.json existuje, jeho obsah se nemění.
+  # Musí zůstat skutečným zapisovatelným souborem, protože
+  # VSCodium ho musí moci měnit.
+  #
+  # Pokud už existuje, jeho obsah se při rebuild nezmění.
   # ------------------------------------------------------------
 
   home.activation.vscodiumSettings = config.lib.dag.entryAfter ["vscodiumDirectories"] ''
           SETTINGS="${vscodiumUserDataDir}/User/settings.json"
 
           # Pokud zde zůstal starý Home Manager symlink,
-          # odstraníme ho, aby vznikl skutečný zapisovatelný soubor.
+          # odstraníme ho.
           if [ -L "$SETTINGS" ]; then
             rm -f "$SETTINGS"
           fi
 
-          # Výchozí nastavení vytvoříme pouze při první instalaci.
+          # Výchozí konfiguraci vytvoříme pouze při první instalaci.
           if [ ! -e "$SETTINGS" ]; then
             cat > "$SETTINGS" <<'EOF'
     {
@@ -130,20 +130,54 @@ in {
   '';
 
   # ------------------------------------------------------------
-  # Rozšíření
+  # VSCodium extensions
   #
-  # Rozšíření jsou deklarativní a mohou zůstat jako symlinky
-  # do /nix/store.
+  # Rozšíření jsou kopírována do .application-data/vscodium,
+  # nikoliv symlinkována do /nix/store.
   #
+  # Díky tomu je celý adresář skutečně zálohovatelný.
   # ------------------------------------------------------------
 
-  home.file = {
-    ".application-data/vscodium/extensions/jnoortheen.nix-ide".source = "${pkgs.vscode-extensions.jnoortheen.nix-ide}/share/vscode/extensions/jnoortheen.nix-ide";
+  home.activation.vscodiumExtensions = config.lib.dag.entryAfter ["vscodiumSettings"] ''
+    EXTENSIONS="${vscodiumExtensionsDir}"
 
-    ".application-data/vscodium/extensions/kamadorueda.alejandra".source = "${pkgs.vscode-extensions.kamadorueda.alejandra}/share/vscode/extensions/kamadorueda.alejandra";
+    # Odstranění starých symlinků a verzovaných adresářů
+    # spravovaných předchozí konfigurací.
+    rm -rf \
+      "$EXTENSIONS/jnoortheen.nix-ide" \
+      "$EXTENSIONS/jnoortheen.nix-ide-"* \
+      "$EXTENSIONS/kamadorueda.alejandra" \
+      "$EXTENSIONS/kamadorueda.alejandra-"* \
+      "$EXTENSIONS/MS-CEINTL.vscode-language-pack-cs" \
+      "$EXTENSIONS/ms-ceintl.vscode-language-pack-cs-"* \
+      "$EXTENSIONS/ZooCodeOrganization.zoo-code" \
+      "$EXTENSIONS/zoocodeorganization.zoo-code-"*
 
-    ".application-data/vscodium/extensions/MS-CEINTL.vscode-language-pack-cs".source = "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}/share/vscode/extensions/MS-CEINTL.vscode-language-pack-cs";
+    # Nix IDE
+    cp -a \
+      "${pkgs.vscode-extensions.jnoortheen.nix-ide}/share/vscode/extensions/jnoortheen.nix-ide" \
+      "$EXTENSIONS/"
 
-    ".application-data/vscodium/extensions/ZooCodeOrganization.zoo-code".source = "${zooCode}/share/vscode/extensions/ZooCodeOrganization.zoo-code";
-  };
+    # Alejandra
+    cp -a \
+      "${pkgs.vscode-extensions.kamadorueda.alejandra}/share/vscode/extensions/kamadorueda.alejandra" \
+      "$EXTENSIONS/"
+
+    # Czech Language Pack
+    cp -a \
+      "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}/share/vscode/extensions/MS-CEINTL.vscode-language-pack-cs" \
+      "$EXTENSIONS/"
+
+    # Zoo Code
+    cp -a \
+      "${zooCode}/share/vscode/extensions/ZooCodeOrganization.zoo-code" \
+      "$EXTENSIONS/"
+
+    # Tyto soubory jsou runtime metadata VSCodiumu.
+    # VSCodium je po spuštění vytvoří znovu podle skutečného
+    # obsahu extensions/.
+    rm -f \
+      "$EXTENSIONS/.obsolete" \
+      "$EXTENSIONS/extensions.json"
+  '';
 }
