@@ -10,11 +10,11 @@
   imports = [
     ./common.nix
     ./modules/application-data.nix
-    ./modules/vscodium.nix
 
     # Aplikace
     ./applications/jellyfin
     ./applications/aider
+    ./applications/vscodium.nix
   ];
 
   programs.librewolf = {
