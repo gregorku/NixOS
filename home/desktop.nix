@@ -1,3 +1,4 @@
+```nix
 {
   config,
   pkgs,
@@ -9,6 +10,8 @@
   imports = [
     ./common.nix
     ./modules/application-data.nix
+    ./modules/vscodium.nix
+
     # Aplikace
     ./applications/jellyfin
     ./applications/aider
@@ -44,15 +47,5 @@
       };
     };
   };
-
-  programs.vscode = {
-    enable = true;
-
-    # Použijeme připravený FHS balíček
-    package = unstable.vscodium-fhs;
-
-    extensions = with pkgs.vscode-extensions; [
-      continue.continue
-    ];
-  };
 }
+```
