@@ -8,12 +8,12 @@
 {
   imports = [
     ./common.nix
-    ./modules/application-data.nix
+    #./modules/application-data.nix
 
     # Aplikace
     ./applications/jellyfin
     ./applications/aider
-    ./applications/vscodium.nix
+    ./applications/vscodium
   ];
 
   programs.librewolf = {

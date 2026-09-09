@@ -27,11 +27,12 @@ in
     aider
   ];
 
-  home.activation.aiderDirectories = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p "${aiderDataDir}/config"
-    mkdir -p "${aiderDataDir}/secrets"
-    mkdir -p "${aiderDataDir}/.aider"
-  '';
+  home.activation.aiderDirectories =
+    config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      mkdir -p "${aiderDataDir}/config"
+      mkdir -p "${aiderDataDir}/secrets"
+      mkdir -p "${aiderDataDir}/.aider"
+    '';
 
   home.file.".application-data/aider/config/aider.conf.yml".text = ''
     model: openrouter/anthropic/claude-sonnet-4.6

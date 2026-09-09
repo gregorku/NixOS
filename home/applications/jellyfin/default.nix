@@ -1,17 +1,40 @@
 {
+  config,
+  ...
+}:
+
+let
+  jellyfinDataDir =
+    "${config.home.homeDirectory}/.application-data/jellyfin";
+in
+{
   imports = [
     ./launcher.nix
   ];
 
-  my.applicationData = {
-    enable = true;
+  # ------------------------------------------------------------
+  # Jellyfin – uživatelská data
+  # ------------------------------------------------------------
 
-    name = "jellyfin";
+  home.activation.jellyfinDirectories =
+    config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      mkdir -p "${jellyfinDataDir}"
+      mkdir -p "${jellyfinDataDir}/.config"
+      mkdir -p "${jellyfinDataDir}/.local/share"
+      mkdir -p "${jellyfinDataDir}/.cache"
+    '';
 
-    configDir = "jellyfin-desktop";
+  home.file = {
+    ".config/jellyfin-desktop".source =
+      config.lib.file.mkOutOfStoreSymlink
+        "${jellyfinDataDir}/.config";
 
-    dataDir = "jellyfin-desktop";
+    ".local/share/jellyfin-desktop".source =
+      config.lib.file.mkOutOfStoreSymlink
+        "${jellyfinDataDir}/.local/share";
 
-    cacheDir = "jellyfin-desktop";
+    ".cache/jellyfin-desktop".source =
+      config.lib.file.mkOutOfStoreSymlink
+        "${jellyfinDataDir}/.cache";
   };
 }

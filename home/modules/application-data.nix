@@ -1,74 +1,120 @@
 { config, lib, ... }:
 
-with lib;
-
 let
-  cfg = config.my.applicationData;
-  appDir = "${config.home.homeDirectory}/.application-data/${cfg.name}";
+  applicationDataModule =
+    { name, ... }:
+    {
+      options = {
+        enable = lib.mkEnableOption "Application data redirection";
+
+        configDir = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Directory under ~/.config.";
+        };
+
+        dataDir = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Directory under ~/.local/share.";
+        };
+
+        cacheDir = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Directory under ~/.cache.";
+        };
+      };
+    };
 in
 {
-  options.my.applicationData = {
-    enable = mkEnableOption "Application data redirection";
+  # ============================================================
+  # Konfigurace jednotlivých aplikací
+  #
+  # Použití:
+  #
+  # my.applicationData.vscodium = {
+  #   enable = true;
+  #   configDir = "VSCodium";
+  #   dataDir = "VSCodium";
+  #   cacheDir = "VSCodium";
+  # };
+  #
+  # ============================================================
 
-    name = mkOption {
-      type = types.str;
-      description = "Application name.";
-    };
+  options.my.applicationData = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule applicationDataModule
+    );
 
-    configDir = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
+    default = {};
 
-    dataDir = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
-
-    cacheDir = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-    };
+    description = ''
+      Přesměrování uživatelských dat aplikací do
+      ~/.application-data/<název-aplikace>.
+    '';
   };
 
-  config = mkIf cfg.enable {
+  # ============================================================
+  # Vytvoření adresářů a symlinků
+  # ============================================================
 
+  config = {
     home.activation.applicationData =
       lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        mkdir -p "${appDir}"
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList
+            (
+              name: app:
+              lib.optionalString app.enable ''
+                mkdir -p "${config.home.homeDirectory}/.application-data/${name}"
 
-        ${optionalString (cfg.configDir != null) ''
-          mkdir -p "${appDir}/.config"
-        ''}
+                ${lib.optionalString (app.configDir != null) ''
+                  mkdir -p "${config.home.homeDirectory}/.application-data/${name}/.config"
+                ''}
 
-        ${optionalString (cfg.dataDir != null) ''
-          mkdir -p "${appDir}/.local/share"
-        ''}
+                ${lib.optionalString (app.dataDir != null) ''
+                  mkdir -p "${config.home.homeDirectory}/.application-data/${name}/.local/share"
+                ''}
 
-        ${optionalString (cfg.cacheDir != null) ''
-          mkdir -p "${appDir}/.cache"
-        ''}
+                ${lib.optionalString (app.cacheDir != null) ''
+                  mkdir -p "${config.home.homeDirectory}/.application-data/${name}/.cache"
+                ''}
+              ''
+            )
+            config.my.applicationData
+        )}
       '';
 
-    home.file = mkMerge [
+    home.file = lib.mkMerge (
+      lib.flatten (
+        lib.mapAttrsToList
+          (
+            name: app:
+            lib.optional app.enable (
+              lib.mkMerge [
+                (lib.mkIf (app.configDir != null) {
+                  ".config/${app.configDir}".source =
+                    config.lib.file.mkOutOfStoreSymlink
+                      "${config.home.homeDirectory}/.application-data/${name}/.config";
+                })
 
-      (mkIf (cfg.configDir != null) {
-        ".config/${cfg.configDir}".source =
-          config.lib.file.mkOutOfStoreSymlink
-            "${appDir}/.config";
-      })
+                (lib.mkIf (app.dataDir != null) {
+                  ".local/share/${app.dataDir}".source =
+                    config.lib.file.mkOutOfStoreSymlink
+                      "${config.home.homeDirectory}/.application-data/${name}/.local/share";
+                })
 
-      (mkIf (cfg.dataDir != null) {
-        ".local/share/${cfg.dataDir}".source =
-          config.lib.file.mkOutOfStoreSymlink
-            "${appDir}/.local/share";
-      })
-
-      (mkIf (cfg.cacheDir != null) {
-        ".cache/${cfg.cacheDir}".source =
-          config.lib.file.mkOutOfStoreSymlink
-            "${appDir}/.cache";
-      })
-    ];
+                (lib.mkIf (app.cacheDir != null) {
+                  ".cache/${app.cacheDir}".source =
+                    config.lib.file.mkOutOfStoreSymlink
+                      "${config.home.homeDirectory}/.application-data/${name}/.cache";
+                })
+              ]
+            )
+          )
+          config.my.applicationData
+      )
+    );
   };
 }
