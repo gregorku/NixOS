@@ -52,8 +52,8 @@
 
     postBuild = ''
       wrapProgram "$out/bin/codium" \
-        --add-flags "--user-data-dir ${vscodiumUserDataDir}" \
-        --add-flags "--extensions-dir ${vscodiumExtensionsDir}"
+        --add-flags "--user-data-dir=${vscodiumUserDataDir}" \
+        --add-flags "--extensions-dir=${vscodiumExtensionsDir}"
     '';
   };
 in {
