@@ -1,32 +1,20 @@
 {
   config,
   pkgs,
+  unstable,
   ...
 }: let
-  janRoot = "${config.home.homeDirectory}/.application-data/jan";
+  janDataDir = "${config.home.homeDirectory}/.application-data/jan";
 
-  janConfigDir = "${janRoot}/config";
+  janConfigDir = "${janDataDir}/config";
 
-  janDataDir = "${janRoot}/data";
-
-  janCacheDir = "${janRoot}/cache";
-
-  janApp = pkgs.appimageTools.wrapType2 {
-    pname = "jan";
-    version = "0.8.4";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/janhq/jan/releases/download/v0.8.4/Jan_0.8.4_amd64.AppImage";
-
-      hash = pkgs.lib.fakeHash;
-    };
-  };
+  janCacheDir = "${janDataDir}/cache";
 
   jan = pkgs.symlinkJoin {
     name = "jan-custom";
 
     paths = [
-      janApp
+      unstable.jan
     ];
 
     nativeBuildInputs = [
@@ -42,7 +30,7 @@
   };
 in {
   # ------------------------------------------------------------
-  # Jan
+  # Jan z nixpkgs unstable
   # ------------------------------------------------------------
 
   home.packages = [
@@ -52,15 +40,9 @@ in {
   # ------------------------------------------------------------
   # Jan data
   #
-  # Všechna data Jan zůstávají pod:
+  # Všechna uživatelská data Jan jsou soustředěna pod:
   #
   # ~/.application-data/jan/
-  #
-  # XDG:
-  #
-  # config -> ~/.application-data/jan/config/
-  # data   -> ~/.application-data/jan/data/
-  # cache  -> ~/.application-data/jan/cache/
   #
   # ------------------------------------------------------------
 
@@ -73,8 +55,9 @@ in {
   # ------------------------------------------------------------
   # Desktop launcher
   #
-  # Používá náš wrapper, takže Jan dostane stejné XDG
-  # adresáře jako při spuštění z terminálu.
+  # Používá náš wrapper, nikoliv přímo unstable.jan.
+  # Tím jsou stejné XDG cesty použity při spuštění z menu
+  # i z terminálu.
   # ------------------------------------------------------------
 
   xdg.desktopEntries.jan = {
