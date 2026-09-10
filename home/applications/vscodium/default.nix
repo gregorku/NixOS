@@ -73,7 +73,7 @@ in {
   # ├── user-data/
   # └── extensions/
   #
-  # Tyto adresáře jsou součástí zálohy .application-data.
+  # Celý adresář je součástí zálohy .application-data.
   # ------------------------------------------------------------
 
   home.activation.vscodiumDirectories = config.lib.dag.entryAfter ["linkGeneration"] ''
@@ -84,12 +84,8 @@ in {
   # ------------------------------------------------------------
   # Výchozí settings.json
   #
-  # settings.json NENÍ spravován přes home.file.
-  #
-  # Musí zůstat skutečným zapisovatelným souborem, protože
-  # VSCodium ho musí moci měnit.
-  #
-  # Pokud už existuje, jeho obsah se při rebuild nezmění.
+  # settings.json není spravován přes home.file.
+  # Musí zůstat skutečným zapisovatelným souborem.
   # ------------------------------------------------------------
 
   home.activation.vscodiumSettings = config.lib.dag.entryAfter ["vscodiumDirectories"] ''
@@ -132,17 +128,36 @@ in {
   # ------------------------------------------------------------
   # VSCodium extensions
   #
-  # Rozšíření jsou kopírována do .application-data/vscodium,
-  # nikoliv symlinkována do /nix/store.
+  # Rozšíření jsou skutečně kopírována do
+  # ~/.application-data/vscodium/extensions.
   #
-  # Díky tomu je celý adresář skutečně zálohovatelný.
+  # Důležité:
+  # cp -a zachovává read-only režimy z /nix/store.
+  # Proto po každém kopírování nastavíme lokální soubory
+  # jako zapisovatelné.
   # ------------------------------------------------------------
 
   home.activation.vscodiumExtensions = config.lib.dag.entryAfter ["vscodiumSettings"] ''
     EXTENSIONS="${vscodiumExtensionsDir}"
 
-    # Odstranění starých symlinků a verzovaných adresářů
-    # spravovaných předchozí konfigurací.
+    # --------------------------------------------------------
+    # OPRAVA PRÁV EXISTUJÍCÍCH ROZŠÍŘENÍ
+    #
+    # Rozšíření byla dříve kopírována pomocí cp -a z Nix store.
+    # Ten obsahuje read-only soubory/adresáře.
+    #
+    # Před rm -rf proto musíme lokální kopie zpřístupnit
+    # pro zápis.
+    # --------------------------------------------------------
+
+    if [ -d "$EXTENSIONS" ]; then
+      chmod -R u+rwX "$EXTENSIONS"
+    fi
+
+    # --------------------------------------------------------
+    # Odstranění starých verzí/symlinků
+    # --------------------------------------------------------
+
     rm -rf \
       "$EXTENSIONS/jnoortheen.nix-ide" \
       "$EXTENSIONS/jnoortheen.nix-ide-"* \
@@ -153,29 +168,55 @@ in {
       "$EXTENSIONS/ZooCodeOrganization.zoo-code" \
       "$EXTENSIONS/zoocodeorganization.zoo-code-"*
 
+    # --------------------------------------------------------
     # Nix IDE
+    # --------------------------------------------------------
+
     cp -a \
       "${pkgs.vscode-extensions.jnoortheen.nix-ide}/share/vscode/extensions/jnoortheen.nix-ide" \
       "$EXTENSIONS/"
 
+    # --------------------------------------------------------
     # Alejandra
+    # --------------------------------------------------------
+
     cp -a \
       "${pkgs.vscode-extensions.kamadorueda.alejandra}/share/vscode/extensions/kamadorueda.alejandra" \
       "$EXTENSIONS/"
 
+    # --------------------------------------------------------
     # Czech Language Pack
+    # --------------------------------------------------------
+
     cp -a \
       "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}/share/vscode/extensions/MS-CEINTL.vscode-language-pack-cs" \
       "$EXTENSIONS/"
 
+    # --------------------------------------------------------
     # Zoo Code
+    # --------------------------------------------------------
+
     cp -a \
       "${zooCode}/share/vscode/extensions/ZooCodeOrganization.zoo-code" \
       "$EXTENSIONS/"
 
-    # Tyto soubory jsou runtime metadata VSCodiumu.
-    # VSCodium je po spuštění vytvoří znovu podle skutečného
+    # --------------------------------------------------------
+    # DŮLEŽITÉ:
+    # cp -a zachoval read-only režimy z /nix/store.
+    #
+    # Uděláme z lokálních kopií normální zapisovatelné soubory
+    # a adresáře.
+    # --------------------------------------------------------
+
+    chmod -R u+rwX "$EXTENSIONS"
+
+    # --------------------------------------------------------
+    # Runtime metadata VSCodiumu
+    #
+    # VSCodium je při spuštění vytvoří znovu podle skutečného
     # obsahu extensions/.
+    # --------------------------------------------------------
+
     rm -f \
       "$EXTENSIONS/.obsolete" \
       "$EXTENSIONS/extensions.json"
