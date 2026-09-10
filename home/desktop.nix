@@ -3,9 +3,7 @@
   pkgs,
   unstable,
   ...
-}:
-
-{
+}: {
   imports = [
     ./common.nix
     #./modules/application-data.nix
@@ -14,11 +12,12 @@
     ./applications/jellyfin
     ./applications/aider
     ./applications/vscodium
+    ./applications/jan
   ];
 
   programs.librewolf = {
     enable = true;
-    languagePacks = [ "cs" ];
+    languagePacks = ["cs"];
     settings = {
       "intl.locale.requested" = "cs";
       "intl.multilingual.enabled" = false;
