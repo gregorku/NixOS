@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   # ============================================================
   # KDE / PLASMA 6.6.6 – NTB LENOVO
   #
@@ -26,13 +29,11 @@
   # Panel a menu zůstávají beze změny.
   # ============================================================
 
-
   # ============================================================
   # UŽIVATELSKÉ BALÍČKY
   # ============================================================
 
   home.packages = with pkgs; [
-
     # ----------------------------------------------------------
     # CLI
     # ----------------------------------------------------------
@@ -68,7 +69,6 @@
     ))
   ];
 
-
   # ============================================================
   # PROSTŘEDÍ
   # ============================================================
@@ -77,7 +77,6 @@
     EDITOR = "nano";
     SAL_USE_VCLPLUGIN = "kf6";
   };
-
 
   # ============================================================
   # GTK – BREEZE DARK
@@ -113,14 +112,13 @@
     gtk4.enable = true;
   };
 
-
   # ============================================================
   # KITTY
   # ============================================================
 
   programs.kitty = {
     enable = true;
-    enableFishIntegration = true;
+    shellIntegration.enableFishIntegration = true;
 
     settings = {
       font_family = "FiraCode Nerd Font";
@@ -144,7 +142,6 @@
     '';
   };
 
-
   # ============================================================
   # FISH
   # ============================================================
@@ -157,8 +154,7 @@
       cat = "bat";
       cd = "z";
 
-      rebuild =
-        "sudo nixos-rebuild switch --flake /etc/nixos#ntbLenovo";
+      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#ntbLenovo";
     };
 
     interactiveShellInit = ''
@@ -173,7 +169,6 @@
     '';
   };
 
-
   # ============================================================
   # STARSHIP
   # ============================================================
@@ -185,8 +180,7 @@
     settings = {
       add_newline = false;
 
-      format =
-        "$username$hostname $directory $git_branch $git_status $cmd_duration $character";
+      format = "$username$hostname $directory $git_branch $git_status $cmd_duration $character";
 
       username = {
         show_always = true;
@@ -227,7 +221,6 @@
     };
   };
 
-
   # ============================================================
   # KDE VZHLED – BREEZE + NORD
   #
@@ -253,13 +246,11 @@
     enable = true;
 
     kde.settings = {
-
       # ----------------------------------------------------------
       # KDE GLOBALS
       # ----------------------------------------------------------
 
       kdeglobals = {
-
         General = {
           ColorScheme = "GregorNordDark";
 
@@ -278,7 +269,6 @@
         };
       };
 
-
       # ----------------------------------------------------------
       # PLASMA
       #
@@ -287,7 +277,6 @@
       # Tím necháváme KDE použít standardní Plasma/Breeze theme
       # a vyhneme se problémům s externími Plasma tématy.
       # ----------------------------------------------------------
-
 
       # ----------------------------------------------------------
       # KURZOR
@@ -301,7 +290,6 @@
       };
     };
   };
-
 
   # ============================================================
   # VLASTNÍ NORD DARK COLOR SCHEME
@@ -482,7 +470,6 @@
     inactiveBlend=163,173,189
     inactiveForeground=163,173,189
   '';
-
 
   # ============================================================
   # KDE / PLASMA – ZÁMĚRNĚ MINIMÁLNÍ
