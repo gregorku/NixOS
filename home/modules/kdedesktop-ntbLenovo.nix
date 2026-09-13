@@ -5,24 +5,14 @@
   ...
 }: {
   # ============================================================
-  # KDE / PLASMA – NTB LENOVO
-  #
-  # Uživatelská konfigurace:
-  #
-  # - GTK / ikony / kurzor
-  # - Kitty
-  # - Fish + CLI
-  # - Starship
-  # - KDE vzhled
-  #
-  # Panel a menu se zde nepřepisují.
-  # ============================================================
-
-  # ============================================================
   # UŽIVATELSKÉ BALÍČKY
   # ============================================================
 
   home.packages = with pkgs; [
+    # ----------------------------------------------------------
+    # CLI
+    # ----------------------------------------------------------
+
     zoxide
     fzf
     eza
@@ -32,10 +22,19 @@
     tmux
     lazygit
 
+    # ----------------------------------------------------------
+    # Nix vývoj
+    # ----------------------------------------------------------
+
     nixd
     nixfmt
 
+    # ----------------------------------------------------------
+    # Python
+    #
     # Verze 0.3.33 nefunguje
+    # ----------------------------------------------------------
+
     (python3.withPackages (
       ps:
         with ps; [
@@ -185,190 +184,4 @@
       };
     };
   };
-
-  # ============================================================
-  # KDE VZHLED – BREEZE + NORD
-  # ============================================================
-
-  qt = {
-    enable = true;
-
-    kde.settings = {
-      kdeglobals = {
-        General = {
-          ColorScheme = "GregorNordDark";
-          AccentColor = "94,129,172";
-        };
-
-        KDE = {
-          widgetStyle = "Breeze";
-        };
-
-        Icons = {
-          Theme = "breeze-dark";
-        };
-      };
-
-      kcminputrc = {
-        Mouse = {
-          cursorTheme = "breeze_cursors";
-          cursorSize = 24;
-        };
-      };
-    };
-  };
-
-  # ============================================================
-  # VLASTNÍ NORD DARK COLOR SCHEME
-  # ============================================================
-
-  home.file.".local/share/color-schemes/GregorNordDark.colors".text = ''
-    [ColorEffects:Disabled]
-    Color=46,52,64
-    ColorAmount=0
-    ColorEffect=0
-    ContrastAmount=0.65
-    ContrastEffect=1
-    IntensityAmount=0.1
-    IntensityEffect=2
-
-    [ColorEffects:Inactive]
-    ChangeSelectionColor=true
-    Color=67,76,94
-    ColorAmount=0.025
-    ColorEffect=2
-    ContrastAmount=0.1
-    ContrastEffect=2
-    Enable=false
-    IntensityAmount=0
-    IntensityEffect=0
-
-    [Colors:Window]
-    BackgroundAlternate=59,66,82
-    BackgroundNormal=46,52,64
-    DecorationFocus=94,129,172
-    DecorationHover=136,192,208
-    ForegroundActive=136,192,208
-    ForegroundInactive=163,173,189
-    ForegroundLink=129,161,193
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=236,239,244
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [Colors:View]
-    BackgroundAlternate=59,66,82
-    BackgroundNormal=46,52,64
-    DecorationFocus=94,129,172
-    DecorationHover=136,192,208
-    ForegroundActive=136,192,208
-    ForegroundInactive=163,173,189
-    ForegroundLink=129,161,193
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=229,233,240
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [Colors:Button]
-    BackgroundAlternate=67,76,94
-    BackgroundNormal=59,66,82
-    DecorationFocus=94,129,172
-    DecorationHover=136,192,208
-    ForegroundActive=136,192,208
-    ForegroundInactive=163,173,189
-    ForegroundLink=129,161,193
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=236,239,244
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [Colors:Selection]
-    BackgroundAlternate=94,129,172
-    BackgroundNormal=94,129,172
-    DecorationFocus=136,192,208
-    DecorationHover=136,192,208
-    ForegroundActive=236,239,244
-    ForegroundInactive=229,233,240
-    ForegroundLink=136,192,208
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=236,239,244
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [Colors:Tooltip]
-    BackgroundAlternate=59,66,82
-    BackgroundNormal=46,52,64
-    DecorationFocus=94,129,172
-    DecorationHover=136,192,208
-    ForegroundActive=136,192,208
-    ForegroundInactive=163,173,189
-    ForegroundLink=129,161,193
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=236,239,244
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [Colors:Complementary]
-    BackgroundAlternate=67,76,94
-    BackgroundNormal=46,52,64
-    DecorationFocus=94,129,172
-    DecorationHover=136,192,208
-    ForegroundActive=136,192,208
-    ForegroundInactive=163,173,189
-    ForegroundLink=129,161,193
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=236,239,244
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [Colors:Header]
-    BackgroundAlternate=67,76,94
-    BackgroundNormal=59,66,82
-    DecorationFocus=94,129,172
-    DecorationHover=136,192,208
-    ForegroundActive=136,192,208
-    ForegroundInactive=163,173,189
-    ForegroundLink=129,161,193
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=236,239,244
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [Colors:Header][Inactive]
-    BackgroundAlternate=59,66,82
-    BackgroundNormal=46,52,64
-    DecorationFocus=129,161,193
-    DecorationHover=136,192,208
-    ForegroundActive=129,161,193
-    ForegroundInactive=163,173,189
-    ForegroundLink=129,161,193
-    ForegroundNegative=191,97,106
-    ForegroundNeutral=235,203,139
-    ForegroundNormal=216,222,233
-    ForegroundPositive=163,190,140
-    ForegroundVisited=180,142,173
-
-    [General]
-    ColorScheme=GregorNordDark
-    Name=Gregor Nord Dark
-    shadeSortColumn=true
-
-    [KDE]
-    contrast=4
-
-    [WM]
-    activeBackground=46,52,64,191
-    activeBlend=236,239,244
-    activeForeground=236,239,244
-    inactiveBackground=46,52,64
-    inactiveBlend=163,173,189
-    inactiveForeground=163,173,189
-  '';
 }

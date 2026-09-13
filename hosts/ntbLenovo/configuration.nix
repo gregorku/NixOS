@@ -15,8 +15,6 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  # Fish je systémově zapnutý, protože je nastaven jako
-  # login shell uživatele gregor.
   programs.fish.enable = true;
 
   imports = [
@@ -203,8 +201,6 @@
 
   # ------------------------------------------------------------
   # Kernel
-  #
-  # Používáme výchozí kernel.
   # ------------------------------------------------------------
 
   boot.kernelPackages = pkgs.linuxPackages_7_2;
