@@ -4,11 +4,8 @@
   unstable,
   stable,
   ...
-}:
-
-{
+}: {
   environment.systemPackages = with pkgs; [
-
     # ======================
     # 📦 SYSTÉM / ZÁKLAD
     # ======================
@@ -98,7 +95,7 @@
     gimp
     easytag
     puddletag
-    unstable.freecad
+    #unstable.freecad
 
     # ======================
     # 📨 KANCELÁŘ
@@ -164,6 +161,6 @@
       "Carlito"
       "Liberation Sans"
     ];
-    monospace = [ "FiraCode Nerd Font" ];
+    monospace = ["FiraCode Nerd Font"];
   };
 }
