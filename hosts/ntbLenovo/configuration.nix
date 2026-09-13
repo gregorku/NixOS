@@ -15,6 +15,8 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # Fish je systémově zapnutý, protože je nastaven jako
+  # login shell uživatele gregor.
   programs.fish.enable = true;
 
   imports = [

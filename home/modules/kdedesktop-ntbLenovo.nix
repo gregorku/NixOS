@@ -5,7 +5,7 @@
   ...
 }: {
   # ============================================================
-  # KDE / PLASMA 6.6.6 – NTB LENOVO
+  # KDE / PLASMA – NTB LENOVO
   #
   # Uživatelská konfigurace:
   #
@@ -15,18 +15,7 @@
   # - Starship
   # - KDE vzhled
   #
-  # ZÁMĚRNĚ:
-  # - žádný Klassy
-  # - žádné externí Plasma plasmoidy
-  # - žádný zásah do panelu
-  # - žádný zásah do menu
-  #
-  # Základ vzhledu:
-  # - Breeze Dark
-  # - Gregor Nord Dark
-  # - Nord Blue accent
-  #
-  # Panel a menu zůstávají beze změny.
+  # Panel a menu se zde nepřepisují.
   # ============================================================
 
   # ============================================================
@@ -34,10 +23,6 @@
   # ============================================================
 
   home.packages = with pkgs; [
-    # ----------------------------------------------------------
-    # CLI
-    # ----------------------------------------------------------
-
     zoxide
     fzf
     eza
@@ -47,19 +32,10 @@
     tmux
     lazygit
 
-    # ----------------------------------------------------------
-    # Nix vývoj
-    # ----------------------------------------------------------
-
     nixd
     nixfmt
 
-    # ----------------------------------------------------------
-    # Python
-    #
     # Verze 0.3.33 nefunguje
-    # ----------------------------------------------------------
-
     (python3.withPackages (
       ps:
         with ps; [
@@ -79,17 +55,7 @@
   };
 
   # ============================================================
-  # GTK – BREEZE DARK
-  #
-  # Catppuccin z původní systémové konfigurace odstraňujeme.
-  #
-  # GTK aplikace:
-  #   GTK2 → Breeze-Dark
-  #   GTK3 → Breeze-Dark
-  #   GTK4 → Breeze-Dark
-  #
-  # Ikony:
-  #   Breeze Dark
+  # GTK
   # ============================================================
 
   gtk = {
@@ -118,7 +84,6 @@
 
   programs.kitty = {
     enable = true;
-    shellIntegration.enableFishIntegration = true;
 
     settings = {
       font_family = "FiraCode Nerd Font";
@@ -223,44 +188,19 @@
 
   # ============================================================
   # KDE VZHLED – BREEZE + NORD
-  #
-  # Nepoužíváme Klassy.
-  #
-  # Záměr:
-  #
-  #   Application Style = Breeze
-  #   Window Decoration = Breeze
-  #   Plasma Style      = výchozí KDE/Breeze
-  #   Color Scheme      = Gregor Nord Dark
-  #   Accent            = Nord Blue #5E81AC
-  #   Icons             = Breeze Dark
-  #   Cursor             = Breeze
-  #
-  # Panel a menu NEPŘEPISUJEME.
-  #
-  # qt.kde.settings používá kwriteconfig6 a mění pouze
-  # uvedené položky.
   # ============================================================
 
   qt = {
     enable = true;
 
     kde.settings = {
-      # ----------------------------------------------------------
-      # KDE GLOBALS
-      # ----------------------------------------------------------
-
       kdeglobals = {
         General = {
           ColorScheme = "GregorNordDark";
-
-          # Nord Blue
           AccentColor = "94,129,172";
         };
 
         KDE = {
-          # Standardní KDE widget style.
-          # Necháváme bez externího stylu typu Klassy.
           widgetStyle = "Breeze";
         };
 
@@ -268,19 +208,6 @@
           Theme = "breeze-dark";
         };
       };
-
-      # ----------------------------------------------------------
-      # PLASMA
-      #
-      # Plasma Style záměrně nenastavujeme natvrdo.
-      #
-      # Tím necháváme KDE použít standardní Plasma/Breeze theme
-      # a vyhneme se problémům s externími Plasma tématy.
-      # ----------------------------------------------------------
-
-      # ----------------------------------------------------------
-      # KURZOR
-      # ----------------------------------------------------------
 
       kcminputrc = {
         Mouse = {
@@ -293,32 +220,6 @@
 
   # ============================================================
   # VLASTNÍ NORD DARK COLOR SCHEME
-  #
-  # Nord palette:
-  #
-  # Polar Night:
-  #   #2E3440
-  #   #3B4252
-  #   #434C5E
-  #   #4C566A
-  #
-  # Snow Storm:
-  #   #D8DEE9
-  #   #E5E9F0
-  #   #ECEFF4
-  #
-  # Frost:
-  #   #8FBCBB
-  #   #88C0D0
-  #   #81A1C1
-  #   #5E81AC
-  #
-  # Aurora:
-  #   #BF616A
-  #   #D08770
-  #   #EBCB8B
-  #   #A3BE8C
-  #   #B48EAD
   # ============================================================
 
   home.file.".local/share/color-schemes/GregorNordDark.colors".text = ''
@@ -443,7 +344,7 @@
     [Colors:Header][Inactive]
     BackgroundAlternate=59,66,82
     BackgroundNormal=46,52,64
-    DecorationFocus=94,129,172
+    DecorationFocus=129,161,193
     DecorationHover=136,192,208
     ForegroundActive=129,161,193
     ForegroundInactive=163,173,189
@@ -470,26 +371,4 @@
     inactiveBlend=163,173,189
     inactiveForeground=163,173,189
   '';
-
-  # ============================================================
-  # KDE / PLASMA – ZÁMĚRNĚ MINIMÁLNÍ
-  #
-  # Tento modul:
-  #
-  #   - nepřidává desktopové widgety
-  #   - nemanipuluje s existujícím panelem
-  #   - nemanipuluje s menu
-  #   - nepřidává Catppuccin plasmoidy
-  #   - nepřidává Bix/Flex widgety
-  #   - nepoužívá Klassy
-  #
-  # Výsledkem je:
-  #
-  #   - Breeze Dark
-  #   - Gregor Nord Dark
-  #   - Nord Blue accent
-  #   - Breeze icons
-  #   - Breeze cursor
-  #
-  # ============================================================
 }
