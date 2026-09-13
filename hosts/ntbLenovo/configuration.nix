@@ -376,7 +376,7 @@
   #
   # Používáme výchozí kernel.
   #
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_7_1;
   # ------------------------------------------------------------
 
   services.libinput.enable = true;
