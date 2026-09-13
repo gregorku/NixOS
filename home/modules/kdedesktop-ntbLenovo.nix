@@ -48,7 +48,7 @@
       name = "Papirus-Dark";
     };
 
-    gtk2.enable = true;
+    gtk2.enable = false;
     gtk3.enable = true;
     gtk4.enable = true;
   };
