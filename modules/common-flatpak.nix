@@ -22,7 +22,7 @@
       "com.bitwarden.desktop" # Bitwarden (aktuální verze)
       "org.localsend.localsend_app" # Sdílení souborů (AirDrop-like)
       "org.onlyoffice.desktopeditors" # OnlyOffice
-      "org.freecad.FreeCAD" # FreeCAD – CAD/3D modelování
+      #"org.freecad.FreeCAD" # FreeCAD – CAD/3D modelování
     ];
 
     # Automatické aktualizace (jednou týdně)

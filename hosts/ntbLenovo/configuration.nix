@@ -4,8 +4,7 @@
   lib,
   unstable,
   ...
-}:
-{
+}: {
   # ============================================================
   # NIXPKGS / MODULY
   # ============================================================
@@ -31,6 +30,7 @@
     ../../modules/common-printing.nix
     ../../modules/common-apps.nix
     ../../modules/common-flatpak.nix
+    ../../modules/common-appimage.nix
     ../../modules/common-filesystems.nix
     ../../modules/common-snapshots.nix
     ../../modules/gpu-nvidia-amd.nix
@@ -61,13 +61,11 @@
     # ../../modules/common-incus.nix
   ];
 
-
   # ============================================================
   # HOSTNAME
   # ============================================================
 
   networking.hostName = "ntbLenovo";
-
 
   # ============================================================
   # AGENIX
@@ -86,7 +84,6 @@
     mode = "0400";
   };
   #*/
-
 
   # ============================================================
   # LOKALIZACE / JAZYK
@@ -107,7 +104,6 @@
     layout = "cz";
     variant = "";
   };
-
 
   # ============================================================
   # FISH + CLI
@@ -137,7 +133,6 @@
       set -g fish_greeting ""
     '';
   };
-
 
   # ============================================================
   # STARSHIP
@@ -179,7 +174,6 @@
     success_symbol = "[➜](#a6e3a1)"
     error_symbol = "[✗](#f38ba8)"
   '';
-
 
   # ============================================================
   # CATPPUCCIN + SYSTÉMOVÉ NÁSTROJE
@@ -228,11 +222,10 @@
 
     (python3.withPackages (
       ps:
-      with ps;
-      [
-        pandas
-        openpyxl
-      ]
+        with ps; [
+          pandas
+          openpyxl
+        ]
     ))
   ];
 
@@ -246,10 +239,8 @@
     EDITOR = "nano";
     SAL_USE_VCLPLUGIN = "kf6";
 
-    GTK2_RC_FILES =
-      "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
+    GTK2_RC_FILES = "${pkgs.catppuccin-gtk}/share/themes/Catppuccin-Mocha-Standard-Blue-Dark/gtk-2.0/gtkrc";
   };
-
 
   # ============================================================
   # AGENIX – PROMĚNNÉ PRO KLÍČE
@@ -263,7 +254,6 @@
     AGE_KEY_FILE = "/home/gregor/.application-data/agenix/keys.txt";
   };
   #*/
-
 
   # ============================================================
   # KITTY
@@ -287,7 +277,6 @@
     map ctrl+alt+enter launch --location=hsplit
     map ctrl+alt+v launch --location=vsplit
   '';
-
 
   # ============================================================
   # DATALINUX – DRUHÝ DISK
@@ -324,7 +313,6 @@
   };
   #*/
 
-
   # ============================================================
   # LEGION 5 – AMD AUDIO FIX
   # ============================================================
@@ -346,7 +334,6 @@
     "snd_hda_intel.dmic_detect=0"
   ];
 
-
   # ============================================================
   # NIX OPTIMALIZACE
   # ============================================================
@@ -366,7 +353,6 @@
     options = "--delete-older-than 15d";
   };
 
-
   # ============================================================
   # SYSTEM
   # ============================================================
@@ -381,7 +367,6 @@
 
   services.libinput.enable = true;
 
-
   # ------------------------------------------------------------
   # systemd-boot
   # ------------------------------------------------------------
@@ -390,7 +375,6 @@
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
 
   # ------------------------------------------------------------
   # Odezva systému při velkém zápisu
@@ -402,7 +386,6 @@
     "vm.dirty_expire_centisecs" = 3000;
     "vm.dirty_writeback_centisecs" = 500;
   };
-
 
   # ============================================================
   # NIXOS STATE VERSION
