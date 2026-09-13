@@ -1,8 +1,11 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./desktop.nix
+    ./modules/kdedesktop-ntbLenovo.nix
     ./menu/ntbLenovo/gocryptfs.nix
     ./menu/ntbLenovo/vzdalena-plocha.nix
     ./menu/ntbLenovo/applications-kmenuedit.nix
