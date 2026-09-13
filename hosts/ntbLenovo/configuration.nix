@@ -15,6 +15,8 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  programs.fish.enable = true;
+
   imports = [
     ./hardware-configuration.nix
 
