@@ -38,6 +38,16 @@
     '';
   };
 
+  # Podpis aktuální sady rozšíření. Mění se pouze tehdy, když se
+  # skutečně změní obsah některého z derivací níže (nová verze,
+  # jiný hash apod.) - ne při každém home-manager rebuildu.
+  vscodiumExtensionsSignature = builtins.hashString "sha256" (builtins.concatStringsSep "\n" [
+    "${pkgs.vscode-extensions.jnoortheen.nix-ide}"
+    "${pkgs.vscode-extensions.kamadorueda.alejandra}"
+    "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}"
+    "${zooCode}"
+  ]);
+
   vscodium = pkgs.symlinkJoin {
     name = "vscodium-custom";
 
@@ -139,6 +149,23 @@ in {
 
   home.activation.vscodiumExtensions = config.lib.dag.entryAfter ["vscodiumSettings"] ''
     EXTENSIONS="${vscodiumExtensionsDir}"
+    SIGNATURE_FILE="$EXTENSIONS/.nix-signature"
+    NEW_SIGNATURE="${vscodiumExtensionsSignature}"
+
+    # --------------------------------------------------------
+    # Pokud se sada rozšíření od minula nezměnila, nic neděláme.
+    #
+    # Bez tohoto kroku by se extensions.json a .obsolete mazaly
+    # při KAŽDÉM home-manager rebuildu, i když se rozšíření vůbec
+    # nezměnila. VSCodium pak při dalším startu bere všechna
+    # rozšíření jako "nově objevená" a vyžaduje reload okna -
+    # u jazykového balíčku se to projeví jako pád zpět do
+    # angličtiny, dokud reload neproběhne.
+    # --------------------------------------------------------
+
+    if [ -f "$SIGNATURE_FILE" ] && [ "$(cat "$SIGNATURE_FILE")" = "$NEW_SIGNATURE" ]; then
+      echo "VSCodium rozšíření beze změny, přeskakuji synchronizaci." >&2
+    else
 
     # --------------------------------------------------------
     # OPRAVA PRÁV EXISTUJÍCÍCH ROZŠÍŘENÍ
@@ -220,5 +247,9 @@ in {
     rm -f \
       "$EXTENSIONS/.obsolete" \
       "$EXTENSIONS/extensions.json"
+
+    echo "$NEW_SIGNATURE" > "$SIGNATURE_FILE"
+
+    fi
   '';
 }
