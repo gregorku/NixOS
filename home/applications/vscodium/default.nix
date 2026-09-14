@@ -217,8 +217,8 @@ in {
     # obsahu extensions/.
     # --------------------------------------------------------
 
-    #rm -f \
-    #  "$EXTENSIONS/.obsolete" \
-    #  "$EXTENSIONS/extensions.json"
+    rm -f \
+      "$EXTENSIONS/.obsolete" \
+      "$EXTENSIONS/extensions.json"
   '';
 }
