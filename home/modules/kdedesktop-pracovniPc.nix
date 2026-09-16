@@ -36,8 +36,9 @@
 
     colorScheme = "dark";
 
-    # Zatím ponecháváme Breeze GTK jako stabilní základ.
+    # Breeze GTK jako stabilní základ.
     # Nord vzhled řeší KDE Color Scheme níže.
+
     theme = {
       package = pkgs.kdePackages.breeze-gtk;
       name = "Breeze-Dark";
@@ -66,6 +67,7 @@
       # ----------------------------------------------------------
       # KDE GLOBALS
       # ----------------------------------------------------------
+
       kdeglobals = {
         General = {
           ColorScheme = "GregorNordDark";
@@ -84,6 +86,7 @@
       # ----------------------------------------------------------
       # WINDOW DECORATION – KLASSY
       # ----------------------------------------------------------
+
       kwinrc = {
         "org.kde.kdecoration3" = {
           library = "org.kde.klassy";
@@ -93,6 +96,7 @@
       # ----------------------------------------------------------
       # PLASMA STYLE – KLASSY DARK
       # ----------------------------------------------------------
+
       plasmarc = {
         Theme = {
           name = "klassy-dark";
@@ -102,6 +106,7 @@
       # ----------------------------------------------------------
       # CURSOR
       # ----------------------------------------------------------
+
       kcminputrc = {
         Mouse = {
           cursorTheme = "breeze_cursors";
