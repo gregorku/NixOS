@@ -3,6 +3,8 @@
 {
   imports = [
     ./desktop.nix
+    ./modules/kdedesktop-pracovniPc.nix
+    ./modules/shell-pracovniPc.nix
     ./menu/pracovniPc/gocryptfs.nix
     ./menu/pracovniPc/vzdalena-plocha.nix
     ./menu/pracovniPc/applications-kmenuedit.nix
