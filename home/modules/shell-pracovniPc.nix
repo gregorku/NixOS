@@ -85,7 +85,8 @@
       cat = "bat";
       cd = "z";
 
-      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#pracovniPc";
+      #rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#pracovniPc";
+      alias rebuild="sudo nixos-rebuild switch --flake /etc/nixos#pracovniPc"
     };
 
     interactiveShellInit = ''
