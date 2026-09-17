@@ -62,6 +62,20 @@
   # ============================================================
   # FISH
   # ============================================================
+  #
+  # Původní konfigurace pracovniPc:
+  #
+  #   programs.fish = {
+  #     enable = true;
+  #     interactiveShellInit = ''
+  #       set -gx STARSHIP_CONFIG /etc/starship.toml
+  #       ...
+  #     '';
+  #   };
+  #
+  # V Home Manageru jsou aliasy převedené do shellAliases
+  # a Starship spravuje Home Manager přímo.
+  # ============================================================
 
   programs.fish = {
     enable = true;
@@ -89,6 +103,19 @@
   # ============================================================
   # STARSHIP
   # ============================================================
+  #
+  # Původní /etc/starship.toml z configuration.nix
+  # převedený přímo do Home Manageru.
+  #
+  # Tím už není potřeba:
+  #
+  #   set -gx STARSHIP_CONFIG /etc/starship.toml
+  #
+  # ani systémový:
+  #
+  #   environment.etc."starship.toml"
+  #
+  # ============================================================
 
   programs.starship = {
     enable = true;
@@ -102,38 +129,38 @@
       username = {
         show_always = true;
         format = "$user";
-        style_user = "#88C0D0";
+        style_user = "#a6e3a1";
       };
 
       hostname = {
         ssh_only = false;
         format = "@$hostname";
-        style = "#81A1C1";
+        style = "#89b4fa";
       };
 
       directory = {
-        style = "#81A1C1";
+        style = "#89b4fa";
         truncation_length = 3;
       };
 
       git_branch = {
         symbol = "🌱 ";
-        style = "#EBCB8B";
+        style = "#f9e2af";
       };
 
       git_status = {
-        style = "#BF616A";
+        style = "#f38ba8";
       };
 
       cmd_duration = {
         min_time = 500;
         format = "⏱ $duration ";
-        style = "#D08770";
+        style = "#fab387";
       };
 
       character = {
-        success_symbol = "[➜](#A3BE8C)";
-        error_symbol = "[✗](#BF616A)";
+        success_symbol = "[➜](#a6e3a1)";
+        error_symbol = "[✗](#f38ba8)";
       };
     };
   };
