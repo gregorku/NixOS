@@ -15,6 +15,10 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # Fish musí být povolený systémově, protože je nastavený
+  # jako login shell uživatele gregor.
+  #
+  # Samotnou konfiguraci Fish spravuje Home Manager.
   programs.fish.enable = true;
 
   imports = [
@@ -40,20 +44,29 @@
 
     ../../modules/common-swap.nix
 
-    # Modul Wireguard
+    # ----------------------------------------------------------
+    # WIREGUARD
+    # ----------------------------------------------------------
+
     # ../../modules/common-wireguard.nix
     # ../../modules/hosts/pracovniPc-wireguard.nix
 
-    ../../modules/common-swap.nix
+    # ----------------------------------------------------------
+    # SÍŤ
+    # ----------------------------------------------------------
+
     ../../modules/common-networkmanager.nix
 
-    # Vzdálený přístup
+    # ----------------------------------------------------------
+    # VZDÁLENÝ PŘÍSTUP
+    # ----------------------------------------------------------
+
     ../../modules/common-remote-access.nix
   ];
 
-  # ─────────────────────────────────────
-  # 🌐 SÍŤ
-  # ─────────────────────────────────────
+  # ============================================================
+  # SÍŤ
+  # ============================================================
 
   networking = {
     hostName = "pracovniPc";
@@ -65,9 +78,9 @@
     hostId = "608ebdb2";
   };
 
-  # ─────────────────────────────────────
-  # 🔐 SSH
-  # ─────────────────────────────────────
+  # ============================================================
+  # SSH
+  # ============================================================
 
   services.openssh = {
     enable = true;
@@ -78,9 +91,9 @@
     };
   };
 
-  # ─────────────────────────────────────
-  # 🌍 Lokalizace / Jazyk
-  # ─────────────────────────────────────
+  # ============================================================
+  # LOKALIZACE / JAZYK
+  # ============================================================
 
   i18n.defaultLocale = "cs_CZ.UTF-8";
 
@@ -98,18 +111,18 @@
     variant = "";
   };
 
-  # ─────────────────────────────────────
-  # 🔐 Agenix
-  # ─────────────────────────────────────
+  # ============================================================
+  # AGENIX
+  # ============================================================
 
   environment.sessionVariables = {
     AGENIX_AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
     AGE_KEY_FILE = "/home/gregor/.config/age/keys.txt";
   };
 
-  # ─────────────────────────────────────
-  # 🔧 NIX OPTIMALIZACE
-  # ─────────────────────────────────────
+  # ============================================================
+  # NIX OPTIMALIZACE
+  # ============================================================
 
   nix.settings = {
     auto-optimise-store = true;
@@ -126,11 +139,16 @@
     options = "--delete-older-than 15d";
   };
 
-  # ─────────────────────────────────────
-  # 💾 ZFS
-  # ─────────────────────────────────────
+  # ============================================================
+  # ZFS
+  # ============================================================
   #
   # Import datapool po bootu.
+  #
+  # Ověřeno:
+  #   Linux       7.2.5
+  #   OpenZFS     2.4.4
+  #   zfs_2_4     meta.broken = false
   #
 
   boot.supportedFilesystems = [ "zfs" ];
@@ -145,37 +163,40 @@
   services.zfs.autoScrub.enable = false;
   services.zfs.autoSnapshot.enable = false;
 
-  # ─────────────────────────────────────
-  # 🐧 KERNEL
-  # ─────────────────────────────────────
+  # ============================================================
+  # KERNEL
+  # ============================================================
   #
   # Linux 7.2 – aktuálně používaná verze.
   #
   # linuxPackages_latest zde nepoužívat kvůli ZFS.
   #
+  # Konkrétně flake poskytuje:
+  #   Linux 7.2.5
+  #   ZFS 2.4.4
+  #
+  # Kombinace je v aktuálním nixpkgs označena jako podporovaná.
+  #
 
   boot.kernelPackages = pkgs.linuxPackages_7_2;
 
-  # ─────────────────────────────────────
-  # 🚀 BOOTLOADER
-  # ─────────────────────────────────────
+  # ============================================================
+  # BOOTLOADER
+  # ============================================================
 
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 5;
+  };
 
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot/efi";
+  };
 
-  # ------------------------------------------------------------
-  # systemd-boot
-  # ------------------------------------------------------------
-
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
-  # ------------------------------------------------------------
-  # Odezva systému při velkém zápisu
-  # ------------------------------------------------------------
+  # ============================================================
+  # ODEZVA SYSTÉMU PŘI VELKÉM ZÁPISU
+  # ============================================================
 
   boot.kernel.sysctl = {
     "vm.dirty_background_ratio" = 3;
@@ -183,9 +204,10 @@
     "vm.dirty_expire_centisecs" = 3000;
     "vm.dirty_writeback_centisecs" = 500;
   };
-  # ─────────────────────────────────────
-  # ⚠️ POVINNÉ – NIKDY NEMĚNIT PO INSTALACI
-  # ─────────────────────────────────────
+
+  # ============================================================
+  # POVINNÉ – NIKDY NEMĚNIT PO INSTALACI
+  # ============================================================
 
   system.stateVersion = "26.05";
 }
