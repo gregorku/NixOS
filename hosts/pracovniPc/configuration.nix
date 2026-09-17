@@ -189,10 +189,7 @@
     configurationLimit = 5;
   };
 
-  boot.loader.efi = {
-    canTouchEfiVariables = true;
-    efiSysMountPoint = "/boot/efi";
-  };
+  boot.loader.efi.canTouchEfiVariables = true;
 
   # ============================================================
   # ODEZVA SYSTÉMU PŘI VELKÉM ZÁPISU
