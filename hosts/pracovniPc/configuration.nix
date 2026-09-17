@@ -4,9 +4,14 @@
   lib,
   unstable,
   ...
-}:
-{
-  _module.args = { inherit unstable; };
+}: {
+  # ============================================================
+  # NIXPKGS / MODULY
+  # ============================================================
+
+  _module.args = {
+    inherit unstable;
+  };
 
   nixpkgs.config.allowUnfree = true;
 
@@ -15,6 +20,10 @@
   imports = [
     ./hardware-configuration.nix
 
+    # ----------------------------------------------------------
+    # ZÁKLADNÍ SYSTÉMOVÉ MODULY
+    # ----------------------------------------------------------
+
     ../../modules/common-users.nix
     ../../modules/common-desktop-kde.nix
     ../../modules/common-securityPc.nix
@@ -22,6 +31,7 @@
     ../../modules/common-printing.nix
     ../../modules/common-apps.nix
     ../../modules/common-flatpak.nix
+    ../../modules/common-appimage.nix
     ../../modules/common-filesystems.nix
     ../../modules/common-snapshots.nix
     ../../modules/gpu-amd.nix
@@ -34,6 +44,7 @@
     # ../../modules/common-wireguard.nix
     # ../../modules/hosts/pracovniPc-wireguard.nix
 
+    ../../modules/common-swap.nix
     ../../modules/common-networkmanager.nix
 
     # Vzdálený přístup
@@ -153,6 +164,25 @@
 
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # ------------------------------------------------------------
+  # systemd-boot
+  # ------------------------------------------------------------
+
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+  # ------------------------------------------------------------
+  # Odezva systému při velkém zápisu
+  # ------------------------------------------------------------
+
+  boot.kernel.sysctl = {
+    "vm.dirty_background_ratio" = 3;
+    "vm.dirty_ratio" = 6;
+    "vm.dirty_expire_centisecs" = 3000;
+    "vm.dirty_writeback_centisecs" = 500;
+  };
   # ─────────────────────────────────────
   # ⚠️ POVINNÉ – NIKDY NEMĚNIT PO INSTALACI
   # ─────────────────────────────────────
