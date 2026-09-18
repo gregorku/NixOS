@@ -1,12 +1,13 @@
-{ config, pkgs, lib, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   # ─────────────────────────────────────
   # DNAT konfigurace
   # ─────────────────────────────────────
-
   dnat = import ./dnat-domaServerPc.nix;
-
 
   # ─────────────────────────────────────
   # Generátor jednoho DNAT pravidla
@@ -17,11 +18,9 @@ let
   # iifname "br0" tcp dport 8182
   #   dnat ip to 10.110.100.220:8182
 
-  genRule = iface: r:
-    ''
-      iifname "${iface}" tcp dport ${toString r.port} dnat ip to ${r.target}
-    '';
-
+  genRule = iface: r: ''
+    iifname "${iface}" tcp dport ${toString r.port} dnat ip to ${r.target}
+  '';
 
   # ─────────────────────────────────────
   # Veřejné / LAN DNAT porty přes br0
@@ -37,9 +36,8 @@ let
 
   publicRules =
     map
-      (r: genRule "br0" r)
-      dnat.public;
-
+    (r: genRule "br0" r)
+    dnat.public;
 
   # ─────────────────────────────────────
   # WireGuard DNAT
@@ -60,23 +58,19 @@ let
   #     (r: genRule "wg3" r)
   #     dnat.wireguard.wg3;
 
-
   # ─────────────────────────────────────
   # Spojení aktivních DNAT pravidel
   # ─────────────────────────────────────
 
   allDnatRules =
     lib.concatStringsSep "\n"
-      publicRules;
-
-in
-{
+    publicRules;
+in {
   # ─────────────────────────────────────
   # NFTABLES
   # ─────────────────────────────────────
 
   networking.nftables.enable = true;
-
 
   # Standardní NixOS firewall je vypnutý.
   #
@@ -84,7 +78,6 @@ in
   # nftables ruleset.
 
   networking.firewall.enable = false;
-
 
   # ─────────────────────────────────────
   # NFTABLES RULESET
@@ -113,7 +106,9 @@ in
           127.0.0.1/32,
           192.168.100.0/24,
           10.10.10.0/24,
-          10.100.100.0/24
+          10.100.100.0/24,
+          10.110.100.0/24,
+          10.120.100.0/24
         };
       }
 
@@ -385,7 +380,6 @@ in
       # v konfiguraci sítě incusbr0.
     }
   '';
-
 
   # ─────────────────────────────────────
   # BALÍČKY
