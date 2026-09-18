@@ -1,17 +1,17 @@
-{ config, pkgs, lib, ... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   dnat = import ./dnat-test.nix;
   # generátor jednoho DNAT pravidla
-  genRule = iface: r:
-    ''iifname "${iface}" tcp dport ${toString r.port} dnat ip to ${r.target}'';
+  genRule = iface: r: ''iifname "${iface}" tcp dport ${toString r.port} dnat ip to ${r.target}'';
   # veřejné DNAT porty z ens3
   publicRules = map (r: genRule "ens3" r) dnat.public;
   allDnatRules =
     lib.concatStringsSep "\n" publicRules;
-
-in
-{
+in {
   networking.nftables.enable = true;
   networking.firewall.enable = false;
 
@@ -23,7 +23,9 @@ in
         flags interval;
         elements = {
           127.0.0.1/32,
-          10.100.100.0/24
+          10.100.100.0/24,
+          10.110.100.0/24,
+          10.120.100.0/24
         };
       }
 
