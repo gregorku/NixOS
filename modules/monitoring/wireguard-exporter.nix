@@ -30,6 +30,10 @@
     serviceConfig = {
       Type = "simple";
 
+      Environment = [
+        "PATH=${pkgs.wireguard-tools}/bin"
+      ];
+
       ExecStart = ''
         ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
           --address 10.120.100.1 \
