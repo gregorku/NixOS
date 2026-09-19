@@ -4,8 +4,7 @@
   lib,
   inputs,
   ...
-}:
-{
+}: {
   imports = [
     ./hardware-configuration.nix
 
@@ -54,6 +53,7 @@
     # Monitoring server Pc.
     #
     ../../modules/server/monitoringVPS.nix
+    ../../modules/monitoring/wireguard-exporter.nix
   ];
 
   ##################################################
