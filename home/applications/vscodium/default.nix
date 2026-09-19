@@ -154,17 +154,41 @@ in {
     NEW_SIGNATURE="${vscodiumExtensionsSignature}"
 
     # --------------------------------------------------------
-    # Pokud se sada rozšíření od minula nezměnila, nic neděláme.
+    # Pokud se sada rozšíření od minula nezměnila A všechny
+    # adresáře rozšíření skutečně existují, nic neděláme.
     #
-    # Bez tohoto kroku by se extensions.json a .obsolete mazaly
-    # při KAŽDÉM home-manager rebuildu, i když se rozšíření vůbec
-    # nezměnila. VSCodium pak při dalším startu bere všechna
+    # Bez kontroly signature by se extensions.json a .obsolete
+    # mazaly při KAŽDÉM home-manager rebuildu, i když se rozšíření
+    # vůbec nezměnila. VSCodium pak při dalším startu bere všechna
     # rozšíření jako "nově objevená" a vyžaduje reload okna -
     # u jazykového balíčku se to projeví jako pád zpět do
     # angličtiny, dokud reload neproběhne.
+    #
+    # Bez kontroly existence adresářů by ale ruční odinstalování
+    # rozšíření přes GUI VSCodia (nebo smazání adresáře) zůstalo
+    # nepovšimnuto, dokud by se nezměnila i verze některé Nix
+    # derivace - do té doby by se dané rozšíření nikdy neobnovilo.
     # --------------------------------------------------------
 
-    if [ -f "$SIGNATURE_FILE" ] && [ "$(cat "$SIGNATURE_FILE")" = "$NEW_SIGNATURE" ]; then
+    NEEDS_SYNC=false
+
+    if [ ! -f "$SIGNATURE_FILE" ] || [ "$(cat "$SIGNATURE_FILE")" != "$NEW_SIGNATURE" ]; then
+      NEEDS_SYNC=true
+    fi
+
+    for EXT_DIR in \
+      "jnoortheen.nix-ide" \
+      "kamadorueda.alejandra" \
+      "MS-CEINTL.vscode-language-pack-cs" \
+      "redhat.vscode-yaml" \
+      "ZooCodeOrganization.zoo-code"
+    do
+      if [ ! -d "$EXTENSIONS/$EXT_DIR" ]; then
+        NEEDS_SYNC=true
+      fi
+    done
+
+    if [ "$NEEDS_SYNC" = false ]; then
       echo "VSCodium rozšíření beze změny, přeskakuji synchronizaci." >&2
     else
 
