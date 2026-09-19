@@ -49,6 +49,66 @@
     "${zooCode}"
   ]);
 
+  # --------------------------------------------------------
+  # extensions.json generovaný přímo v Nixu.
+  #
+  # Dřívější přístup (smazat extensions.json a nechat VSCodium,
+  # aby si rozšíření samo "objevilo" při skenování adresáře) se
+  # ukázal jako nespolehlivý - v praxi se stalo, že jedno z
+  # rozšíření (redhat.vscode-yaml) VSCodium při pasivním skenu
+  # z neznámého důvodu vynechalo, přestože bylo na disku validně
+  # zkopírované. Proto místo spoléhání na autodetekci zapisujeme
+  # manifest s korektními záznamy rovnou.
+  # --------------------------------------------------------
+
+  mkExtensionEntry = {
+    id,
+    version,
+    relativeLocation,
+  }: {
+    identifier.id = id;
+    version = version;
+    location = {
+      "$mid" = 1;
+      path = "${vscodiumExtensionsDir}/${relativeLocation}";
+      scheme = "file";
+    };
+    relativeLocation = relativeLocation;
+    metadata = {
+      installedTimestamp = 0;
+      source = "gallery";
+      isPreReleaseVersion = false;
+    };
+  };
+
+  vscodiumExtensionsManifest = pkgs.writeText "vscodium-extensions.json" (builtins.toJSON (map mkExtensionEntry [
+    {
+      id = "jnoortheen.nix-ide";
+      version = pkgs.vscode-extensions.jnoortheen.nix-ide.version;
+      relativeLocation = "jnoortheen.nix-ide";
+    }
+    {
+      id = "kamadorueda.alejandra";
+      version = pkgs.vscode-extensions.kamadorueda.alejandra.version;
+      relativeLocation = "kamadorueda.alejandra";
+    }
+    {
+      id = "ms-ceintl.vscode-language-pack-cs";
+      version = pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs.version;
+      relativeLocation = "MS-CEINTL.vscode-language-pack-cs";
+    }
+    {
+      id = "redhat.vscode-yaml";
+      version = pkgs.vscode-extensions.redhat.vscode-yaml.version;
+      relativeLocation = "redhat.vscode-yaml";
+    }
+    {
+      id = "zoocodeorganization.zoo-code";
+      version = zooCode.version;
+      relativeLocation = "ZooCodeOrganization.zoo-code";
+    }
+  ]));
+
   vscodium = pkgs.symlinkJoin {
     name = "vscodium-custom";
 
@@ -275,13 +335,17 @@ in {
     # --------------------------------------------------------
     # Runtime metadata VSCodiumu
     #
-    # VSCodium je při spuštění vytvoří znovu podle skutečného
-    # obsahu extensions/.
+    # Místo mazání extensions.json (a spoléhání na to, že ho
+    # VSCodium při startu samo správně znovu vytvoří skenováním
+    # adresáře - což se ukázalo jako nespolehlivé) zapisujeme
+    # manifest vygenerovaný přímo v Nixu, s korektními záznamy
+    # pro všechna spravovaná rozšíření.
     # --------------------------------------------------------
 
-    rm -f \
-      "$EXTENSIONS/.obsolete" \
-      "$EXTENSIONS/extensions.json"
+    rm -f "$EXTENSIONS/.obsolete"
+
+    cp -f "${vscodiumExtensionsManifest}" "$EXTENSIONS/extensions.json"
+    chmod u+rw "$EXTENSIONS/extensions.json"
 
     echo "$NEW_SIGNATURE" > "$SIGNATURE_FILE"
 
