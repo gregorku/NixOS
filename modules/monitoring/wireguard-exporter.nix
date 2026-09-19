@@ -23,6 +23,10 @@
       "wireguard-wg3.service"
     ];
 
+    wantedBy = [
+      "multi-user.target"
+    ];
+
     serviceConfig = {
       Type = "simple";
 
