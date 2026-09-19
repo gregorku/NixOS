@@ -3,9 +3,7 @@
   pkgs,
   lib,
   ...
-}:
-
-let
+}: let
   dnat = import ./dnat-netcupVPSServer.nix;
 
   # všechna WireGuard rozhraní
@@ -31,9 +29,7 @@ let
 
   # nft syntaxe { "wg0", "wg1", ... }
   wgSet = "{ " + lib.concatStringsSep ", " (map (i: ''"${i}"'') wgIfaces) + " }";
-
-in
-{
+in {
   networking.nftables.enable = true;
   networking.firewall.enable = false;
 
@@ -77,7 +73,7 @@ in
 
         # DNS + DHCP pro Incus
         iifname "incusbr0" udp dport { 53, 67 } accept
-        iifname "incusbr0" tcp dport { 53, 9100 } accept
+        iifname "incusbr0" tcp dport { 53, 9100, 9586 } accept
 
         # Cockpit
         tcp dport 9090 ip saddr @trusted accept
