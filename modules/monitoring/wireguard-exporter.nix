@@ -36,7 +36,7 @@
 
       ExecStart = ''
         ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
-          --address 10.120.100.1 \
+          --address 10.10.10.1 \
           --port 9586 \
           --interfaces wg1 wg2 wg3 \
           --export_remote_ip_and_port true \
