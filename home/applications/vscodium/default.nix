@@ -45,6 +45,7 @@
     "${pkgs.vscode-extensions.jnoortheen.nix-ide}"
     "${pkgs.vscode-extensions.kamadorueda.alejandra}"
     "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}"
+    "${pkgs.vscode-extensions.redhat.vscode-yaml}"
     "${zooCode}"
   ]);
 
@@ -192,6 +193,8 @@ in {
       "$EXTENSIONS/kamadorueda.alejandra-"* \
       "$EXTENSIONS/MS-CEINTL.vscode-language-pack-cs" \
       "$EXTENSIONS/ms-ceintl.vscode-language-pack-cs-"* \
+      "$EXTENSIONS/redhat.vscode-yaml" \
+      "$EXTENSIONS/redhat.vscode-yaml-"* \
       "$EXTENSIONS/ZooCodeOrganization.zoo-code" \
       "$EXTENSIONS/zoocodeorganization.zoo-code-"*
 
@@ -217,6 +220,14 @@ in {
 
     cp -a \
       "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}/share/vscode/extensions/MS-CEINTL.vscode-language-pack-cs" \
+      "$EXTENSIONS/"
+
+    # --------------------------------------------------------
+    # Red Hat YAML
+    # --------------------------------------------------------
+
+    cp -a \
+      "${pkgs.vscode-extensions.redhat.vscode-yaml}/share/vscode/extensions/redhat.vscode-yaml" \
       "$EXTENSIONS/"
 
     # --------------------------------------------------------
