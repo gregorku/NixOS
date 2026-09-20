@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   virtualisation.incus = {
     enable = true;
     ui.enable = true;
@@ -29,7 +31,7 @@
       "network-online.target"
     ];
 
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = ["multi-user.target"];
 
     serviceConfig.Type = "oneshot";
 
@@ -43,7 +45,7 @@
       # ----------------------
       # NAT network (incusbr0)
       # ----------------------
-      if ! $INCUS network list | grep -q '^| incusbr0 '; then
+      if ! $INCUS network show incusbr0 >/dev/null 2>&1; then
         echo "Creating incusbr0..."
 
         $INCUS network create incusbr0 \
