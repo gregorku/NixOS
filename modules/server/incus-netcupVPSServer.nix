@@ -57,7 +57,7 @@
       # ----------------------
       # Default storage (dir)
       # ----------------------
-      if ! $INCUS storage list | grep -q '^| default '; then
+      if ! $INCUS storage show default >/dev/null 2>&1; then
         echo "Creating default dir storage..."
 
         $INCUS storage create default dir
