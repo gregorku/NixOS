@@ -4,25 +4,24 @@
   lib,
   ...
 }: let
-  ##################################################
-  # WireGuard peer metadata
-  #
-  # Společný zdroj názvů, veřejných klíčů a IP.
-  ##################################################
   peers = import ../server/wireguard-peers.nix;
 
-  ##################################################
-  # Konfigurace pro prometheus-wireguard-exporter
-  #
-  # Exporter očekává:
-  #
-  # [Peer]
-  # # jméno peeru
-  # PublicKey = ...
-  #
-  # Proto generujeme jeden [Peer] blok pro každý
-  # veřejný klíč na každém WireGuard rozhraní.
-  ##################################################
+  mkPeer = peer: {
+    publicKey = peer.publicKey;
+    allowedIPs = [peer.allowedIP];
+  };
+
+  peersForInterface = interface:
+    lib.mapAttrsToList
+    (
+      _: peer:
+        mkPeer peer.${interface}
+    )
+    (
+      lib.filterAttrs
+      (_: peer: peer.${interface} or null != null)
+      peers
+    );
 
   peerNamesConfig =
     lib.concatStringsSep "\n\n"
@@ -41,6 +40,7 @@
                   [Peer]
                   # ${peer.name}
                   PublicKey = ${peer.wg1.publicKey}
+                  AllowedIPs = ${peer.wg1.allowedIP}
                 ''
                 else null
               )
@@ -51,6 +51,7 @@
                   [Peer]
                   # ${peer.name}
                   PublicKey = ${peer.wg2.publicKey}
+                  AllowedIPs = ${peer.wg2.allowedIP}
                 ''
                 else null
               )
@@ -61,6 +62,7 @@
                   [Peer]
                   # ${peer.name}
                   PublicKey = ${peer.wg3.publicKey}
+                  AllowedIPs = ${peer.wg3.allowedIP}
                 ''
                 else null
               )
@@ -70,29 +72,14 @@
       )
     );
 in {
-  ##################################################
-  # WireGuard exporter package
-  ##################################################
-
   environment.systemPackages = [
     pkgs.prometheus-wireguard-exporter
   ];
-
-  ##################################################
-  # Exporter peer names configuration
-  #
-  # Soubor je generovaný deklarativně z
-  # wireguard-peers.nix.
-  ##################################################
 
   environment.etc."prometheus-wireguard-exporter/peers.conf" = {
     text = peerNamesConfig;
     mode = "0444";
   };
-
-  ##################################################
-  # Prometheus WireGuard Exporter
-  ##################################################
 
   systemd.services.prometheus-wireguard-exporter = {
     description = "Prometheus WireGuard Exporter";
