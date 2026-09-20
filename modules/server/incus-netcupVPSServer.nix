@@ -80,6 +80,13 @@
         $INCUS profile device set default eth0 \
           network=incusbr0
       fi
+
+      # ----------------------
+      # Prometheus metrics
+      # ----------------------
+      echo "Configuring metrics endpoint..."
+
+      $INCUS config set core.metrics_address 10.10.10.1:8444
     '';
   };
 }
