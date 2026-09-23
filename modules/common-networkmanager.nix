@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   # ----------------------
   # NetworkManager
   # ----------------------
@@ -30,7 +33,7 @@
 
     # ✔ bezpečné omezení (volitelné)
     # zakáže loopback, jinak nechá Avahi vybrat správná rozhraní
-    denyInterfaces = [ "lo" ];
+    denyInterfaces = ["lo"];
   };
 
   # ----------------------
@@ -49,7 +52,10 @@
   ];
 
   # ----------------------
-  # Uživatel může spravovat síť
+  # Uživatel může spravovat síť a sériová zařízení
   # ----------------------
-  users.users.gregor.extraGroups = [ "networkmanager" ];
+  users.users.gregor.extraGroups = [
+    "networkmanager"
+    "dialout"
+  ];
 }
