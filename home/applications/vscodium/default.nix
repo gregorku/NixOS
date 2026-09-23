@@ -10,6 +10,10 @@
 
   vscodiumExtensionsDir = "${vscodiumDataDir}/extensions";
 
+  # --------------------------------------------------------
+  # Zoo Code
+  # --------------------------------------------------------
+
   zooCode = pkgs.stdenvNoCC.mkDerivation {
     pname = "zoo-code";
     version = "3.82.0";
@@ -38,27 +42,68 @@
     '';
   };
 
-  # Podpis aktuální sady rozšíření. Mění se pouze tehdy, když se
-  # skutečně změní obsah některého z derivací níže (nová verze,
-  # jiný hash apod.) - ne při každém home-manager rebuildu.
+  # --------------------------------------------------------
+  # PlatformIO IDE
+  #
+  # PlatformIO IDE 3.3.4
+  #
+  # PlatformIO IDE používá ms-vscode.cpptools jako
+  # extensionDependency, proto instalujeme obě rozšíření.
+  # --------------------------------------------------------
+
+  platformioIde = pkgs.stdenvNoCC.mkDerivation {
+    pname = "platformio-ide";
+    version = "3.3.4";
+
+    src = pkgs.fetchurl {
+      url =
+        "https://github.com/platformio/platformio-vscode-ide/releases/download/"
+        + "v3.3.4/platformio-ide-3.3.4.vsix";
+
+      hash = "sha256-qfNz4IYjCmCMFLtAkbGTW5xnsVT8iDnFWjrgkmr2Slk=";
+    };
+
+    nativeBuildInputs = [
+      pkgs.unzip
+    ];
+
+    dontUnpack = true;
+
+    installPhase = ''
+      mkdir -p "$out/share/vscode/extensions/platformio.platformio-ide"
+
+      unzip -q "$src" -d "$TMPDIR/platformio-ide"
+
+      cp -r "$TMPDIR/platformio-ide/extension/." \
+        "$out/share/vscode/extensions/platformio.platformio-ide/"
+    '';
+  };
+
+  # --------------------------------------------------------
+  # Podpis aktuální sady rozšíření.
+  #
+  # Mění se pouze tehdy, když se skutečně změní obsah
+  # některého z derivací níže.
+  # --------------------------------------------------------
+
   vscodiumExtensionsSignature = builtins.hashString "sha256" (builtins.concatStringsSep "\n" [
     "${pkgs.vscode-extensions.jnoortheen.nix-ide}"
     "${pkgs.vscode-extensions.kamadorueda.alejandra}"
     "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}"
     "${pkgs.vscode-extensions.redhat.vscode-yaml}"
+    "${pkgs.vscode-extensions.ms-vscode.cpptools}"
     "${zooCode}"
+    "${platformioIde}"
   ]);
 
   # --------------------------------------------------------
   # extensions.json generovaný přímo v Nixu.
   #
   # Dřívější přístup (smazat extensions.json a nechat VSCodium,
-  # aby si rozšíření samo "objevilo" při skenování adresáře) se
-  # ukázal jako nespolehlivý - v praxi se stalo, že jedno z
-  # rozšíření (redhat.vscode-yaml) VSCodium při pasivním skenu
-  # z neznámého důvodu vynechalo, přestože bylo na disku validně
-  # zkopírované. Proto místo spoléhání na autodetekci zapisujeme
-  # manifest s korektními záznamy rovnou.
+  # aby si rozšíření samo "objevilo" při skenování adresáře)
+  # se ukázal jako nespolehlivý.
+  #
+  # Proto zapisujeme manifest s korektními záznamy rovnou.
   # --------------------------------------------------------
 
   mkExtensionEntry = {
@@ -103,9 +148,19 @@
       relativeLocation = "redhat.vscode-yaml";
     }
     {
+      id = "ms-vscode.cpptools";
+      version = pkgs.vscode-extensions.ms-vscode.cpptools.version;
+      relativeLocation = "ms-vscode.cpptools";
+    }
+    {
       id = "zoocodeorganization.zoo-code";
       version = zooCode.version;
       relativeLocation = "ZooCodeOrganization.zoo-code";
+    }
+    {
+      id = "platformio.platformio-ide";
+      version = platformioIde.version;
+      relativeLocation = "platformio.platformio-ide";
     }
   ]));
 
@@ -160,17 +215,17 @@ in {
   # ------------------------------------------------------------
 
   home.activation.vscodiumSettings = config.lib.dag.entryAfter ["vscodiumDirectories"] ''
-          SETTINGS="${vscodiumUserDataDir}/User/settings.json"
+        SETTINGS="${vscodiumUserDataDir}/User/settings.json"
 
-          # Pokud zde zůstal starý Home Manager symlink,
-          # odstraníme ho.
-          if [ -L "$SETTINGS" ]; then
-            rm -f "$SETTINGS"
-          fi
+        # Pokud zde zůstal starý Home Manager symlink,
+        # odstraníme ho.
+        if [ -L "$SETTINGS" ]; then
+          rm -f "$SETTINGS"
+        fi
 
-          # Výchozí konfiguraci vytvoříme pouze při první instalaci.
-          if [ ! -e "$SETTINGS" ]; then
-            cat > "$SETTINGS" <<'EOF'
+        # Výchozí konfiguraci vytvoříme pouze při první instalaci.
+        if [ ! -e "$SETTINGS" ]; then
+          cat > "$SETTINGS" <<'EOF'
     {
       "editor.insertSpaces": true,
       "editor.tabSize": 2,
@@ -193,7 +248,7 @@ in {
       }
     }
     EOF
-          fi
+        fi
   '';
 
   # ------------------------------------------------------------
@@ -216,18 +271,6 @@ in {
     # --------------------------------------------------------
     # Pokud se sada rozšíření od minula nezměnila A všechny
     # adresáře rozšíření skutečně existují, nic neděláme.
-    #
-    # Bez kontroly signature by se extensions.json a .obsolete
-    # mazaly při KAŽDÉM home-manager rebuildu, i když se rozšíření
-    # vůbec nezměnila. VSCodium pak při dalším startu bere všechna
-    # rozšíření jako "nově objevená" a vyžaduje reload okna -
-    # u jazykového balíčku se to projeví jako pád zpět do
-    # angličtiny, dokud reload neproběhne.
-    #
-    # Bez kontroly existence adresářů by ale ruční odinstalování
-    # rozšíření přes GUI VSCodia (nebo smazání adresáře) zůstalo
-    # nepovšimnuto, dokud by se nezměnila i verze některé Nix
-    # derivace - do té doby by se dané rozšíření nikdy neobnovilo.
     # --------------------------------------------------------
 
     NEEDS_SYNC=false
@@ -241,7 +284,9 @@ in {
       "kamadorueda.alejandra" \
       "MS-CEINTL.vscode-language-pack-cs" \
       "redhat.vscode-yaml" \
-      "ZooCodeOrganization.zoo-code"
+      "ms-vscode.cpptools" \
+      "ZooCodeOrganization.zoo-code" \
+      "platformio.platformio-ide"
     do
       if [ ! -d "$EXTENSIONS/$EXT_DIR" ]; then
         NEEDS_SYNC=true
@@ -252,110 +297,112 @@ in {
       echo "VSCodium rozšíření beze změny, přeskakuji synchronizaci." >&2
     else
 
-    # --------------------------------------------------------
-    # OPRAVA PRÁV EXISTUJÍCÍCH ROZŠÍŘENÍ
-    #
-    # Rozšíření byla dříve kopírována pomocí cp -a z Nix store.
-    # Ten obsahuje read-only soubory/adresáře.
-    #
-    # Před rm -rf proto musíme lokální kopie zpřístupnit
-    # pro zápis.
-    # --------------------------------------------------------
+      # --------------------------------------------------------
+      # OPRAVA PRÁV EXISTUJÍCÍCH ROZŠÍŘENÍ
+      # --------------------------------------------------------
 
-    if [ -d "$EXTENSIONS" ]; then
+      if [ -d "$EXTENSIONS" ]; then
+        chmod -R u+rwX "$EXTENSIONS"
+      fi
+
+      # --------------------------------------------------------
+      # Odstranění starých verzí/symlinků
+      # --------------------------------------------------------
+
+      rm -rf \
+        "$EXTENSIONS/jnoortheen.nix-ide" \
+        "$EXTENSIONS/jnoortheen.nix-ide-"* \
+        "$EXTENSIONS/kamadorueda.alejandra" \
+        "$EXTENSIONS/kamadorueda.alejandra-"* \
+        "$EXTENSIONS/MS-CEINTL.vscode-language-pack-cs" \
+        "$EXTENSIONS/ms-ceintl.vscode-language-pack-cs-"* \
+        "$EXTENSIONS/redhat.vscode-yaml" \
+        "$EXTENSIONS/redhat.vscode-yaml-"* \
+        "$EXTENSIONS/ms-vscode.cpptools" \
+        "$EXTENSIONS/ms-vscode.cpptools-"* \
+        "$EXTENSIONS/ZooCodeOrganization.zoo-code" \
+        "$EXTENSIONS/zoocodeorganization.zoo-code-"* \
+        "$EXTENSIONS/platformio.platformio-ide" \
+        "$EXTENSIONS/platformio.platformio-ide-"*
+
+      # --------------------------------------------------------
+      # Nix IDE
+      # --------------------------------------------------------
+
+      cp -a \
+        "${pkgs.vscode-extensions.jnoortheen.nix-ide}/share/vscode/extensions/jnoortheen.nix-ide" \
+        "$EXTENSIONS/"
+
+      # --------------------------------------------------------
+      # Alejandra
+      # --------------------------------------------------------
+
+      cp -a \
+        "${pkgs.vscode-extensions.kamadorueda.alejandra}/share/vscode/extensions/kamadorueda.alejandra" \
+        "$EXTENSIONS/"
+
+      # --------------------------------------------------------
+      # Czech Language Pack
+      # --------------------------------------------------------
+
+      cp -a \
+        "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}/share/vscode/extensions/MS-CEINTL.vscode-language-pack-cs" \
+        "$EXTENSIONS/"
+
+      # --------------------------------------------------------
+      # Red Hat YAML
+      # --------------------------------------------------------
+
+      cp -a \
+        "${pkgs.vscode-extensions.redhat.vscode-yaml}/share/vscode/extensions/redhat.vscode-yaml" \
+        "$EXTENSIONS/"
+
+      # --------------------------------------------------------
+      # Microsoft C/C++
+      #
+      # PlatformIO IDE 3.3.4 ho používá jako extensionDependency.
+      # --------------------------------------------------------
+
+      cp -a \
+        "${pkgs.vscode-extensions.ms-vscode.cpptools}/share/vscode/extensions/ms-vscode.cpptools" \
+        "$EXTENSIONS/"
+
+      # --------------------------------------------------------
+      # Zoo Code
+      # --------------------------------------------------------
+
+      cp -a \
+        "${zooCode}/share/vscode/extensions/ZooCodeOrganization.zoo-code" \
+        "$EXTENSIONS/"
+
+      # --------------------------------------------------------
+      # PlatformIO IDE
+      # --------------------------------------------------------
+
+      cp -a \
+        "${platformioIde}/share/vscode/extensions/platformio.platformio-ide" \
+        "$EXTENSIONS/"
+
+      # --------------------------------------------------------
+      # DŮLEŽITÉ:
+      # cp -a zachoval read-only režimy z /nix/store.
+      #
+      # Uděláme z lokálních kopií normální zapisovatelné soubory
+      # a adresáře.
+      # --------------------------------------------------------
+
       chmod -R u+rwX "$EXTENSIONS"
-    fi
 
-    # --------------------------------------------------------
-    # Odstranění starých verzí/symlinků
-    # --------------------------------------------------------
+      # --------------------------------------------------------
+      # Runtime metadata VSCodiumu
+      # --------------------------------------------------------
 
-    rm -rf \
-      "$EXTENSIONS/jnoortheen.nix-ide" \
-      "$EXTENSIONS/jnoortheen.nix-ide-"* \
-      "$EXTENSIONS/kamadorueda.alejandra" \
-      "$EXTENSIONS/kamadorueda.alejandra-"* \
-      "$EXTENSIONS/MS-CEINTL.vscode-language-pack-cs" \
-      "$EXTENSIONS/ms-ceintl.vscode-language-pack-cs-"* \
-      "$EXTENSIONS/redhat.vscode-yaml" \
-      "$EXTENSIONS/redhat.vscode-yaml-"* \
-      "$EXTENSIONS/ZooCodeOrganization.zoo-code" \
-      "$EXTENSIONS/zoocodeorganization.zoo-code-"*
+      rm -f "$EXTENSIONS/.obsolete"
 
-    # --------------------------------------------------------
-    # Nix IDE
-    # --------------------------------------------------------
+      cp -f "${vscodiumExtensionsManifest}" "$EXTENSIONS/extensions.json"
+      chmod u+rw "$EXTENSIONS/extensions.json"
 
-    cp -a \
-      "${pkgs.vscode-extensions.jnoortheen.nix-ide}/share/vscode/extensions/jnoortheen.nix-ide" \
-      "$EXTENSIONS/"
-
-    # --------------------------------------------------------
-    # Alejandra
-    # --------------------------------------------------------
-
-    cp -a \
-      "${pkgs.vscode-extensions.kamadorueda.alejandra}/share/vscode/extensions/kamadorueda.alejandra" \
-      "$EXTENSIONS/"
-
-    # --------------------------------------------------------
-    # Czech Language Pack
-    # --------------------------------------------------------
-
-    cp -a \
-      "${pkgs.vscode-extensions.ms-ceintl.vscode-language-pack-cs}/share/vscode/extensions/MS-CEINTL.vscode-language-pack-cs" \
-      "$EXTENSIONS/"
-
-    # --------------------------------------------------------
-    # Red Hat YAML
-    # --------------------------------------------------------
-
-    cp -a \
-      "${pkgs.vscode-extensions.redhat.vscode-yaml}/share/vscode/extensions/redhat.vscode-yaml" \
-      "$EXTENSIONS/"
-
-    # --------------------------------------------------------
-    # Zoo Code
-    # --------------------------------------------------------
-
-    cp -a \
-      "${zooCode}/share/vscode/extensions/ZooCodeOrganization.zoo-code" \
-      "$EXTENSIONS/"
-
-    # --------------------------------------------------------
-    # PlatformIO IDE
-    # --------------------------------------------------------
-
-    cp -a \
-      "${platformioIde}/share/vscode/extensions/platformio.platformio-ide" \
-      "$EXTENSIONS/"
-
-    # --------------------------------------------------------
-    # DŮLEŽITÉ:
-    # cp -a zachoval read-only režimy z /nix/store.
-    #
-    # Uděláme z lokálních kopií normální zapisovatelné soubory
-    # a adresáře.
-    # --------------------------------------------------------
-
-    chmod -R u+rwX "$EXTENSIONS"
-
-    # --------------------------------------------------------
-    # Runtime metadata VSCodiumu
-    #
-    # Místo mazání extensions.json (a spoléhání na to, že ho
-    # VSCodium při startu samo správně znovu vytvoří skenováním
-    # adresáře - což se ukázalo jako nespolehlivé) zapisujeme
-    # manifest vygenerovaný přímo v Nixu, s korektními záznamy
-    # pro všechna spravovaná rozšíření.
-    # --------------------------------------------------------
-
-    rm -f "$EXTENSIONS/.obsolete"
-
-    cp -f "${vscodiumExtensionsManifest}" "$EXTENSIONS/extensions.json"
-    chmod u+rw "$EXTENSIONS/extensions.json"
-
-    echo "$NEW_SIGNATURE" > "$SIGNATURE_FILE"
+      echo "$NEW_SIGNATURE" > "$SIGNATURE_FILE"
 
     fi
   '';
