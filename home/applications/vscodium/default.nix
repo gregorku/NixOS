@@ -60,7 +60,7 @@
         "https://github.com/platformio/platformio-vscode-ide/releases/download/"
         + "v3.3.4/platformio-ide-3.3.4.vsix";
 
-      hash = "sha256-qfNz4IYjCmCMFLtAkbGTW5xnsVT8iDnFWjrgkmr2Slk=";
+      hash = "sha256-XQ+XW0OgOmg/HYduvfN11Gm8Tp5zThU9nzz7J1R2D0c=";
     };
 
     nativeBuildInputs = [
