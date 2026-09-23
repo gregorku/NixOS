@@ -77,6 +77,9 @@ in {
         iifname "incusbr0" udp dport { 53, 67 } accept
         iifname "incusbr0" tcp dport { 53, 8443, 8444, 9100, 9586 } accept
 
+        # NVR
+        iifname "ens3" oifname "wg2" ip daddr 10.110.100.200 tcp dport 8000 accept
+
         # Cockpit
         tcp dport 9090 ip saddr @trusted accept
         tcp dport 9090 iifname "wg1" accept
