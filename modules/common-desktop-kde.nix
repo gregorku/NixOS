@@ -71,6 +71,10 @@
 
     # Telefony
     android-tools
+
+    # esp32
+    gparted
+    picocom
   ];
 
   # ----------------------
