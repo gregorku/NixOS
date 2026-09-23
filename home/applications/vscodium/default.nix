@@ -323,6 +323,14 @@ in {
       "$EXTENSIONS/"
 
     # --------------------------------------------------------
+    # PlatformIO IDE
+    # --------------------------------------------------------
+
+    cp -a \
+      "${platformioIde}/share/vscode/extensions/platformio.platformio-ide" \
+      "$EXTENSIONS/"
+
+    # --------------------------------------------------------
     # DŮLEŽITÉ:
     # cp -a zachoval read-only režimy z /nix/store.
     #
