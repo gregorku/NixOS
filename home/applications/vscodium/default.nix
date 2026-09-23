@@ -76,6 +76,14 @@
 
       cp -r "$TMPDIR/platformio-ide/extension/." \
         "$out/share/vscode/extensions/platformio.platformio-ide/"
+
+      # Metadata PlatformIO IDE z kořene VSIX
+      for file in CHANGELOG.md LICENSE README.md; do
+        if [ -f "$TMPDIR/platformio-ide/$file" ]; then
+          cp "$TMPDIR/platformio-ide/$file" \
+            "$out/share/vscode/extensions/platformio.platformio-ide/"
+        fi
+      done
     '';
   };
 
