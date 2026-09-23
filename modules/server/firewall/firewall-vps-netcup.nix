@@ -122,7 +122,9 @@ in {
         # NVR
         iifname "ens3" oifname "wg2" ip daddr 10.110.100.200 tcp dport 8000 accept
         iifname "ens3" oifname "wg2" ip daddr 10.110.100.210 tcp dport 8181 accept
+        iifname "ens3" oifname "wg2" ip daddr 10.110.100.210 tcp dport 5540 accept
         iifname "ens3" oifname "wg2" ip daddr 10.110.100.220 tcp dport 8182 accept
+        iifname "ens3" oifname "wg2" ip daddr 10.110.100.220 tcp dport 5541 accept
 
         limit rate 5/minute log prefix "FW DROP FWD: "
         drop
