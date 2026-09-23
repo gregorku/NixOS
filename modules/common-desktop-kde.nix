@@ -3,9 +3,7 @@
   pkgs,
   lib,
   ...
-}:
-
-{
+}: {
   # ----------------------
   # 🖥️ Display manager
   # ----------------------
@@ -49,7 +47,6 @@
   # 📦 KDE balíčky
   # ----------------------
   environment.systemPackages = with pkgs; [
-
     # KDE Partition Manager
     kdePackages.partitionmanager
 
@@ -71,6 +68,9 @@
     # 🎨 Theme
     catppuccin-kde
     papirus-icon-theme
+
+    # Telefony
+    android-tools
   ];
 
   # ----------------------
@@ -78,19 +78,19 @@
   # ----------------------
   security.sudo.extraRules = [
     {
-      users = [ "gregor" ];
+      users = ["gregor"];
       commands = [
         {
           command = "/run/current-system/sw/bin/openconnect";
-          options = [ "NOPASSWD" ];
+          options = ["NOPASSWD"];
         }
         {
           command = "/run/current-system/sw/bin/pkill";
-          options = [ "NOPASSWD" ];
+          options = ["NOPASSWD"];
         }
         {
           command = "/run/current-system/sw/bin/wg-quick";
-          options = [ "NOPASSWD" ];
+          options = ["NOPASSWD"];
         }
       ];
     }
