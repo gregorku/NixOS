@@ -151,7 +151,7 @@
   #   zfs_2_4     meta.broken = false
   #
 
-  boot.supportedFilesystems = [ "zfs" ];
+  boot.supportedFilesystems = ["zfs"];
 
   boot.zfs.forceImportRoot = false;
 
@@ -167,18 +167,28 @@
   # KERNEL
   # ============================================================
   #
-  # Linux 7.2 – aktuálně používaná verze.
+  # Uzamčeno na konkrétní verzi Linux 7.2.6 kvůli kompatibilitě se ZFS.
   #
-  # linuxPackages_latest zde nepoužívat kvůli ZFS.
-  #
-  # Konkrétně flake poskytuje:
-  #   Linux 7.2.5
-  #   ZFS 2.4.4
-  #
-  # Kombinace je v aktuálním nixpkgs označena jako podporovaná.
+  # linuxPackages_latest ani standardní pkgs.linuxPackages_7_2 nepoužívat,
+  # protože point-release 7.2.7 způsobuje problémy se ZFS.
   #
 
-  boot.kernelPackages = pkgs.linuxPackages_7_2;
+  boot.kernelPackages = let
+    kernel_7_2_6 = pkgs.buildLinux {
+      version = "7.2.6";
+      modDirVersion = "7.2.6";
+
+      src = pkgs.fetchurl {
+        url = "mirror://kernel/linux/kernel/v7.x/linux-7.2.6.tar.xz";
+        # Dočasný hash. Při spuštění nixos-rebuild systém selže a vypíše správný SHA256 hash.
+        hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      };
+
+      # Přebírá standardní konfiguraci z nejblíže odpovídajícího sestavení v Nixpkgs
+      extraConfig = pkgs.linux_6_12.config or {};
+    };
+  in
+    pkgs.linuxPackagesFor kernel_7_2_6;
 
   # ============================================================
   # BOOTLOADER
