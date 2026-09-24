@@ -169,9 +169,6 @@
   #
   # Uzamčeno na konkrétní verzi Linux 7.2.6 kvůli kompatibilitě se ZFS.
   #
-  # linuxPackages_latest ani standardní pkgs.linuxPackages_7_2 nepoužívat,
-  # protože point-release 7.2.7 způsobuje problémy se ZFS.
-  #
 
   boot.kernelPackages = let
     kernel_7_2_6 = pkgs.buildLinux {
@@ -180,12 +177,14 @@
 
       src = pkgs.fetchurl {
         url = "mirror://kernel/linux/kernel/v7.x/linux-7.2.6.tar.xz";
-        # Dočasný hash. Při spuštění nixos-rebuild systém selže a vypíše správný SHA256 hash.
+        # Dočasný hash pro zjištění reálného SHA256
         hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
       };
 
-      # Přebírá standardní konfiguraci z nejblíže odpovídajícího sestavení v Nixpkgs
-      extraConfig = pkgs.linux_6_12.config or {};
+      # structuredExtraConfig očekává přímo klíče a hodnoty pro Kconfig
+      structuredExtraConfig = with pkgs.lib.kernel; {
+        # Zde můžete popřípadě specifikovat vlastní Kconfig příznaky (např. ZFS_FS = yes;)
+      };
     };
   in
     pkgs.linuxPackagesFor kernel_7_2_6;
