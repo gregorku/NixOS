@@ -21,89 +21,84 @@
     agenix.url = "github:ryantm/agenix";
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-unstable,
-      home-manager,
-      nix-flatpak,
-      agenix,
-      ...
-    }@inputs:
+  outputs = {
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    home-manager,
+    nix-flatpak,
+    agenix,
+    ...
+  } @ inputs: let
+    system = "x86_64-linux";
 
-    let
-      system = "x86_64-linux";
+    # 🖥️ Stable balíčky (NixOS 26.05)
+    stable = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
 
-      # 🖥️ Stable balíčky (NixOS 26.05)
-      stable = import nixpkgs {
+    # 📦 Unstable balíčky pouze pro jednotlivé aplikace
+    unstable = import nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+    };
+
+    # 🧠 Vytvoření hosta
+    mkHost = host: homeFile:
+      nixpkgs.lib.nixosSystem {
         inherit system;
-        config.allowUnfree = true;
-      };
 
-      # 📦 Unstable balíčky pouze pro jednotlivé aplikace
-      unstable = import nixpkgs-unstable {
-        inherit system;
-        config.allowUnfree = true;
-      };
-
-      # 🧠 Vytvoření hosta
-      mkHost =
-        host: homeFile:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-
-          specialArgs = {
-            inherit inputs stable unstable;
-          };
-
-          modules = [
-            ./hosts/${host}/configuration.nix
-
-            # 🏠 Home Manager
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-
-              home-manager.extraSpecialArgs = {
-                inherit stable unstable;
-              };
-
-              home-manager.users.gregor = import homeFile;
-            }
-
-            # 🔐 Agenix
-            agenix.nixosModules.default
-          ];
+        specialArgs = {
+          inherit inputs stable unstable;
         };
 
-    in
-    {
-      nixosConfigurations = {
+        modules = [
+          ./hosts/${host}/configuration.nix
 
-        # 💻 Notebooky (stable základ + možnost unstable balíčků)
-        ntbLenovo = mkHost "ntbLenovo" ./home/ntbLenovo.nix;
+          # 🏠 Home Manager
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
 
-        ntbDell = mkHost "ntbDell" ./home/ntbDell.nix;
+            home-manager.extraSpecialArgs = {
+              inherit stable unstable;
+            };
 
-        # 🖥️ vzdálená plocha
-        pracovniPc = mkHost "pracovniPc" ./home/pracovniPc.nix;
+            home-manager.users.gregor = import homeFile;
+          }
 
-        # 🖥️ Servery
-        domaPcServer = mkHost "domaPcServer" ./home/server.nix;
-
-        virtServerPrace = mkHost "virtServerPrace" ./home/server.nix;
-
-        netcupVPSServer = mkHost "netcupVPSServer" ./home/server.nix;
-
-        testVPSServer = mkHost "testVPSServer" ./home/server.nix;
-
-        test = mkHost "test" ./home/server.nix;
-
-        testServer = mkHost "testServer" ./home/server.nix;
-
-        testServerPrace = mkHost "testServerPrace" ./home/server.nix;
+          # 🔐 Agenix
+          agenix.nixosModules.default
+        ];
       };
+  in {
+    nixosConfigurations = {
+      # 💻 Notebooky (stable základ + možnost unstable balíčků)
+      ntbLenovo = mkHost "ntbLenovo" ./home/ntbLenovo.nix;
+
+      ntbDell = mkHost "ntbDell" ./home/ntbDell.nix;
+
+      # 🖥️ vzdálená plocha
+      pracovniPc = mkHost "pracovniPc" ./home/pracovniPc.nix;
+
+      # 🖥️ Servery
+      domaPcServer = mkHost "domaPcServer" ./home/server.nix;
+
+      virtServerPrace = mkHost "virtServerPrace" ./home/server.nix;
+
+      netcupVPSServer = mkHost "netcupVPSServer" ./home/server.nix;
+
+      bratrmachServer = mkHost "bratrmachServer" ./home/server.nix;
+
+      testVPSServer = mkHost "testVPSServer" ./home/server.nix;
+
+      test = mkHost "test" ./home/server.nix;
+
+      testServer = mkHost "testServer" ./home/server.nix;
+
+      testServerPrace = mkHost "testServerPrace" ./home/server.nix;
     };
+  };
 }
