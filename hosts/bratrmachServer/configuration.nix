@@ -1,4 +1,3 @@
-```nix
 {
   config,
   lib,
@@ -179,4 +178,3 @@
 
   system.stateVersion = "26.05";
 }
-```
