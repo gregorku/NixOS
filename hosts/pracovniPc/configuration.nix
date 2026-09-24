@@ -177,13 +177,11 @@
 
       src = pkgs.fetchurl {
         url = "mirror://kernel/linux/kernel/v7.x/linux-7.2.6.tar.xz";
-        # Dočasný hash pro zjištění reálného SHA256
-        hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        hash = "sha256-A5rvhPKwmUrto/T8/D0C7J16m7uQIOomTEP0Rshg9gY=";
       };
 
-      # structuredExtraConfig očekává přímo klíče a hodnoty pro Kconfig
       structuredExtraConfig = with pkgs.lib.kernel; {
-        # Zde můžete popřípadě specifikovat vlastní Kconfig příznaky (např. ZFS_FS = yes;)
+        # Případné vlastní parametry Kconfig
       };
     };
   in
