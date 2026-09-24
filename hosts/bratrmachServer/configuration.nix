@@ -1,3 +1,4 @@
+```nix
 {
   config,
   lib,
@@ -32,7 +33,7 @@
     #../../modules/server/firewall/firewall-virtServerPrace.nix
 
     # Bridge
-    #../../modules/server/server-br0.nix
+    ../../modules/server/server-br0.nix
 
     # Vzdálené odemykání LUKS přes SSH
     #../../modules/security/initrd-unlock.nix
@@ -52,32 +53,6 @@
     canTouchEfiVariables = true;
     efiSysMountPoint = "/boot";
   };
-
-  # ─────────────────────────────────────
-  # 🔐 LUKS2
-  # šifrovaný systémový disk
-  # ─────────────────────────────────────
-
-  #boot.initrd.luks.devices."cryptroot" = {
-  #device = "/dev/disk/by-uuid/476554ca-6f6b-420a-bc4a-7c056518f086";
-
-  # Automatické odemknutí během ladění.
-  # KEYFILE JE NA NEŠIFROVANÉM /boot!
-  #keyFile = "/boot/cryptroot.key";
-  #};
-
-  #boot.initrd.secrets = {
-  #  "/boot/cryptroot.key" = "/boot/cryptroot.key";
-  #};
-
-  # ─────────────────────────────────────
-  # 🔐 Alternativa – později můžeme použít
-  # keyfile pro automatické odemykání
-  # ─────────────────────────────────────
-
-  #boot.initrd.secrets = {
-  #  "/crypto_keyfile.bin" = "/boot/crypto_keyfile.bin";
-  #};
 
   # ─────────────────────────────────────
   # 🌐 INITRD NETWORK
@@ -145,14 +120,13 @@
   # 🌐 BRIDGE br0
   # ─────────────────────────────────────
   #
-  # Aktivujeme až po ověření skutečného
-  # názvu fyzického síťového rozhraní.
+  # Fyzické rozhraní tohoto Mini PC je enp2s0.
   #
 
-  #server.br0 = {
-  #  enable = true;
-  #  interface = "eno1";
-  #};
+  server.br0 = {
+    enable = true;
+    interface = "enp2s0";
+  };
 
   # ─────────────────────────────────────
   # 🔐 SSH
@@ -205,3 +179,4 @@
 
   system.stateVersion = "26.05";
 }
+```
