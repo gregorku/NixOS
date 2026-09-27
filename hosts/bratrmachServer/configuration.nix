@@ -36,6 +36,19 @@
   ];
 
   # ─────────────────────────────────────
+  # 💽 Data-HDD
+  # ─────────────────────────────────────
+
+  fileSystems."/data-HDD" = {
+    device = "/dev/disk/by-uuid/1a4b8542-e974-4f6d-8b61-bf052ca2c233";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.device-timeout=30s"
+    ];
+  };
+
+  # ─────────────────────────────────────
   # 💽 BOOTLOADER
   # UEFI + systemd-boot
   # ─────────────────────────────────────
