@@ -44,10 +44,17 @@
       # ----------------------
       # Default profile → existing system bridge br0
       # ----------------------
-      echo "Setting default profile to existing br0..."
-      $INCUS profile device set default eth0 \
-        nictype=bridged \
-        parent=br0 || true
+      echo "Configuring default profile to use existing br0..."
+
+      if $INCUS profile device show default | grep -q '^eth0:'; then
+        $INCUS profile device set default eth0 \
+          nictype=bridged \
+          parent=br0
+      else
+        $INCUS profile device add default eth0 nic \
+          nictype=bridged \
+          parent=br0
+      fi
     '';
   };
 }
