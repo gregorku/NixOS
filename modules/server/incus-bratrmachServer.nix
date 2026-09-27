@@ -31,7 +31,7 @@
       # ----------------------
       # NAT network (incusbr0)
       # ----------------------
-      if ! $INCUS network list | grep -q incusbr0; then
+      if ! $INCUS network list | grep -q '^| incusbr0 '; then
         echo "Creating incusbr0..."
         $INCUS network create incusbr0 \
           ipv4.address=10.10.10.1/24 \
@@ -40,21 +40,12 @@
       fi
 
       # ----------------------
-      # LAN bridge (br0) — existující systémový bridge
+      # Default profile → existing system bridge br0
       # ----------------------
-      if ! $INCUS network list | grep -q '^| br0 '; then
-        echo "Creating br0 network..."
-        $INCUS network create br0 --type=physical \
-          parent=br0 \
-          ipv4.address=none \
-          ipv6.address=none
-      fi
-
-      # ----------------------
-      # Default profile → br0
-      # ----------------------
-      echo "Setting default profile to br0..."
-      $INCUS profile device set default eth0 network=br0 || true
+      echo "Setting default profile to existing br0..."
+      $INCUS profile device set default eth0 \
+        nictype=bridged \
+        parent=br0 || true
     '';
   };
 }
