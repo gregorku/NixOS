@@ -32,7 +32,7 @@
     ../../modules/server/server-br0.nix
 
     # Monitoring serveru
-    ../../modules/server/monitoringPc.nix
+    ../../modules/server/monitoringPc-bratrmach.nix
   ];
 
   # ─────────────────────────────────────
