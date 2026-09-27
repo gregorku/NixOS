@@ -1,13 +1,15 @@
-{ config, lib, pkgs, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   ############################################################
   ## Monitoring - Physical NixOS Server
   ##
   ## Exporters:
   ##   • node_exporter
   ##   • smartctl_exporter
-  ##   • zfs_exporter
   ############################################################
 
   ############################
@@ -44,14 +46,13 @@
   environment.systemPackages = with pkgs; [
     smartmontools
     prometheus-smartctl-exporter
-    prometheus-zfs-exporter
   ];
 
   systemd.services.prometheus-smartctl-exporter = {
     description = "Prometheus SMARTCTL Exporter";
 
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
+    after = ["network.target"];
+    wantedBy = ["multi-user.target"];
 
     serviceConfig = {
       Type = "simple";
@@ -66,35 +67,11 @@
   };
 
   ############################
-  ## ZFS Exporter
-  ############################
-
-  systemd.services.prometheus-zfs-exporter = {
-    description = "Prometheus ZFS Exporter";
-
-    after = [ "zfs.target" "network.target" ];
-    wants = [ "zfs.target" ];
-    wantedBy = [ "multi-user.target" ];
-
-    serviceConfig = {
-      Type = "simple";
-      Restart = "always";
-      RestartSec = "5";
-
-      ExecStart = ''
-        ${pkgs.prometheus-zfs-exporter}/bin/zfs_exporter \
-          --web.listen-address=:9134
-      '';
-    };
-  };
-
-  ############################
   ## Firewall
   ############################
 
   networking.firewall.interfaces.wg3.allowedTCPPorts = [
-    9100  # node_exporter
-    9134  # zfs_exporter
-    9633  # smartctl_exporter
+    9100 # node_exporter
+    9633 # smartctl_exporter
   ];
 }
