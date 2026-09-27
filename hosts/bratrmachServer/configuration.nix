@@ -19,9 +19,6 @@
     # POZDĚJI AKTIVOVAT
     # ───────────────────────────────────
 
-    # ZFS
-    #../../modules/server/server-zfs.nix
-
     # Cockpit
     #../../modules/server/cockpit.nix
 
@@ -34,11 +31,8 @@
     # Bridge
     ../../modules/server/server-br0.nix
 
-    # Vzdálené odemykání LUKS přes SSH
-    #../../modules/security/initrd-unlock.nix
-
     # Monitoring serveru
-    #../../modules/server/monitoringPc.nix
+    ../../modules/server/monitoringPc.nix
   ];
 
   # ─────────────────────────────────────
@@ -54,39 +48,6 @@
   };
 
   # ─────────────────────────────────────
-  # 🌐 INITRD NETWORK
-  # ─────────────────────────────────────
-  #
-  # Zatím vypnuto.
-  #
-  # Později použijeme pro vzdálené
-  # odemykání LUKS přes SSH.
-  #
-  # V initrd ještě není br0 ani VLAN.
-  # Použije se fyzické síťové rozhraní.
-  #
-
-  #boot.initrd.systemd.network.enable = true;
-
-  #boot.initrd.systemd.network.networks."10-initrd-enp1s0" = {
-  #  matchConfig.Name = "eno1";
-
-  #  address = [
-  #    "192.168.12.230/24"
-  #  ];
-
-  #  routes = [
-  #    {
-  #      Gateway = "192.168.120.1";
-  #    }
-  #  ];
-
-  #  networkConfig = {
-  #    DHCP = "no";
-  #  };
-  #};
-
-  # ─────────────────────────────────────
   # 🌐 SÍŤ
   # ─────────────────────────────────────
 
@@ -100,20 +61,6 @@
     # Důležité později pro ZFS.
     hostId = "7a23ccfe";
   };
-
-  # ─────────────────────────────────────
-  # 🌐 Síťový ovladač v initrd
-  # ─────────────────────────────────────
-  #
-  # Zatím není potřeba.
-  #
-  # Později aktivujeme společně s initrd
-  # networking pro vzdálené odemykání LUKS.
-  #
-
-  #boot.initrd.availableKernelModules = [
-  #  "r8169"
-  #];
 
   # ─────────────────────────────────────
   # 🌐 BRIDGE br0
