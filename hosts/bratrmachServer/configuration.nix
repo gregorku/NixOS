@@ -29,7 +29,7 @@
     ../../modules/server/incus-bratrmachServer.nix
 
     # Firewall
-    #../../modules/server/firewall/firewall-virtServerPrace.nix
+    ../../modules/server/firewall/firewall-bratrmachServer.nix
 
     # Bridge
     ../../modules/server/server-br0.nix
