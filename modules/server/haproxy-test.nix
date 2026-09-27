@@ -3,9 +3,7 @@
   pkgs,
   lib,
   ...
-}:
-
-{
+}: {
   services.haproxy = {
     enable = true;
 
@@ -33,7 +31,7 @@
           use_backend vaultwarden_http        if { hdr(host) -i vault.serveftp.org }
           use_backend nextcloud_http          if { hdr(host) -i gregor.serveftp.org }
           use_backend zabbix_http             if { hdr(host) -i zabbix.serveftp.org }
-          use_backend homeassistant_http      if { hdr(host) -i homeassistant.serveftp.org }
+          use_backend mapa_http               if { hdr(host) -i mapa.serveftp.org }
           use_backend homeassistant_net_http  if { hdr(host) -i homeassistant.serveftp.net }
           use_backend grafana_http            if { hdr(host) -i grafana.serveftp.net }
 
@@ -52,13 +50,15 @@
           option forwardfor
           server nextcloud 10.100.101.12:22280 send-proxy-v2
 
-      backend zabbix_http
+      backend zabbix_http send-proxy-v2
           mode http
+          option forwardfor
           server zabbix 200.1.1.200:80
 
-      backend homeassistant_http
+      backend mapa_http
           mode http
-          server homeassistant 10.100.101.100:22080
+          option forwardfor
+          server mapa 10.10.10.15:80 send-proxy-v2
 
       backend homeassistant_net_http
           mode http
@@ -82,7 +82,7 @@
           use_backend vaultwarden_https        if { req_ssl_sni -i vault.serveftp.org }
           use_backend nextcloud_https          if { req_ssl_sni -i gregor.serveftp.org }
           use_backend zabbix_https             if { req_ssl_sni -i zabbix.serveftp.org }
-          use_backend homeassistant_https      if { req_ssl_sni -i homeassistant.serveftp.org }
+          use_backend maoa_https               if { req_ssl_sni -i mapa.serveftp.org }
           use_backend homeassistant_net_https  if { req_ssl_sni -i homeassistant.serveftp.net }
           use_backend grafana_https            if { req_ssl_sni -i grafana.serveftp.net }
 
@@ -103,9 +103,9 @@
           mode tcp
           server zabbix 200.1.1.200:443
 
-      backend homeassistant_https
+      backend mapa_https
           mode tcp
-          server homeassistant 10.100.101.100:22443
+          server homeassistant 10.10.10.11:443 send-proxy-v2
 
       backend homeassistant_net_https
           mode tcp
