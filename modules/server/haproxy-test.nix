@@ -50,10 +50,10 @@
           option forwardfor
           server nextcloud 10.100.101.12:22280 send-proxy-v2
 
-      backend zabbix_http send-proxy-v2
+      backend zabbix_http
           mode http
           option forwardfor
-          server zabbix 200.1.1.200:80
+          server zabbix 200.1.1.200:80 send-proxy-v2
 
       backend mapa_http
           mode http
