@@ -105,7 +105,7 @@
 
       backend mapa_https
           mode tcp
-          server homeassistant 10.10.10.11:443 send-proxy-v2
+          server homeassistant 10.10.10.15:443 send-proxy-v2
 
       backend homeassistant_net_https
           mode tcp
