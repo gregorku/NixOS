@@ -82,7 +82,7 @@
           use_backend vaultwarden_https        if { req_ssl_sni -i vault.serveftp.org }
           use_backend nextcloud_https          if { req_ssl_sni -i gregor.serveftp.org }
           use_backend zabbix_https             if { req_ssl_sni -i zabbix.serveftp.org }
-          use_backend maoa_https               if { req_ssl_sni -i mapa.serveftp.org }
+          use_backend mapa_https               if { req_ssl_sni -i mapa.serveftp.org }
           use_backend homeassistant_net_https  if { req_ssl_sni -i homeassistant.serveftp.net }
           use_backend grafana_https            if { req_ssl_sni -i grafana.serveftp.net }
 
