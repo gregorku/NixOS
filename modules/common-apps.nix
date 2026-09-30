@@ -11,7 +11,7 @@
     # ======================
     git
     nvd
-    #unstable.vscodium
+    unstable.code-cursor
     nano
     mc
     btop
@@ -100,7 +100,8 @@
     # ======================
     # 📨 KANCELÁŘ
     # ======================
-    libreoffice-qt6-fresh
+    #libreoffice-qt6-fresh
+    unstable.libreoffice-qt6-fresh
     onlyoffice-desktopeditors
     evolution
     pdfarranger
