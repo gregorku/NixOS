@@ -12,6 +12,7 @@
     git
     nvd
     unstable.code-cursor
+    unstable.codex
     nano
     mc
     btop
