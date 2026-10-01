@@ -44,6 +44,7 @@
     wireguard-tools
     psmisc
     ethtool
+    tcpdump
 
     # CLI nástroje (např. avahi-browse)
     avahi
