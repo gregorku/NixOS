@@ -49,6 +49,7 @@
 
     ../../modules/common-swap.nix
     ../../modules/common-networkmanager.nix
+    ../../modules/common-firewall-ntb.nix
 
     # ----------------------------------------------------------
     # VIRTUALIZACE / INCUS
