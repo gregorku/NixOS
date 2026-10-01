@@ -43,6 +43,7 @@
     networkmanager
     wireguard-tools
     psmisc
+    ethtool
 
     # CLI nástroje (např. avahi-browse)
     avahi

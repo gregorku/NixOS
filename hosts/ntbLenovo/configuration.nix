@@ -199,6 +199,39 @@
   # SYSTEM
   # ============================================================
 
+  ###############################################################################
+  # Ethernet - vypnutí EEE pro Realtek eno1
+  #
+  # Vypíná Energy Efficient Ethernet (EEE) na rozhraní eno1.
+  # U Realtek RTL8168H/8111H způsobovalo EEE problém s opětovným navázáním
+  # ethernetového linku po odpojení a opětovném připojení kabelu.
+  # Bez tohoto nastavení zůstávalo eno1 ve stavu Link Down, dokud nebyl
+  # proveden reset PHY nebo restart systému.
+  #
+  # Služba se spustí po zpřístupnění síťového zařízení eno1 a pomocí ethtool
+  # nastaví EEE na off. Tím se zajistí spolehlivé obnovení LAN linku.
+  ###############################################################################
+
+  systemd.services.disable-eee-eno1 = {
+    description = "Disable EEE on eno1";
+
+    after = [
+      "sys-subsystem-net-devices-eno1.device"
+      "network-pre.target"
+    ];
+
+    wants = [
+      "sys-subsystem-net-devices-eno1.device"
+    ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.ethtool}/bin/ethtool --set-eee eno1 eee off";
+      RemainAfterExit = "yes";
+    };
+
+    wantedBy = ["multi-user.target"];
+  };
   # ------------------------------------------------------------
   # Kernel
   # ------------------------------------------------------------
