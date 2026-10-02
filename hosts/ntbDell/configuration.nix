@@ -4,9 +4,8 @@
   lib,
   unstable,
   ...
-}:
-{
-  _module.args = { inherit unstable; };
+}: {
+  _module.args = {inherit unstable;};
 
   nixpkgs.config.allowUnfree = true;
   imports = [
@@ -32,6 +31,7 @@
     #../../modules/common-wireguard.nix
     #../../modules/hosts/ntbDell-wireguard.nix
     ../../modules/common-networkmanager.nix
+    ../../modules/common-firewall-ntb.nix
   ];
 
   networking.hostName = "ntbDell";
@@ -146,7 +146,6 @@
 
     nixd
     nixfmt
-
   ];
 
   environment.pathsToLink = [
