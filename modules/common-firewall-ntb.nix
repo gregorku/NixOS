@@ -150,6 +150,7 @@
         #
 
         iifname "eno1" udp dport 5678 accept;
+        iifname "wlp4s0" udp dport 5678 accept;
 
 
         # ───────────────────────────────
