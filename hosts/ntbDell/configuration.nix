@@ -31,7 +31,7 @@
     #../../modules/common-wireguard.nix
     #../../modules/hosts/ntbDell-wireguard.nix
     ../../modules/common-networkmanager.nix
-    ../../modules/common-firewall-ntb.nix
+    ../../modules/common-firewall-ntb-dell.nix
   ];
 
   networking.hostName = "ntbDell";
