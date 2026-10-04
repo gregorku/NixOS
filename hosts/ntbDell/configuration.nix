@@ -22,6 +22,7 @@
     ../../modules/common-filesystems.nix
     ../../modules/common-snapshots.nix
     ../../modules/gpu-intel.nix
+    ../../modules/shell-ntbDell.nix
 
     ../../modules/notebook-power.nix
     ../../modules/common-virtualization.nix
