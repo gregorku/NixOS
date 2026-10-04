@@ -1,11 +1,14 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./desktop.nix
     ./menu/ntbDell/gocryptfs.nix
     ./menu/ntbDell/vzdalena-plocha.nix
     ./menu/ntbDell/applications-kmenuedit.nix
+    ./modules/shell-ntbDell.nix
     ./menu/ntbDell/vpn.nix
     ./menu/ntbDell/ssh.nix
     ./menu/ntbDell/hdd.nix
