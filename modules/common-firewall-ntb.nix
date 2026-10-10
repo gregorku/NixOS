@@ -180,6 +180,21 @@
           443
         } accept;
 
+        # ───────────────────────────────
+        # AVAHI / mDNS – síťové tiskárny
+        # ───────────────────────────────
+
+        # IPv4 mDNS – lokální síť
+        iifname "wlp4s0" \
+          ip saddr 192.168.100.0/24 \
+          ip daddr 224.0.0.251 \
+          udp dport 5353 accept;
+
+        # IPv6 mDNS – link-local provoz
+        iifname "wlp4s0" \
+          ip6 saddr fe80::/10 \
+          ip6 daddr ff02::fb \
+          udp dport 5353 accept;
 
         # ───────────────────────────────
         # WIREGUARD
