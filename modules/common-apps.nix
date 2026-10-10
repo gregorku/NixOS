@@ -102,7 +102,7 @@
     # 📨 KANCELÁŘ
     # ======================
     #libreoffice-qt6-fresh
-    unstable.libreoffice-qt6-fresh
+    unstable.libreoffice-qt
     onlyoffice-desktopeditors
     evolution
     pdfarranger
