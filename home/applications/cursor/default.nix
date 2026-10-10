@@ -1,12 +1,9 @@
-```nix
 {
   config,
   pkgs,
   unstable,
   ...
-}:
-
-let
+}: let
   cursorDataDir = "${config.home.homeDirectory}/.application-data/cursor";
 
   cursorUserDataDir = "${cursorDataDir}/user-data";
@@ -35,20 +32,17 @@ let
         --set XDG_CACHE_HOME "${cursorCacheDir}"
     '';
   };
-in
-{
+in {
   home.packages = [
     cursor
   ];
 
-  home.activation.cursorDirectories =
-    config.lib.dag.entryAfter [ "writeBoundary" ] ''
-      mkdir -p \
-        "${cursorUserDataDir}" \
-        "${cursorExtensionsDir}" \
-        "${cursorConfigDir}" \
-        "${cursorDataHome}" \
-        "${cursorCacheDir}"
-    '';
+  home.activation.cursorDirectories = config.lib.dag.entryAfter ["writeBoundary"] ''
+    mkdir -p \
+      "${cursorUserDataDir}" \
+      "${cursorExtensionsDir}" \
+      "${cursorConfigDir}" \
+      "${cursorDataHome}" \
+      "${cursorCacheDir}"
+  '';
 }
-```
