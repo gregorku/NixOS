@@ -13,6 +13,7 @@
     ./applications/aider
     ./applications/vscodium
     ./applications/jan
+    ./applications/cursor
   ];
 
   programs.librewolf = {
