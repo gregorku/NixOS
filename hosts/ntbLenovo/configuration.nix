@@ -30,6 +30,7 @@
     ../../modules/common-securityPc.nix
     ../../modules/common-bluetooth.nix
     ../../modules/common-printing.nix
+    ../../modules/common-print-Brother.nix
     ../../modules/common-apps.nix
     ../../modules/common-flatpak.nix
     ../../modules/common-appimage.nix
