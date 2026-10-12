@@ -142,14 +142,6 @@
   # ============================================================
   # ZFS
   # ============================================================
-  #
-  # Import datapool po bootu.
-  #
-  # Ověřeno:
-  #   Linux       7.2.5
-  #   OpenZFS     2.4.4
-  #   zfs_2_4     meta.broken = false
-  #
 
   boot.supportedFilesystems = ["zfs"];
 
@@ -162,11 +154,6 @@
 
   services.zfs.autoScrub.enable = false;
   services.zfs.autoSnapshot.enable = false;
-
-  # Skrytí fyzických ZFS oddílů před UDisks/KDE.
-  services.udev.extraRules = ''
-    ACTION=="add|change", ENV{ID_FS_TYPE}=="zfs_member", ENV{UDISKS_IGNORE}="1"
-  '';
 
   # ============================================================
   # KERNEL
