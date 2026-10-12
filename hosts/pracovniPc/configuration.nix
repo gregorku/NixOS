@@ -163,6 +163,11 @@
   services.zfs.autoScrub.enable = false;
   services.zfs.autoSnapshot.enable = false;
 
+  # Skrytí fyzických ZFS oddílů před UDisks/KDE.
+  services.udev.extraRules = ''
+    ACTION=="add|change", ENV{ID_FS_TYPE}=="zfs_member", ENV{UDISKS_IGNORE}="1"
+  '';
+
   # ============================================================
   # KERNEL
   # ============================================================
