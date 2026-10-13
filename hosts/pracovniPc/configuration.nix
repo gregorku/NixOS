@@ -56,6 +56,7 @@
     # ----------------------------------------------------------
 
     ../../modules/common-networkmanager.nix
+    ../../modules/common-firewall-pracovniPc.nix
 
     # ----------------------------------------------------------
     # VZDÁLENÝ PŘÍSTUP
