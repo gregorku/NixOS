@@ -3,9 +3,7 @@
   pkgs,
   lib,
   ...
-}:
-
-{
+}: {
   services.haproxy = {
     enable = true;
 
@@ -30,6 +28,7 @@
           bind *:80
           option httplog
 
+          use_backend auth_http               if { hdr(host) -i auth.serveftp.org }
           use_backend vaultwarden_http        if { hdr(host) -i vault.serveftp.org }
           use_backend nextcloud_http          if { hdr(host) -i gregor.serveftp.org }
           use_backend zabbix_http             if { hdr(host) -i zabbix.serveftp.org }
@@ -42,6 +41,11 @@
       # -------------------------
       # HTTP backends
       # -------------------------
+      backend auth_http
+          mode http
+          option forwardfor
+          server auth 10.10.10.10:80 send-proxy-v2
+
       backend vaultwarden_http
           mode http
           option forwardfor
@@ -79,6 +83,7 @@
           tcp-request inspect-delay 5s
           tcp-request content accept if { req_ssl_hello_type 1 }
 
+          use_backend auth_https               if { req_ssl_sni -i auth.serveftp.org }
           use_backend vaultwarden_https        if { req_ssl_sni -i vault.serveftp.org }
           use_backend nextcloud_https          if { req_ssl_sni -i gregor.serveftp.org }
           use_backend zabbix_https             if { req_ssl_sni -i zabbix.serveftp.org }
@@ -91,6 +96,10 @@
       # -------------------------
       # HTTPS backends (různé porty!)
       # -------------------------
+      backend auth_https
+          mode tcp
+          server auth 10.10.10.10:443 send-proxy-v2
+
       backend vaultwarden_https
           mode tcp
           server vaultwarden 10.10.10.10:443 send-proxy-v2
