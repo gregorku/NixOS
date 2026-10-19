@@ -1,3 +1,4 @@
+```nix
 {
   config,
   pkgs,
@@ -17,7 +18,7 @@
     nativeBuildInputs = [pkgs.makeWrapper];
 
     postBuild = ''
-      wrapProgram "$out/bin/Jan" \
+      wrapProgram "$out/bin/Jan-Desktop" \
         --set XDG_CONFIG_HOME "${janConfigDir}" \
         --set XDG_DATA_HOME "${janDataHome}" \
         --set XDG_CACHE_HOME "${janCacheDir}"
@@ -28,3 +29,4 @@ in {
     jan
   ];
 }
+```
