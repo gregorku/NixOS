@@ -23,10 +23,8 @@
         --set XDG_CACHE_HOME "${janCacheDir}"
     '';
   };
-in
-  {
-    home.packages = [
-      jan
-    ];
-  }
-  111
+in {
+  home.packages = [
+    jan
+  ];
+}
