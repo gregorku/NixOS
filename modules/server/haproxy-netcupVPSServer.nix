@@ -54,7 +54,7 @@
       backend nextcloud_http
           mode http
           option forwardfor
-          server nextcloud 10.100.100.12:22280 send-proxy-v2
+          server nextcloud 10.10.10.10:80 send-proxy-v2
 
       backend zabbix_http
           mode http
@@ -106,7 +106,7 @@
 
       backend nextcloud_https
           mode tcp
-          server nextcloud 10.100.100.12:22443 send-proxy-v2
+          server nextcloud 10.10.10.10:443 send-proxy-v2
 
       backend zabbix_https
           mode tcp
