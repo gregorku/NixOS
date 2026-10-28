@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   # Povolení samotné služby Incus
   virtualisation.incus = {
     enable = true;
@@ -11,9 +13,9 @@
   # Incus vyžaduje nftables pro správu sítě (místo starého iptables)
   networking.nftables.enable = true;
 
-  # Nastavení firewallu - Incus si spravuje vlastní bridge (incusbr0), 
+  # Nastavení firewallu - Incus si spravuje vlastní bridge (incusbr0),
   # ale je dobré zajistit, aby NixOS neblokoval provoz mezi kontejnery.
-  networking.firewall.trustedInterfaces = [ "incusbr0" ];
+  networking.firewall.trustedInterfaces = ["incusbr0"];
 
   # Důležité pro běh Dockeru uvnitř Incusu (nesting)
   # Toto nastavení zajistí, že bridge v kontejnerech nebudou filtrovány firewallem hostitele
@@ -23,14 +25,14 @@
 
   # Přidání užitečných balíčků pro práci s kontejnery
   environment.systemPackages = with pkgs; [
-    incus           # CLI klient
-    virt-viewer     # Pro přístup ke grafické konzoli VM (pokud budete používat VM)
+    incus # CLI klient
+    #virt-viewer     # Pro přístup ke grafické konzoli VM (pokud budete používat VM)
   ];
 
-  # Poznámka: Nezapomeňte přidat svého uživatele do skupiny 'incus-admin' 
+  # Poznámka: Nezapomeňte přidat svého uživatele do skupiny 'incus-admin'
   # users.users.vás-uživatel.extraGroups = [ "incus-admin" ];
   # User access (no sudo needed)
   users.users.gregor.extraGroups = [
     "incus-admin"
-  ];  
+  ];
 }
