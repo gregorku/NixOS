@@ -30,6 +30,7 @@
 
           use_backend vaultwarden_http        if { hdr(host) -i vault.serveftp.org }
           use_backend nextcloud_http          if { hdr(host) -i gregor.serveftp.org }
+          use_backend nextcloud_lu_http       if { hdr(host) -i gregor.serveftp.net }
           use_backend zabbix_http             if { hdr(host) -i zabbix.serveftp.org }
           use_backend mapa_http               if { hdr(host) -i mapa.serveftp.org }
           use_backend homeassistant_net_http  if { hdr(host) -i homeassistant.serveftp.net }
@@ -49,6 +50,11 @@
           mode http
           option forwardfor
           server nextcloud 10.100.101.12:22280 send-proxy-v2
+
+      backend nextcloud_lu_http
+          mode http
+          option forwardfor
+          server nextcloud 10.100.101.12:32280 send-proxy-v2
 
       backend zabbix_http
           mode http
@@ -81,6 +87,7 @@
 
           use_backend vaultwarden_https        if { req_ssl_sni -i vault.serveftp.org }
           use_backend nextcloud_https          if { req_ssl_sni -i gregor.serveftp.org }
+          use_backend nextcloud_lu_https       if { req_ssl_sni -i gregor.serveftp.net }
           use_backend zabbix_https             if { req_ssl_sni -i zabbix.serveftp.org }
           use_backend mapa_https               if { req_ssl_sni -i mapa.serveftp.org }
           use_backend homeassistant_net_https  if { req_ssl_sni -i homeassistant.serveftp.net }
@@ -98,6 +105,10 @@
       backend nextcloud_https
           mode tcp
           server nextcloud 10.100.101.12:22443 send-proxy-v2
+
+      backend nextcloud_lu_https
+          mode tcp
+          server nextcloud 10.100.101.12:32443 send-proxy-v2
 
       backend zabbix_https
           mode tcp
