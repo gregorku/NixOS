@@ -88,7 +88,7 @@ in {
         iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 8443 accept
 
         # Incus infrastructure 10.10.10.10
-        iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 9440-9451 accept
+        iifname "wg1" ip saddr 10.100.100.0/24 tcp dport 9440-9456 accept
 
         limit rate 5/minute log prefix "FW DROP IN: "
         drop
