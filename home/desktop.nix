@@ -16,6 +16,11 @@
     ./applications/cursor
   ];
 
+  # Brave Browser z nixpkgs-unstable
+  home.packages = [
+    unstable.brave
+  ];
+
   programs.librewolf = {
     enable = true;
     languagePacks = ["cs"];

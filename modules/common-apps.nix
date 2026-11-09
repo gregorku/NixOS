@@ -60,7 +60,6 @@
     # 🌐 INTERNET / PROHLÍŽEČE
     # ======================
     vivaldi
-    brave
     firefox
 
     # ======================
