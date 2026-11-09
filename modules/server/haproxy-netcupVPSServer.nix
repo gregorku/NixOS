@@ -62,7 +62,7 @@
 
       backend homeassistant_http
           mode http
-          server homeassistant 10.100.100.100:22080
+          server homeassistant 10.10.10.10:80 send-proxy-v2
 
       backend homeassistant_net_http
           mode http
@@ -114,7 +114,7 @@
 
       backend homeassistant_https
           mode tcp
-          server homeassistant 10.100.100.100:22443
+          server homeassistant 10.10.10.10:443 send-proxy-v2
 
       backend homeassistant_net_https
           mode tcp
