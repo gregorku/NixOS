@@ -12,7 +12,7 @@
     git
     nvd
     #unstable.code-cursor
-    unstable.codex
+    #unstable.codex
     nano
     mc
     btop
