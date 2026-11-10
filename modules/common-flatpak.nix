@@ -22,6 +22,7 @@
       "com.bitwarden.desktop" # Bitwarden (aktuální verze)
       "org.localsend.localsend_app" # Sdílení souborů (AirDrop-like)
       "org.onlyoffice.desktopeditors" # OnlyOffice
+      "com.brave.Browser" # Brave Browser
       #"org.freecad.FreeCAD" # FreeCAD – CAD/3D modelování
     ];
 
