@@ -52,6 +52,7 @@
 
     # KDE Connect
     kdePackages.kdeconnect-kde
+    kdePackages.kdialog
     # KDE Správa hesel
     kdePackages.kwalletmanager
 
