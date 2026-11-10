@@ -17,9 +17,9 @@
   ];
 
   # Brave Browser z nixpkgs-unstable
-  #home.packages = [
-  #  unstable.brave
-  #];
+  home.packages = [
+    unstable.brave
+  ];
 
   programs.librewolf = {
     enable = true;
