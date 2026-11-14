@@ -1,4 +1,3 @@
-```nix
 {
   description = "NixOS configuration for multiple devices";
 
@@ -110,4 +109,3 @@
     };
   };
 }
-```
