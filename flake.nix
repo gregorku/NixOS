@@ -1,3 +1,4 @@
+```nix
 {
   description = "NixOS configuration for multiple devices";
 
@@ -93,6 +94,8 @@
 
       virtServerPrace = mkHost "virtServerPrace" ./home/server.nix nixpkgs;
 
+      pracePcServer = mkHost "pracePcServer" ./home/server.nix nixpkgs;
+
       netcupVPSServer = mkHost "netcupVPSServer" ./home/server.nix nixpkgs;
 
       bratrmachServer = mkHost "bratrmachServer" ./home/server.nix nixpkgs;
@@ -107,3 +110,4 @@
     };
   };
 }
+```
