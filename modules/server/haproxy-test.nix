@@ -28,6 +28,7 @@
           bind *:80
           option httplog
 
+          use_backend sjv_http                if { hdr(host) -i sjv.serveftp.org }
           use_backend vaultwarden_http        if { hdr(host) -i vault.serveftp.org }
           use_backend nextcloud_http          if { hdr(host) -i gregor.serveftp.org }
           use_backend nextcloud_lu_http       if { hdr(host) -i ludek.serveftp.net }
@@ -41,6 +42,11 @@
       # -------------------------
       # HTTP backends
       # -------------------------
+      backend sjv_http
+          mode http
+          option forwardfor
+          server sjv 10.10.10.20:80 send-proxy-v2
+
       backend vaultwarden_http
           mode http
           option forwardfor
@@ -85,6 +91,7 @@
           tcp-request inspect-delay 5s
           tcp-request content accept if { req_ssl_hello_type 1 }
 
+          use_backend sjv_https                if { req_ssl_sni -i sjv.serveftp.org }
           use_backend vaultwarden_https        if { req_ssl_sni -i vault.serveftp.org }
           use_backend nextcloud_https          if { req_ssl_sni -i gregor.serveftp.org }
           use_backend nextcloud_lu_https       if { req_ssl_sni -i ludek.serveftp.net }
@@ -98,6 +105,10 @@
       # -------------------------
       # HTTPS backends (různé porty!)
       # -------------------------
+      backend sjv_https
+          mode tcp
+          server sjv 10.10.10.20:443 send-proxy-v2
+
       backend vaultwarden_https
           mode tcp
           server vaultwarden 10.10.10.10:443 send-proxy-v2
