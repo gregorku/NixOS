@@ -22,6 +22,7 @@
     pciutils # 👈 lspci (hardware debug)
     alsa-utils # 👈 aplay, amixer (audio debug)
     system-config-printer
+    shellcheck
 
     #aider-chat
 
