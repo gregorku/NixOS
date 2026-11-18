@@ -31,7 +31,7 @@
     # ../../auto-upgrade.nix
 
     # Síť
-    # ../../modules/server/server-br0.nix
+    ../../modules/server/server-br0.nix
     # ../../modules/server/firewall/firewall-domaServerPc.nix
   ];
 
@@ -244,8 +244,34 @@
     useHostResolvConf = false;
   };
 
+  # ────────────────────────────────────────────────
+  # DNS resolver
+  #
   services.resolved.enable = true;
 
+  # ────────────────────────────────────────────────
+  # LAN bridge br0
+  # ────────────────────────────────────────────────
+  #
+  # Fyzické rozhraní:
+  #
+  #   enp5s0
+  #
+  # je členem bridge:
+  #
+  #   br0
+  #
+  # IP adresa serveru je přidělena bridge br0,
+  # nikoli fyzickému rozhraní enp5s0.
+  #
+  # Bridge bude později možné používat také
+  # pro Incus kontejnery připojené přímo do LAN.
+
+  server.br0 = {
+    enable = true;
+
+    interface = "enp5s0";
+  };
   # ==================================================
   # SSH – BĚŽÍCÍ SYSTÉM
   # ==================================================
