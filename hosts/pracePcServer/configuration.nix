@@ -24,10 +24,10 @@
 
     # ../../modules/common-snapshots.nix
     # ../../modules/server/cockpit.nix
-    # ../../modules/server/incus-domaPcServer.nix
+    #../../modules/server/incus-pracePcServer.nix
     # ../../modules/server/libvirt.nix
     # ../../modules/server/zfs.nix
-    # ../../modules/server/monitoringPc.nix
+    ../../modules/server/monitoringPc.nix
     # ../../auto-upgrade.nix
 
     # Síť
