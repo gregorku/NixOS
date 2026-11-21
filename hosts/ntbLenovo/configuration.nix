@@ -123,39 +123,18 @@
   #*/
 
   # ============================================================
-  # DATALINUX – DRUHÝ DISK
-  #
-  # Samsung 990 EVO 2TB
-  #
-  # ZATÍM VYPNUTO.
-  #
-  # Druhý disk zprovozníme až po prvním úspěšném bootu.
-  # Konfiguraci nemažeme, pouze ji ponecháváme zakomentovanou.
+  # INCUS – ZÁVISLOST NA DATALINUX
   # ============================================================
 
-  #/*
-  boot.initrd.luks.devices."data_crypt" = {
-    device = "/dev/disk/by-uuid/b56c0b20-f566-44b5-8f81-54bbcd61cf10";
-    keyFile = "/root/keys/data.key";
-    allowDiscards = true;
-  };
+  systemd.services.incus = {
+    requires = [
+      "run-media-gregor-DataLinux.mount"
+    ];
 
-  boot.initrd.secrets = {
-    "/root/keys/data.key" = /root/keys/data.key;
-  };
-
-  fileSystems."/run/media/gregor/DataLinux" = {
-    device = "/dev/mapper/data_crypt";
-    fsType = "btrfs";
-
-    options = [
-      "compress=zstd"
-      "noatime"
-      "nofail"
-      "commit=120"
+    after = [
+      "run-media-gregor-DataLinux.mount"
     ];
   };
-  #*/
 
   # ============================================================
   # LEGION 5 – AMD AUDIO FIX
