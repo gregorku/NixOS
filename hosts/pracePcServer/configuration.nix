@@ -8,25 +8,18 @@
   # ==================================================
 
   imports = [
-    # Hardware tohoto serveru
     ./hardware-configuration.nix
-
-    # Common – sdílené moduly
     ../../modules/common-security.nix
     ../../modules/common-server-swap.nix
-
-    # Server – základní moduly
     ../../modules/server/server-apps.nix
     ../../modules/server/server-base.nix
-
-    # Další moduly zapneme postupně po dokončení
-    # základní konfigurace serveru.
 
     # ../../modules/common-snapshots.nix
     # ../../modules/server/cockpit.nix
     #../../modules/server/incus-pracePcServer.nix
     # ../../modules/server/libvirt.nix
     # ../../modules/server/zfs.nix
+
     ../../modules/server/monitoringPc.nix
     # ../../auto-upgrade.nix
 
@@ -36,23 +29,18 @@
   ];
 
   # ==================================================
-  # INITRD – SÍŤ PRO VZDÁLENÉ ODEMYKÁNÍ LUKS
+  # INITRD – PEVNÁ SÍŤ PRO VZDÁLENÉ ODEMYKÁNÍ LUKS
   # ==================================================
   #
-  # Síť se používá pouze během initrd.
+  # Fyzické rozhraní: enp5s0
+  # IP adresa:        192.168.12.200/24
+  # Brána:            192.168.12.1
+  # DNS:              192.168.12.1
   #
-  # Server se připojí přímo přes fyzickou síťovou
-  # kartu enp5s0. Bridge br0 v initrd neexistuje.
+  # Tato konfigurace platí pouze pro initrd.
+  # Běžící NixOS nadále používá DHCP.
   #
-  # IP adresa se získá přes DHCP z MikroTiku.
-  #
-  # Přístup bude možný přes existující WireGuard
-  # spojení do domácí LAN.
-  #
-  # Není potřeba instalovat WireGuard na server.
-  #
-  # SSH port: 2223
-  #
+  # Bridge br0 v initrd nepoužíváme.
 
   boot.initrd.systemd.enable = true;
 
@@ -64,18 +52,33 @@
     networks."10-enp5s0" = {
       matchConfig.Name = "enp5s0";
 
-      networkConfig.DHCP = "ipv4";
+      address = [
+        "192.168.12.200/24"
+      ];
+
+      networkConfig = {
+        DHCP = "no";
+        IPv6AcceptRA = false;
+      };
+
+      routes = [
+        {
+          routeConfig.Gateway = "192.168.12.1";
+        }
+      ];
 
       linkConfig.RequiredForOnline = "routable";
     };
   };
 
+  # DNS pro initrd
+  boot.initrd.network.resolvers = [
+    "192.168.12.1"
+  ];
+
   # ==================================================
   # INITRD – SÍŤOVÝ OVLADAČ
   # ==================================================
-  #
-  # Síťová karta Realtek RTL8111/8168.
-  # Ovladač r8169 musí být dostupný již v initrd.
 
   boot.initrd.availableKernelModules = [
     "r8169"
@@ -85,20 +88,14 @@
   # INITRD – SSH VZDÁLENÉ ODEMYKÁNÍ
   # ==================================================
   #
-  # SSH server běží již před odemčením systémového
-  # disku.
+  # SSH port: 2223
   #
-  # Host klíč je samostatný pro initrd.
-  #
-  # Soubor:
+  # Samostatný host klíč:
   # /etc/secrets/initrd/ssh_host_ed25519_key
   #
-  # Veřejný klíč klienta ntbLenovo je autorizován
-  # s příkazem systemctl default.
-  #
-  # Po připojení přes SSH se zobrazí odemykací
-  # prostředí systemd a lze zadat LUKS hesla.
-  #
+  # Povolení klienti:
+  # - ntbLenovo
+  # - pracovniPc
 
   boot.initrd.network.ssh = {
     enable = true;
@@ -111,6 +108,7 @@
 
     authorizedKeys = [
       ''command="systemctl default" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMfIgYGdYP31GscJs5Z6JFLHuRV2S9DUykPV2sAx+gB gregor@ntbLenovo''
+      ''command="systemctl default" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICijUGdhTTfIHjSV8bpSzUhd6g4WYe26l8TH2xzSDaLA gregor@pracovniPc''
     ];
   };
 
@@ -136,18 +134,11 @@
   # ==================================================
   # BOOTLOADER
   # ==================================================
-  #
-  # UEFI + systemd-boot.
-  #
-  # EFI oddíl:
-  # /boot
-  #
 
   boot.loader.systemd-boot.enable = true;
 
   boot.loader.efi = {
     canTouchEfiVariables = true;
-
     efiSysMountPoint = "/boot";
   };
 
@@ -155,40 +146,16 @@
   # LUKS – SYSTÉMOVÝ DISK
   # ==================================================
   #
-  # Systémový disk:
-  # /dev/nvme0n1
+  # Root LUKS je definován v hardware-configuration.nix.
   #
-  # EFI:
-  # /dev/nvme0n1p1
-  #
-  # LUKS root:
-  # /dev/nvme0n1p2
-  #
-  # LUKS UUID:
+  # UUID:
   # d17095fa-6356-4828-b6b1-51bd2f83e82f
   #
-  # Zařízení cryptroot je již definováno
-  # v hardware-configuration.nix.
-  #
-  # Zde jej znovu nedefinujeme.
-  #
-  # Odemčení probíhá heslem přes initrd SSH.
+  # Odemčení probíhá přes initrd SSH.
 
   # ==================================================
   # LUKS – ŠIFROVANÝ SWAP
   # ==================================================
-  #
-  # Swap diskový oddíl:
-  # /dev/nvme0n1p3
-  #
-  # LUKS UUID:
-  # cc2f6ae6-8176-441a-9a20-5008546cd138
-  #
-  # Mapper:
-  # /dev/mapper/cryptswap
-  #
-  # Swap je definován v hardware-configuration.nix.
-  # Zde pouze zajistíme jeho odemčení v initrd.
 
   boot.initrd.luks.devices."cryptswap" = {
     device = "/dev/disk/by-uuid/cc2f6ae6-8176-441a-9a20-5008546cd138";
@@ -197,16 +164,6 @@
   # ==================================================
   # ZFS
   # ==================================================
-  #
-  # Server obsahuje existující ZFS pooly na dalších
-  # discích.
-  #
-  # Při instalaci systémového disku jsme se těchto
-  # disků nedotýkali.
-  #
-  # Automatický import poolů zatím není zapnutý.
-  # Nejprve ověříme nový systém a následně nastavíme
-  # připojení jednotlivých poolů.
 
   boot.supportedFilesystems = [
     "zfs"
@@ -222,13 +179,10 @@
   # SÍŤ – BĚŽÍCÍ SYSTÉM
   # ==================================================
   #
-  # Síťové rozhraní:
-  # enp5s0
+  # Běžný NixOS používá DHCP.
+  # Tato konfigurace je nezávislá na initrd.
   #
-  # Zatím bez bridge br0.
-  # DHCP zajistí připojení serveru do LAN.
-  #
-  # Bridge a Incus síť nastavíme později.
+  # Hostname: pracepcserver
 
   networking = {
     hostName = "pracepcserver";
@@ -237,52 +191,30 @@
 
     useDHCP = true;
 
-    # Unikátní ZFS hostId tohoto serveru.
     hostId = "4206ae54";
 
-    # DNS resolver spravuje systemd-resolved.
     useHostResolvConf = false;
   };
 
-  # ────────────────────────────────────────────────
   # DNS resolver
-  #
   services.resolved.enable = true;
 
-  # ────────────────────────────────────────────────
-  # LAN bridge br0
-  # ────────────────────────────────────────────────
-  #
-  # Fyzické rozhraní:
-  #
-  #   enp5s0
-  #
-  # je členem bridge:
-  #
-  #   br0
-  #
-  # IP adresa serveru je přidělena bridge br0,
-  # nikoli fyzickému rozhraní enp5s0.
-  #
-  # Bridge bude později možné používat také
-  # pro Incus kontejnery připojené přímo do LAN.
+  # ==================================================
+  # LAN BRIDGE br0
+  # ==================================================
 
   server.br0 = {
     enable = true;
 
     interface = "enp5s0";
   };
+
   # ==================================================
   # SSH – BĚŽÍCÍ SYSTÉM
   # ==================================================
   #
-  # Běžný SSH přístup po nabootování.
-  #
-  # Root se může přihlásit pouze SSH klíčem.
-  # Přihlášení roota heslem je zakázané.
-  #
-  # Heslové přihlášení běžného uživatele je zatím
-  # povolené.
+  # Standardní SSH port 22.
+  # Port 2223 je určen pouze pro initrd.
 
   services.openssh = {
     enable = true;
@@ -339,9 +271,6 @@
   # ==================================================
   # NIXOS STATE VERSION
   # ==================================================
-  #
-  # Verze při první instalaci systému.
-  # Při běžných upgradech neměnit.
 
   system.stateVersion = "26.05";
 }
