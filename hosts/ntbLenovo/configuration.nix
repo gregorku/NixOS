@@ -110,6 +110,35 @@
   };
 
   # ============================================================
+  # DATALINUX – DRUHÝ DISK
+  # Samsung 990 EVO 2TB
+  # ============================================================
+
+  #/*
+  boot.initrd.luks.devices."data_crypt" = {
+    device = "/dev/disk/by-uuid/b56c0b20-f566-44b5-8f81-54bbcd61cf10";
+    keyFile = "/root/keys/data.key";
+    allowDiscards = true;
+  };
+
+  boot.initrd.secrets = {
+    "/root/keys/data.key" = /root/keys/data.key;
+  };
+
+  fileSystems."/run/media/gregor/DataLinux" = {
+    device = "/dev/mapper/data_crypt";
+    fsType = "btrfs";
+
+    options = [
+      "compress=zstd"
+      "noatime"
+      "nofail"
+      "commit=120"
+    ];
+  };
+  #*/
+
+  # ============================================================
   # AGENIX – PROMĚNNÉ PRO KLÍČE
   #
   # ZATÍM VYPNUTO.
