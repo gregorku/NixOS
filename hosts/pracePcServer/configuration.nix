@@ -103,7 +103,7 @@
 
     authorizedKeys = [
       ''command="systemctl default" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMfIgYGdYP31GscJs5Z6JFLHuRV2S9DUykPV2sAx+gB gregor@ntbLenovo''
-      ''command="systemctl default" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICijUGdhTTfIHjSV8bpSzUhd6g4WYe26l8TH2xzSDaLA gregor@pracovniPc''
+      ''command="systemctl default" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICfQjk/mSjsmoRv98IUCntIJ8BThj0RokyDL0S+yHiAd gregor@pracovniPc''
     ];
   };
 
