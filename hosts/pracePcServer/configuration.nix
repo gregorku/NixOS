@@ -151,11 +151,9 @@
   # ==================================================
   # LUKS – ŠIFROVANÝ SWAP
   # ==================================================
-
-  boot.initrd.luks.devices."cryptswap" = {
-    device = "/dev/disk/by-uuid/cc2f6ae6-8176-441a-9a20-5008546cd138";
-  };
-
+  # Swap je šifrovaný samostatným LUKS kontejnerem (cryptswap).
+  # Odemykání probíhá automaticky pomocí klíče:
+  #   /root/cryptswap.key
   # ==================================================
   # ZFS
   # ==================================================
