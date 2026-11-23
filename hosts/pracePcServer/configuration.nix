@@ -63,7 +63,7 @@
 
       routes = [
         {
-          routeConfig.Gateway = "192.168.12.1";
+          Gateway = "192.168.12.1";
         }
       ];
 
