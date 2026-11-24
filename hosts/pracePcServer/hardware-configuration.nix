@@ -46,14 +46,6 @@
     options = ["fmask=0022" "dmask=0022"];
   };
 
-  # ==================================================
-  # SWAP – BEZ LUKS
-  # ==================================================
-  #
-  # Oddíl /dev/nvme0n1p3 bude běžný swap.
-  # Před aktivací konfigurace je nutné odstranit
-  # původní LUKS kontejner a vytvořit swap signaturu.
-
   swapDevices = [
     {
       device = "/dev/nvme0n1p3";
