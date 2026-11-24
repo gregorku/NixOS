@@ -46,15 +46,17 @@
     options = ["fmask=0022" "dmask=0022"];
   };
 
+  # ==================================================
+  # SWAP – BEZ LUKS
+  # ==================================================
+  #
+  # Oddíl /dev/nvme0n1p3 bude běžný swap.
+  # Před aktivací konfigurace je nutné odstranit
+  # původní LUKS kontejner a vytvořit swap signaturu.
+
   swapDevices = [
     {
-      device = "/dev/mapper/cryptswap";
-      encrypted = {
-        enable = true;
-        label = "cryptswap";
-        blkDev = "/dev/disk/by-uuid/cc2f6ae6-8176-441a-9a20-5008546cd138";
-        keyFile = "/sysroot/root/cryptswap.key";
-      };
+      device = "/dev/nvme0n1p3";
     }
   ];
 

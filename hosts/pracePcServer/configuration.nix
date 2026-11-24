@@ -149,12 +149,6 @@
   # Odemčení probíhá přes initrd SSH.
 
   # ==================================================
-  # LUKS – ŠIFROVANÝ SWAP
-  # ==================================================
-  # Swap je šifrovaný samostatným LUKS kontejnerem (cryptswap).
-  # Odemykání probíhá automaticky pomocí klíče:
-  #   /root/cryptswap.key
-  # ==================================================
   # ZFS
   # ==================================================
 
