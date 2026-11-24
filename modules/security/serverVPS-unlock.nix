@@ -124,7 +124,7 @@
             waited=$((waited + BOOT_POLL_INTERVAL))
           done
 
-          log ERROR "Běžné SSH se neobjevilo během ${BOOT_TIMEOUT} sekund."
+          log ERROR "Běžné SSH se neobjevilo během ''${BOOT_TIMEOUT} sekund."
           return 1
         }
 
