@@ -27,8 +27,8 @@
     ##################################################
 
     # Automatické vzdálené odemykání LUKS serverů.
-    #../../modules/security/serverVPS-unlock.nix
-    #../../modules/security/serverVPS-unlock-setupPc.nix
+    ../../modules/security/serverVPS-unlock.nix
+    ../../modules/security/serverVPS-unlock-setupPc.nix
 
     ##################################################
     # VPS-specific

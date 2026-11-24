@@ -3,483 +3,339 @@
   lib,
   pkgs,
   ...
-}:
-
-let
+}: let
   cfg = config.services.serverUnlock;
 
-  # ─────────────────────────────────────
-  # Typ konfigurace jednoho serveru
-  # ─────────────────────────────────────
+  # ------------------------------------------------------------
+  # Konfigurace jednoho spravovaného serveru
+  # ------------------------------------------------------------
 
   serverType = lib.types.submodule {
     options = {
-
       host = lib.mkOption {
         type = lib.types.str;
-
-        description = ''
-          IP adresa nebo hostname cíle dostupného z VPS.
-
-          V našem případě jde o VPN adresu MikroTik routeru,
-          přes který jsou porty přesměrovány na jednotlivé
-          servery.
-        '';
+        description = "VPN IP adresa nebo hostname serveru.";
       };
 
       unlockPort = lib.mkOption {
         type = lib.types.port;
-
-        description = ''
-          SSH port initrd používaný pro vzdálené
-          odemykání LUKS.
-        '';
+        description = "SSH port initrd.";
       };
 
       normalPort = lib.mkOption {
         type = lib.types.port;
-
-        description = ''
-          Produkční SSH port serveru.
-
-          Tento port se používá pro kontrolu,
-          zda je server již normálně spuštěný.
-        '';
+        description = "SSH port běžícího NixOS.";
       };
 
       hostPublicKey = lib.mkOption {
         type = lib.types.str;
-
-        description = ''
-          Veřejný SSH host key initrd SSH serveru.
-
-          Používá se pro deklarativní vytvoření
-          systémového SSH known_hosts na VPS.
-
-          Příklad:
-
-            ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI...
-        '';
+        description = "Veřejný SSH host key initrd.";
       };
 
       keyFile = lib.mkOption {
         type = lib.types.str;
-
         default = "/root/.ssh/unlock_servers";
-
-        description = ''
-          Soukromý SSH klíč používaný VPS serverem
-          pro připojení k SSH serveru v initrd.
-        '';
+        description = "Soukromý SSH klíč VPS.";
       };
 
       passwordFile = lib.mkOption {
         type = lib.types.str;
-
-        description = ''
-          Soubor obsahující LUKS passphrase.
-
-          Soubor nesmí být uložen v Git repozitáři.
-
-          Doporučené umístění:
-
-            /etc/secrets/server-unlock/<server>.pass
-
-          Doporučená práva:
-
-            owner: root
-            mode: 0400
-        '';
+        description = "Cesta k souboru s LUKS heslem.";
       };
-
     };
   };
 
-  # ─────────────────────────────────────
-  # Kontrola jednoho serveru
-  # ─────────────────────────────────────
+  # ------------------------------------------------------------
+  # SSH known_hosts
+  # ------------------------------------------------------------
 
-  serverChecks = lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (name: server: ''
+  serverKnownHosts =
+    lib.mapAttrs' (
+      name: server:
+        lib.nameValuePair "${name}-initrd" {
+          hostNames = [
+            "[${server.host}]:${toString server.unlockPort}"
+          ];
 
-      check_server \
-        ${lib.escapeShellArg name} \
-        ${lib.escapeShellArg server.host} \
-        ${toString server.unlockPort} \
-        ${toString server.normalPort} \
-        ${lib.escapeShellArg server.keyFile} \
-        ${lib.escapeShellArg server.passwordFile}
+          publicKey = server.hostPublicKey;
+        }
+    )
+    cfg.servers;
 
-    '') cfg.servers
-  );
+  # ------------------------------------------------------------
+  # Samostatný pracovní skript pro každý server
+  # ------------------------------------------------------------
 
-  # ─────────────────────────────────────
-  # Deklarativní SSH known_hosts
-  # ─────────────────────────────────────
+  mkServerWorker = name: server:
+    pkgs.writeShellApplication {
+      name = "server-unlock-${name}";
 
-  serverKnownHosts = lib.mapAttrs' (
-    name: server:
-    lib.nameValuePair "${name}-initrd" {
-      hostNames = [
-        "[${server.host}]:${toString server.unlockPort}"
+      runtimeInputs = with pkgs; [
+        coreutils
+        netcat-openbsd
+        openssh
       ];
 
-      publicKey = server.hostPublicKey;
-    }
-  ) cfg.servers;
+      text = ''
+        set -u
 
-  # ─────────────────────────────────────
-  # Program server-unlock
-  # ─────────────────────────────────────
+        SERVER_NAME=${lib.escapeShellArg name}
+        HOST=${lib.escapeShellArg server.host}
+        UNLOCK_PORT=${toString server.unlockPort}
+        NORMAL_PORT=${toString server.normalPort}
+        SSH_KEY=${lib.escapeShellArg server.keyFile}
+        PASSWORD_FILE=${lib.escapeShellArg server.passwordFile}
 
-  serverUnlockScript = pkgs.writeShellApplication {
+        CHECK_INTERVAL=${toString cfg.checkInterval}
+        BOOT_TIMEOUT=${toString cfg.bootTimeout}
+        BOOT_POLL_INTERVAL=${toString cfg.bootPollInterval}
+        UNLOCK_TIMEOUT=${toString cfg.unlockTimeout}
+        LOG_LEVEL=${lib.escapeShellArg cfg.logLevel}
 
-    name = "server-unlock";
+        log() {
+          local level="$1"
+          shift
 
-    runtimeInputs = with pkgs; [
-      bash
-      coreutils
-      gnugrep
-      netcat-openbsd
-      openssh
-    ];
+          printf '%s [%s] [%s] %s\n' \
+            "$(date '+%Y-%m-%d %H:%M:%S')" \
+            "$level" \
+            "$SERVER_NAME" \
+            "$*"
+        }
 
-    text = ''
-      set -u
+        port_open() {
+          local port="$1"
 
+          nc -z -w 3 "$HOST" "$port" >/dev/null 2>&1
+        }
 
-      CHECK_INTERVAL=${toString cfg.checkInterval}
-      BOOT_TIMEOUT=${toString cfg.bootTimeout}
-      LOG_LEVEL=${lib.escapeShellArg cfg.logLevel}
+        wait_for_normal_ssh() {
+          local waited=0
 
+          log INFO "Čekám na běžné SSH na portu $NORMAL_PORT"
 
-      log()
-      {
-        local level="$1"
-        shift
+          while (( waited < BOOT_TIMEOUT )); do
+            if port_open "$NORMAL_PORT"; then
+              log INFO "Běžné SSH je dostupné. Server naběhl."
+              return 0
+            fi
 
-        printf '%s [%s] %s\n' \
-          "$(date '+%Y-%m-%d %H:%M:%S')" \
-          "$level" \
-          "$*"
-      }
+            sleep "$BOOT_POLL_INTERVAL"
+            waited=$((waited + BOOT_POLL_INTERVAL))
+          done
 
+          log ERROR "Běžné SSH se neobjevilo během ${BOOT_TIMEOUT} sekund."
+          return 1
+        }
 
-      port_open()
-      {
-        local host="$1"
-        local port="$2"
+        unlock_server() {
+          local ssh_status=0
 
-        nc \
-          -z \
-          -w 3 \
-          "$host" \
-          "$port" \
-          >/dev/null 2>&1
-      }
-
-
-      wait_for_normal_ssh()
-      {
-        local name="$1"
-        local host="$2"
-        local port="$3"
-
-        local waited=0
-
-        log INFO \
-          "$name: čekám na produkční SSH port $port"
-
-
-        while (( waited < BOOT_TIMEOUT )); do
-
-          if port_open "$host" "$port"; then
-
-            log INFO \
-              "$name: server úspěšně naběhl"
-
-            return 0
-
+          if [[ ! -r "$SSH_KEY" ]]; then
+            log ERROR "Nelze číst SSH klíč: $SSH_KEY"
+            return 1
           fi
 
+          if [[ ! -r "$PASSWORD_FILE" ]]; then
+            log ERROR "Nelze číst soubor s heslem: $PASSWORD_FILE"
+            return 1
+          fi
 
-          sleep "$CHECK_INTERVAL"
+          log INFO "Initrd SSH je dostupné na portu $UNLOCK_PORT."
+          log INFO "Odesílám LUKS heslo."
 
-          waited=$((waited + CHECK_INTERVAL))
+          #
+          # SSH musí mít přidělený terminál (-tt),
+          # protože systemd-tty-ask-password-agent
+          # pracuje s terminálem.
+          #
+          # Host key se ověřuje proti systémovému
+          # /etc/ssh/ssh_known_hosts.
+          #
+          # SSH proces má časový limit UNLOCK_TIMEOUT.
+          #
 
-        done
+          if timeout \
+            --foreground \
+            --signal=TERM \
+            --kill-after=10s \
+            "''${UNLOCK_TIMEOUT}s" \
+            ssh \
+              -tt \
+              -i "$SSH_KEY" \
+              -p "$UNLOCK_PORT" \
+              -o BatchMode=yes \
+              -o IdentitiesOnly=yes \
+              -o StrictHostKeyChecking=yes \
+              -o UserKnownHostsFile=/dev/null \
+              -o GlobalKnownHostsFile=/etc/ssh/ssh_known_hosts \
+              -o UpdateHostKeys=no \
+              -o ConnectTimeout=10 \
+              -o ConnectionAttempts=1 \
+              root@"$HOST" \
+              systemd-tty-ask-password-agent \
+              < "$PASSWORD_FILE"
+          then
+            ssh_status=0
+          else
+            ssh_status=$?
+          fi
 
+          if (( ssh_status == 0 )); then
+            log INFO "SSH příkaz skončil úspěšně."
+          else
+            log WARN "SSH skončilo s návratovým kódem $ssh_status."
+          fi
 
-        log ERROR \
-          "$name: produkční SSH port se neobjevil během timeoutu"
+          #
+          # Návratový kód SSH sám o sobě nerozhoduje,
+          # zda bylo LUKS odemčeno.
+          #
+          # Při přechodu z initrd do běžného systému
+          # se může SSH spojení přerušit.
+          #
+          # Úspěch proto potvrzujeme běžným SSH portem.
+          #
 
-        return 1
-      }
+          wait_for_normal_ssh
+        }
 
+        check_server() {
+          #
+          # 1. Běžný systém už odpovídá.
+          #
 
-      unlock_server()
-      {
-        local name="$1"
-        local host="$2"
-        local unlock_port="$3"
-        local normal_port="$4"
-        local ssh_key="$5"
-        local password_file="$6"
+          if port_open "$NORMAL_PORT"; then
+            if [[ "$LOG_LEVEL" == "debug" ]]; then
+              log DEBUG "Server běží."
+            fi
 
-        local ssh_status=0
+            return 0
+          fi
 
+          #
+          # 2. Běžné SSH neodpovídá.
+          #    Zkontrolujeme initrd SSH.
+          #
 
-        if [[ ! -r "$password_file" ]]; then
+          if port_open "$UNLOCK_PORT"; then
+            unlock_server
+            return $?
+          fi
 
-          log ERROR \
-            "$name: nelze číst password file $password_file"
-
-          return 1
-
-        fi
-
-
-        if [[ ! -r "$ssh_key" ]]; then
-
-          log ERROR \
-            "$name: nelze číst SSH klíč $ssh_key"
-
-          return 1
-
-        fi
-
-
-        log INFO \
-          "$name: initrd SSH je dostupné na portu $unlock_port"
-
-
-        log INFO \
-          "$name: pokouším se odemknout LUKS"
-
-
-        #
-        # systemd-tty-ask-password-agent očekává terminál.
-        #
-        # SSH proto používá -tt.
-        #
-        # Passphrase se čte pouze z lokálního souboru
-        # na VPS a posílá se do vzdáleného initrd SSH.
-        #
-        # Po úspěšném odemčení initrd zanikne a SSH
-        # spojení může skončit návratovým kódem != 0.
-        #
-        # Návratový kód SSH proto zaznamenáme,
-        # ale skutečný výsledek ověříme podle dostupnosti
-        # produkčního SSH portu.
-        #
-
-        if ssh \
-          -tt \
-          -i "$ssh_key" \
-          -p "$unlock_port" \
-          -o BatchMode=yes \
-          -o ConnectTimeout=10 \
-          -o ConnectionAttempts=1 \
-          root@"$host" \
-          systemd-tty-ask-password-agent \
-          < "$password_file"
-        then
-
-          ssh_status=0
-
-        else
-
-          ssh_status=$?
-
-        fi
-
-
-        if (( ssh_status == 0 )); then
-
-          log INFO \
-            "$name: SSH příkaz pro odemčení skončil úspěšně"
-
-        else
-
-          log WARN \
-            "$name: SSH spojení skončilo s návratovým kódem $ssh_status"
-
-        fi
-
-
-        #
-        # Po odeslání passphrase už NEHODNOTÍME stav
-        # initrd SSH.
-        #
-        # Initrd SSH může být ještě několik sekund dostupné,
-        # než dokončí odemčení LUKS a pokračuje v bootování.
-        #
-        # Skutečným potvrzením úspěšného bootu je až
-        # dostupnost produkčního SSH portu.
-        #
-        # Proto zde neprovádíme kontrolu unlock_port.
-        # Místo toho čekáme až do BOOT_TIMEOUT na normal_port.
-        #
-
-        wait_for_normal_ssh \
-          "$name" \
-          "$host" \
-          "$normal_port"
-      }
-
-
-      check_server()
-      {
-        local name="$1"
-        local host="$2"
-        local unlock_port="$3"
-        local normal_port="$4"
-        local ssh_key="$5"
-        local password_file="$6"
-
-
-        #
-        # 1. Produkční SSH odpovídá.
-        #
-        # Server je již spuštěný.
-        #
-
-        if port_open "$host" "$normal_port"; then
+          #
+          # 3. Neodpovídá ani jeden port.
+          #
 
           if [[ "$LOG_LEVEL" == "debug" ]]; then
-
-            log DEBUG \
-              "$name: server běží, SSH port $normal_port je dostupný"
-
+            log DEBUG "Běžné SSH ani initrd SSH nejsou dostupné."
           fi
 
           return 0
+        }
 
-        fi
+        log INFO "Samostatná služba odemykání spuštěna."
+        log INFO "Kontrola každých ''${CHECK_INTERVAL} sekund."
 
+        while true; do
+          check_server || true
 
-        #
-        # 2. Produkční SSH neodpovídá.
-        #
-        # Zkontrolujeme initrd SSH.
-        #
+          sleep "$CHECK_INTERVAL"
+        done
+      '';
+    };
 
-        if port_open "$host" "$unlock_port"; then
+  # ------------------------------------------------------------
+  # Samostatná systemd služba pro každý server
+  # ------------------------------------------------------------
 
-          unlock_server \
-            "$name" \
-            "$host" \
-            "$unlock_port" \
-            "$normal_port" \
-            "$ssh_key" \
-            "$password_file"
+  serverServices =
+    lib.mapAttrs' (
+      name: server: let
+        worker = mkServerWorker name server;
+      in
+        lib.nameValuePair "server-unlock-${name}" {
+          description = "Automatic LUKS Unlock - ${name}";
 
-          return $?
+          after = [
+            "network-online.target"
+          ];
 
-        fi
+          wants = [
+            "network-online.target"
+          ];
 
+          wantedBy = [
+            "multi-user.target"
+          ];
 
-        #
-        # 3. Není dostupné produkční SSH
-        #    ani initrd SSH.
-        #
-        # Server může být:
-        #
-        #   • vypnutý
-        #   • bez napájení
-        #   • bez sítě
-        #   • právě v průběhu bootu
-        #
+          serviceConfig = {
+            Type = "simple";
 
-        if [[ "$LOG_LEVEL" == "debug" ]]; then
+            User = "root";
+            Group = "root";
 
-          log DEBUG \
-            "$name: nedostupné produkční i initrd SSH"
+            ExecStart = "${worker}/bin/server-unlock-${name}";
 
-        fi
+            Restart = "always";
+            RestartSec = 10;
 
-        return 0
-      }
+            NoNewPrivileges = true;
+            PrivateTmp = true;
 
+            ProtectHome = "read-only";
+            ProtectSystem = "strict";
 
-      log INFO \
-        "Automatic LUKS Unlock Manager spuštěn"
+            ReadOnlyPaths = [
+              server.keyFile
+              server.passwordFile
+            ];
 
-
-      while true; do
-
-        ${serverChecks}
-
-        sleep "$CHECK_INTERVAL"
-
-      done
-    '';
-  };
-
-in
-{
-
-  # ─────────────────────────────────────
-  # Options
-  # ─────────────────────────────────────
+            TimeoutStartSec = 0;
+            KillMode = "control-group";
+          };
+        }
+    )
+    cfg.servers;
+in {
+  # ============================================================
+  # OPTIONS
+  # ============================================================
 
   options.services.serverUnlock = {
-
     enable = lib.mkEnableOption "Automatic LUKS Unlock Manager";
 
     servers = lib.mkOption {
-
       type = lib.types.attrsOf serverType;
-
-      default = { };
-
-      description = ''
-        Seznam serverů spravovaných službou
-        Automatic LUKS Unlock Manager.
-      '';
+      default = {};
+      description = "Seznam serverů spravovaných VPS.";
     };
 
     checkInterval = lib.mkOption {
-
       type = lib.types.ints.positive;
-
-      default = 10;
-
-      description = ''
-        Interval kontroly serverů v sekundách.
-      '';
-    };
-
-    unlockTimeout = lib.mkOption {
-
-      type = lib.types.ints.positive;
-
-      default = 900;
-
-      description = ''
-        Rezervovaná hodnota maximální doby čekání
-        na initrd SSH.
-
-        Výchozí hodnota je 900 sekund.
-      '';
+      default = 300;
+      description = "Interval pravidelné kontroly serveru v sekundách.";
     };
 
     bootTimeout = lib.mkOption {
-
       type = lib.types.ints.positive;
-
       default = 600;
+      description = "Maximální čekání na běžné SSH po odemčení.";
+    };
 
-      description = ''
-        Maximální doba čekání na produkční SSH
-        po pokusu o odemčení LUKS.
+    bootPollInterval = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 5;
+      description = "Interval kontroly běžného SSH během startu.";
+    };
 
-        Výchozí hodnota je 600 sekund.
-      '';
+    unlockTimeout = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 900;
+      description = "Maximální doba běhu SSH příkazu pro odemčení.";
     };
 
     logLevel = lib.mkOption {
-
       type = lib.types.enum [
         "debug"
         "info"
@@ -488,125 +344,38 @@ in
       ];
 
       default = "info";
-
-      description = ''
-        Úroveň logování služby server-unlock.
-      '';
+      description = "Úroveň logování.";
     };
-
   };
 
-  # ─────────────────────────────────────
-  # Configuration
-  # ─────────────────────────────────────
+  # ============================================================
+  # CONFIGURATION
+  # ============================================================
 
   config = lib.mkIf cfg.enable {
+    assertions =
+      [
+        {
+          assertion = cfg.servers != {};
+          message = "services.serverUnlock: musí být nakonfigurován alespoň jeden server.";
+        }
+      ]
+      ++ lib.mapAttrsToList (name: server: {
+        assertion = server.hostPublicKey != "";
+        message = "services.serverUnlock.servers.${name}.hostPublicKey nesmí být prázdný.";
+      })
+      cfg.servers
+      ++ lib.mapAttrsToList (name: server: {
+        assertion =
+          builtins.match "[a-zA-Z0-9_.-]+" name != null;
+        message = "Neplatný název serveru pro server-unlock: ${name}";
+      })
+      cfg.servers;
 
-    # ─────────────────────────────────────
-    # Kontrola konfigurace
-    # ─────────────────────────────────────
-
-    assertions = lib.mapAttrsToList (name: server: {
-      assertion = server.hostPublicKey != "";
-
-      message = "services.serverUnlock.servers.${name}.hostPublicKey nesmí být prázdný";
-    }) cfg.servers;
-
-    # ─────────────────────────────────────
-    # Deklarativní SSH known_hosts
-    # ─────────────────────────────────────
-
+    # SSH host keys všech spravovaných initrd serverů.
     programs.ssh.knownHosts = serverKnownHosts;
 
-    # ─────────────────────────────────────
-    # Program
-    # ─────────────────────────────────────
-
-    environment.systemPackages = [
-      serverUnlockScript
-    ];
-
-    # ─────────────────────────────────────
-    # Hlavní konfigurace služby
-    # ─────────────────────────────────────
-
-    environment.etc."server-unlock/server-unlock.conf".text = ''
-      CHECK_INTERVAL=${toString cfg.checkInterval}
-      UNLOCK_TIMEOUT=${toString cfg.unlockTimeout}
-      BOOT_TIMEOUT=${toString cfg.bootTimeout}
-      LOG_LEVEL=${cfg.logLevel}
-      SERVER_CONFIG=/etc/server-unlock/servers.conf
-    '';
-
-    # ─────────────────────────────────────
-    # Seznam serverů
-    # ─────────────────────────────────────
-
-    environment.etc."server-unlock/servers.conf".text = lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: server: ''
-        [${name}]
-        HOST=${server.host}
-        UNLOCK_PORT=${toString server.unlockPort}
-        NORMAL_PORT=${toString server.normalPort}
-        SSH_KEY=${server.keyFile}
-        PASSWORD_FILE=${server.passwordFile}
-      '') cfg.servers
-    );
-
-    # ─────────────────────────────────────
-    # systemd service
-    # ─────────────────────────────────────
-
-    systemd.services.server-unlock = {
-
-      description = "Automatic Server LUKS Unlock Manager";
-
-      after = [
-        "network-online.target"
-      ];
-
-      wants = [
-        "network-online.target"
-      ];
-
-      wantedBy = [
-        "multi-user.target"
-      ];
-
-      serviceConfig = {
-
-        Type = "simple";
-
-        User = "root";
-
-        Group = "root";
-
-        Restart = "always";
-
-        RestartSec = 10;
-
-        ExecStart = "${serverUnlockScript}/bin/server-unlock";
-
-        # Bezpečnostní omezení služby
-
-        NoNewPrivileges = true;
-
-        PrivateTmp = true;
-
-        ProtectHome = "read-only";
-
-        ProtectSystem = "strict";
-
-        # Přístup k SSH klíči a LUKS password files
-
-        ReadOnlyPaths = [
-          "/root/.ssh"
-          "/etc/secrets/server-unlock"
-        ];
-
-      };
-
-    };
-
+    # Každý server má vlastní systemd službu.
+    systemd.services = serverServices;
   };
 }
