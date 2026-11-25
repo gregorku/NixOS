@@ -197,8 +197,8 @@
     interface = "enp5s0";
   };
 
-  # Pevná MAC adresa bridge (pracepcserver)
-  systemd.network.netdevs."40-br0".netdevConfig.MACAddress = "1A:AC:4D:52:1B:A3";
+  # Pevná MAC adresa bridge
+  networking.interfaces.br0.macAddress = "1A:AC:4D:52:1B:A3";
 
   # ==================================================
   # SSH – BĚŽÍCÍ SYSTÉM
