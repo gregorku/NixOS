@@ -34,6 +34,7 @@
     krusader
     kdiff3
     meld
+    gnome-disk-utility
 
     # ======================
     # 📁 SOUBORY / decompression
